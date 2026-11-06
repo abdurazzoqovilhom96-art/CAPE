@@ -1,0 +1,24 @@
+# Plan v2.1 scaling panel, corrected stock Crackle pin optimizer on the crops with <= 2^25 voxels only
+# (269 s per encode already at 512x512x256; larger crops are SKIPPED_BUDGET, see
+# data/manifests/scaling_v21_skipped.json). CAPE-FAST is repeated here as the matched reference.
+#   py -3.12 run_all.py --stage development --config configs/scaling_v21_stock.yaml --manifest data/manifests/scaling_v21_stock.jsonl
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v2.1 scaling - corrected stock pins vs CAPE-FAST on crops <= 2^25 voxels (seen development sources)
+input:
+  manifest: data/manifests/scaling_v21_stock.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  repeats: 3
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_fast_m0, crackle_pins_opt_corrected_m0]
+panels: [A, B]
+primary:
+  new: cape_fast_m0
+  baseline: crackle_pins_opt_corrected_m0
+oracle:
+  enabled: false

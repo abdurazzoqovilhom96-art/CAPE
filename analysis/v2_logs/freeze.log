@@ -1,0 +1,3 @@
+
+=== 2026-11-06T04:45:58+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/freeze_v2.py --pilot-run results\20261106T041741Z_pilot_ca467036
+frozen budget e=24 (smallest budget with gain >= 0.9 x max gain (10 B)); gains={8: 2, 24: 10, 64: 10} -> configs\test_v2_frozen.yaml

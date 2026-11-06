@@ -1,0 +1,58 @@
+{
+  "freeze_id": "pilot_345a9f2901be_3d2f368b489b",
+  "mode": "pilot",
+  "config_path": "D:\\CAPE_PINS\\configs\\pilot_v2.yaml",
+  "config_hash": "345a9f2901be7482ff52d909fd46d13923f018724cb9c6957e52be968bf318be",
+  "methods_hash": "f4b17c17ad401cd03778816799f23e3c524383d259004ee4d630444cdb265094",
+  "split_hash": "3d2f368b489b97f4a1ed4f32db5d7a89da32a528b33eb287f640a15abe39fe05",
+  "source_hash": "6da737b5641a17d2d2669165821c7286d9dcd06a20ce0976e12d994235fa74c3",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "safe_refine_e24_m0_zstd9",
+    "safe_archive_m0_zstd9",
+    "safe_refine_e8_m0_zstd9",
+    "safe_refine_e64_m0_zstd9",
+    "safe_refine_unpin_e24_m0_zstd9",
+    "safe_refine_anchor_e24_m0_zstd9",
+    "safe_refine_e24_m0_zstd3",
+    "safe_archive_m0_zstd3",
+    "cape_fast_m0",
+    "cape_certified_m0",
+    "cape_m0",
+    "cape_m0_legacy",
+    "crackle_flat_m0",
+    "crackle_pins_opt_m0",
+    "crackle_pins_opt_corrected_m0",
+    "cape_core",
+    "stock_cover",
+    "weighted_greedy"
+  ],
+  "primary": {
+    "new": "safe_refine_e24_m0_zstd9",
+    "baseline": "safe_archive_m0_zstd9"
+  },
+  "splits": [
+    "development"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-06T04:18:08.177+00:00"
+}

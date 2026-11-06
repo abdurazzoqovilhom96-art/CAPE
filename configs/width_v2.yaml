@@ -1,0 +1,24 @@
+# Plan v2 (P1) width/scale run on the 4 Crackle repository crops (2 with Z = 512): matched legacy vs
+# fast timing, CAPE-FAST (depth regimes off) vs depth regimes on, corrected stock. Development only.
+#   .\run_experiment.cmd --stage development --config ".\configs\width_v2.yaml" --manifest ".\data\manifests\width_sensitivity.jsonl"
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: development
+description: v2 width/scale (Z=512, seen Crackle crops) - fast vs legacy implementation, CAPE-FAST/CERTIFIED, corrected stock, SAFE-ARCHIVE, SAFE+refine
+input:
+  manifest: data/manifests/width_sensitivity.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  repeats: 3
+  external_wrappers: [none, zstd9]
+  task_timeout_s: 1800
+methods: [cape_fast_m0, cape_certified_m0, cape_m0, cape_m0_legacy, crackle_pins_opt_corrected_m0, crackle_pins_opt_m0,
+          crackle_flat_m0, safe_archive_m0_zstd9, safe_refine_e24_m0_zstd9, cape_core, cape_fixed_depth_width, stock_cover]
+panels: [A, B]
+primary:
+  new: cape_fast_m0
+  baseline: crackle_pins_opt_corrected_m0
+oracle:
+  enabled: false

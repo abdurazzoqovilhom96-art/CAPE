@@ -1,0 +1,605 @@
+# Method registry (spec sections 17, 22). Run configs select methods by id.
+# cape_native methods take the run config's `algorithm` section as base options; the
+# method's own `options` override it (ablations, panel A forced-pins format).
+schema_version: 1
+methods:
+  # ---------------------------------------------------------------- new method
+  cape_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape}
+    family: crackle_format
+    categories: [K1, K2, K3, K4, K5, K6]
+    panels: [B]
+    wrappable: true
+    role: new
+    description: CAPE selector (safe reductions, componentwise exact DP / local search, dual certificate); stock pins/flat rule
+  cape_m5:
+    adapter: cape_native
+    options: {markov_model_order: 5, format_policy: same_as_stock, selector: cape}
+    family: crackle_format
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    wrappable: true
+    role: new
+    description: CAPE with Markov order 5 crack codes (paired with crackle_pins_opt_m5)
+  cape_m0_minfmt:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: min_exact, selector: cape}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: false
+    role: new
+    description: Secondary, declared before freeze - exact min(flat, CAPE pins) format choice; never the primary pair
+  # -------------------------------------------- v2 (plan P1; development / seen data only)
+  cape_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: true
+    role: new
+    description: v2 CAPE-FAST - CAPE selector, depth regimes off (full-width w_D only), no certificate reported; stock pins/flat rule
+  cape_fast_m5:
+    adapter: cape_native
+    options: {markov_model_order: 5, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: true
+    role: new
+    description: v2 CAPE-FAST with Markov order 5 crack codes
+  cape_m0_legacy:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, reduction_impl: legacy}
+    family: crackle_format
+    categories: [K2]
+    panels: [B]
+    wrappable: false
+    role: internal
+    description: v1 implementation (strided chains, sort-based dedup, dense DP) for matched timing; bitstreams identical to cape_m0
+  crackle_pins_opt_corrected_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: stock_greedy_corrected}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    description: Corrected stock - upstream pins_opt selection, background and serializer; only the F2 count width fixed
+  crackle_pins_opt_corrected_m5:
+    adapter: cape_native
+    options: {markov_model_order: 5, format_policy: same_as_stock, selector: stock_greedy_corrected}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    description: Corrected stock with Markov order 5 crack codes
+  safe_archive_m0_zstd3:
+    adapter: safe_archive
+    options: {zstd: zstd3, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: baseline
+    description: SAFE-ARCHIVE engineering guard - smaller of zstd3(flat) and zstd3(CAPE-FAST); never larger than the included flat
+  safe_archive_m0_zstd9:
+    adapter: safe_archive
+    options: {zstd: zstd9, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: baseline
+    description: SAFE-ARCHIVE engineering guard with zstd level 9
+  safe_archive_m5_zstd3:
+    adapter: safe_archive
+    options: {zstd: zstd3, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: baseline
+    description: SAFE-ARCHIVE engineering guard, Markov order 5, zstd level 3
+  safe_archive_m5_zstd9:
+    adapter: safe_archive
+    options: {zstd: zstd9, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: baseline
+    description: SAFE-ARCHIVE engineering guard, Markov order 5, zstd level 9
+  cape_certified_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: all_regimes}
+    family: crackle_format
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    wrappable: false
+    role: new
+    description: v2 CAPE-CERTIFIED - the CAPE-FAST stream (byte-identical) plus a restricted-model LB over ALL depth regimes
+  cape_certified_m5:
+    adapter: cape_native
+    options: {markov_model_order: 5, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: all_regimes}
+    family: crackle_format
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    wrappable: false
+    role: new
+    description: v2 CAPE-CERTIFIED with Markov order 5 crack codes
+  safe_refine_e8_m0_zstd3:
+    adapter: safe_refine
+    options: {zstd: zstd3, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 8,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 8 full-file evaluations), Markov 0, zstd 3'
+  safe_refine_e8_m0_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 8,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 8 full-file evaluations), Markov 0, zstd 9'
+  safe_refine_e8_m5_zstd3:
+    adapter: safe_refine
+    options: {zstd: zstd3, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width, max_evals: 8,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 8 full-file evaluations), Markov 5, zstd 3'
+  safe_refine_e8_m5_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width, max_evals: 8,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 8 full-file evaluations), Markov 5, zstd 9'
+  safe_refine_e24_m0_zstd3:
+    adapter: safe_refine
+    options: {zstd: zstd3, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 24,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 24 full-file evaluations), Markov 0, zstd 3'
+  safe_refine_e24_m0_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 24,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 24 full-file evaluations), Markov 0, zstd 9'
+  safe_refine_e24_m5_zstd3:
+    adapter: safe_refine
+    options: {zstd: zstd3, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width, max_evals: 24,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 24 full-file evaluations), Markov 5, zstd 3'
+  safe_refine_e24_m5_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width, max_evals: 24,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 24 full-file evaluations), Markov 5, zstd 9'
+  safe_refine_e64_m0_zstd3:
+    adapter: safe_refine
+    options: {zstd: zstd3, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 64,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 64 full-file evaluations), Markov 0, zstd 3'
+  safe_refine_e64_m0_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 64,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 64 full-file evaluations), Markov 0, zstd 9'
+  safe_refine_e64_m5_zstd3:
+    adapter: safe_refine
+    options: {zstd: zstd3, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width, max_evals: 64,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 64 full-file evaluations), Markov 5, zstd 3'
+  safe_refine_e64_m5_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 5, selector: cape, depth_policy: fixed_depth_width, max_evals: 64,
+              moves: [unpin, anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] SAFE-ARCHIVE + bounded archive-objective refinement (unpin+anchor, 64 full-file evaluations), Markov 5, zstd 9'
+  safe_refine_unpin_e24_m0_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 24,
+              moves: [unpin]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] Ablation - refinement with unpin moves only (24 evaluations)'
+  safe_refine_anchor_e24_m0_zstd9:
+    adapter: safe_refine
+    options: {zstd: zstd9, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, max_evals: 24,
+              moves: [anchor]}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: internal
+    experimental: true
+    description: '[EXPERIMENTAL v2.1] Ablation - refinement with anchor moves only (24 evaluations)'
+  # ------------------------------------------------------- stock Crackle (PyPI)
+  crackle_flat_m0:
+    adapter: crackle_stock
+    options: {allow_pins: 0, markov_model_order: 0}
+    family: crackle_format
+    categories: [K1, K2, K3, K4, K6]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    citation: S1
+  crackle_pins_fast_m0:
+    adapter: crackle_stock
+    options: {allow_pins: 1, markov_model_order: 0}
+    family: crackle_format
+    categories: [K1, K2, K3, K4, K6]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    citation: S1
+  crackle_pins_opt_m0:
+    adapter: crackle_stock
+    options: {allow_pins: 2, markov_model_order: 0}
+    family: crackle_format
+    categories: [K1, K2, K3, K4, K6]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    description: Primary baseline (allow_pins=2); the name is not an optimality claim
+    citation: S1
+  crackle_flat_m5:
+    adapter: crackle_stock
+    options: {allow_pins: 0, markov_model_order: 5}
+    family: crackle_format
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    citation: S1
+  crackle_pins_opt_m5:
+    adapter: crackle_stock
+    options: {allow_pins: 2, markov_model_order: 5}
+    family: crackle_format
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    citation: S1
+  crackle_vendor_pins_opt_m0:
+    adapter: crackle_vendor
+    options: {allow_pins: true, optimize_pins: true, markov_model_order: 0}
+    family: crackle_format
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    wrappable: false
+    role: reference
+    description: Pinned-SHA stock build with the same compiler/flags as CAPE (fair timing reference)
+    citation: S1
+  # ----------------------------------------- internal algorithmic panel (spec 17.1)
+  stock_cover:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, selector: stock_greedy}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [A]
+    role: internal
+    description: Upstream pin selection + upstream serializer, pins format forced (same boundary payload)
+  weighted_greedy:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, selector: cape, reduce_equal: false,
+              reduce_subset: false, reduce_singleton: false, use_exact: false, use_local: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [A]
+    role: internal
+    description: Classic cost/new-CC greedy with singletons on the full candidate family
+  greedy_local:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, selector: cape, reduce_equal: false,
+              reduce_subset: false, reduce_singleton: false, use_exact: false, use_local: true}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [A]
+    role: internal
+    description: Weighted greedy + the same local search (separates exact and reduction effects)
+  # ---- v2.1 equal-infrastructure internal comparators (review 2026-11-06): the SAME FAST pipeline as
+  # cape_fast_m0 (same runs, candidates, safe reductions, components, data structures, format rule,
+  # depth policy, no certificate); only the pass-2 solvers differ -> a 2x2 of exact DP x local search.
+  weighted_greedy_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", use_exact: false, use_local: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: Equal-infrastructure weighted greedy - CAPE-FAST pipeline and reductions, no exact DP, no local search
+  greedy_local_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", use_exact: false, use_local: true}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: Equal-infrastructure weighted greedy + local search (no exact DP)
+  cape_fast_exact_only_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", use_exact: true, use_local: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: Equal-infrastructure greedy + exact DP on small components (no local search)
+  # ---- evidence protocol (E2 / E3 / E7, 2026-11-06): config-only variants of existing switches
+  weighted_greedy_noreduce_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", use_exact: false, use_local: false, reduce_equal: false, reduce_subset: false,
+              reduce_singleton: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: E2/17.3 ablation - FAST pipeline, safe reductions OFF, weighted greedy only
+  cape_fast_noreduce_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", reduce_equal: false, reduce_subset: false, reduce_singleton: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: E2/17.3 ablation - CAPE-FAST solver with safe reductions OFF
+  greedy_local_fast_b2_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", use_exact: false, use_local: true, local_checks_per_component: 20000,
+              local_checks_total: 2000000}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: E2 quality-time curve - equal-infrastructure greedy + local search, 2x local-search budget
+  greedy_local_fast_b4_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", use_exact: false, use_local: true, local_checks_per_component: 40000,
+              local_checks_total: 4000000}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: E2 quality-time curve - equal-infrastructure greedy + local search, 4x local-search budget
+  weighted_greedy_certified_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: regime, use_exact: false, use_local: false}
+    family: crackle_format
+    categories: [K1, K2, K5, K6]
+    panels: [B]
+    role: internal
+    description: 17.3 - equal-infrastructure weighted greedy WITH the same integer dual lower bound (certificate)
+  safe_stock_m0_zstd9:
+    adapter: safe_archive
+    options: {zstd: zstd9, markov_model_order: 0, selector: stock_greedy_corrected, depth_policy: fixed_depth_width}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    wrappable: false
+    role: baseline
+    description: E7 SAFE-stock - min(zstd9(flat), zstd9(corrected stock pins)); same frame settings as safe_archive
+  cape_core:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, selector: cape}
+    family: crackle_format
+    categories: [K1, K2, K5, K6]
+    panels: [A]
+    role: internal
+    description: Full CAPE selector in the forced pins format (panel A)
+  # ------------------------------------------------------- ablations (spec 22)
+  cape_no_dedup:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, reduce_equal: false}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  cape_no_dominance:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, reduce_subset: false, reduce_singleton: false}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  cape_no_exact:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, use_exact: false}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  cape_no_local:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, use_local: false}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  cape_no_dual_gate:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, use_dual_gate: false}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  cape_stock_background:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, background_policy: stock}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  cape_fixed_depth_width:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, depth_policy: fixed_depth_width}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  cape_maximal_runs_only:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, candidate_policy: maximal_runs_only}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  # ------------------------------------------------------------ external codecs
+  compresso_native:
+    adapter: compresso
+    options: {steps: [8, 8, 1]}
+    family: compresso
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    wrappable: true
+    role: comparator
+    citation: S2
+  compresso_lzma6:
+    adapter: compresso
+    options: {steps: [8, 8, 1], outer: lzma6}
+    family: compresso
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    role: comparator
+    citation: S2
+  neuroglancer_b8:
+    adapter: neuroglancer
+    options: {block: [8, 8, 8]}
+    family: neuroglancer
+    categories: [K1, K2, K3, K4, K7]
+    panels: [B, C]
+    wrappable: true
+    role: comparator
+    citation: S9
+  csgv_rans_b64:
+    adapter: csgv
+    options: {brick: 64}
+    family: csgv
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    role: comparator
+    citation: S3,S5
+  csgvr_sb_b64:
+    adapter: csgvr
+    options: {brick: 64}
+    family: csgv
+    categories: [K1, K2, K3, K4, K7]
+    panels: [B, C]
+    role: comparator
+    citation: S4
+  zstd3:
+    adapter: generic
+    options: {codec: zstd, level: 3}
+    family: generic
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    role: comparator
+    citation: S12
+  zstd9:
+    adapter: generic
+    options: {codec: zstd, level: 9}
+    family: generic
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    role: comparator
+    citation: S12
+  lzma6_raw:
+    adapter: generic
+    options: {codec: lzma, level: 6}
+    family: generic
+    categories: [K1, K2, K3, K4]
+    panels: [B]
+    role: comparator
+  blosc2_bshuffle_zstd5:
+    adapter: blosc2
+    options: {codec: zstd, clevel: 5, filter: bitshuffle, chunk_bytes: 1048576, block_bytes: 262144}
+    family: blosc2
+    categories: [K1, K2, K3, K4, K7]
+    panels: [B]
+    role: comparator
+    citation: S13
+  raw:
+    adapter: generic
+    options: {codec: none}
+    family: generic
+    categories: [K1]
+    panels: [B]
+    role: reference

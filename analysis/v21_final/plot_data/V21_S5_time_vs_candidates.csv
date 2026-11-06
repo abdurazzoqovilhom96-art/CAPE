@@ -1,0 +1,51 @@
+series,family,x_field,x,y_field,y
+CAPE-FAST,Crackle connectomics,candidates_before,4440.0,fast_enc_ms,1.643862
+CAPE-FAST,Crackle connectomics,candidates_before,4440.0,fast_enc_ms,2.926993
+CAPE-FAST,Crackle connectomics,candidates_before,15923.0,fast_enc_ms,6.895706
+CAPE-FAST,Crackle connectomics,candidates_before,17858.0,fast_enc_ms,6.113535
+CAPE-FAST,Crackle connectomics,candidates_before,18162.0,fast_enc_ms,11.976806
+CAPE-FAST,Crackle connectomics,candidates_before,56753.0,fast_enc_ms,31.7693
+CAPE-FAST,Crackle connectomics,candidates_before,172018.0,fast_enc_ms,27.203337
+CAPE-FAST,Crackle connectomics,candidates_before,202853.0,fast_enc_ms,39.11176
+CAPE-FAST,Crackle connectomics,candidates_before,224078.0,fast_enc_ms,77.854
+CAPE-FAST,Crackle connectomics,candidates_before,467828.0,fast_enc_ms,179.1103
+CAPE-FAST,Crackle connectomics,candidates_before,655370.0,fast_enc_ms,127.8844
+CAPE-FAST,Crackle connectomics,candidates_before,1793395.0,fast_enc_ms,304.2054
+CAPE-FAST,Crackle connectomics,candidates_before,2678197.0,fast_enc_ms,642.0062
+CAPE-FAST,Crackle connectomics,candidates_before,2818981.0,fast_enc_ms,617.2325
+CAPE-FAST,Crackle connectomics,candidates_before,4590554.0,fast_enc_ms,1178.143
+CAPE-FAST,Crackle connectomics,candidates_before,13200033.0,fast_enc_ms,3431.4743
+CAPE-FAST,Crackle ws,candidates_before,632171.0,fast_enc_ms,65.2846
+CAPE-FAST,Crackle ws,candidates_before,4705618.0,fast_enc_ms,795.9937
+CAPE-FAST,Crackle ws,candidates_before,18353773.0,fast_enc_ms,3243.2379
+CAPE-FAST,Crackle ws,candidates_before,38104234.0,fast_enc_ms,7091.8056
+CAPE-FAST,CREMI A,candidates_before,212650.0,fast_enc_ms,24.5166
+CAPE-FAST,CREMI A,candidates_before,804894.0,fast_enc_ms,113.9997
+CAPE-FAST,CREMI A,candidates_before,3457192.0,fast_enc_ms,483.3073
+CAPE-FAST,CREMI A,candidates_before,14324342.0,fast_enc_ms,2176.8315
+CAPE-FAST,CREMI A,candidates_before,22381767.0,fast_enc_ms,3113.0687
+v1 legacy,Crackle connectomics,candidates_before,4440.0,legacy_enc_ms,2.219335
+v1 legacy,Crackle connectomics,candidates_before,4440.0,legacy_enc_ms,4.049338
+v1 legacy,Crackle connectomics,candidates_before,15923.0,legacy_enc_ms,12.849381
+v1 legacy,Crackle connectomics,candidates_before,17858.0,legacy_enc_ms,11.035058
+v1 legacy,Crackle connectomics,candidates_before,18162.0,legacy_enc_ms,22.6596
+v1 legacy,Crackle connectomics,candidates_before,56753.0,legacy_enc_ms,61.5032
+v1 legacy,Crackle connectomics,candidates_before,172018.0,legacy_enc_ms,112.8352
+v1 legacy,Crackle connectomics,candidates_before,202853.0,legacy_enc_ms,72.6873
+v1 legacy,Crackle connectomics,candidates_before,224078.0,legacy_enc_ms,165.7537
+v1 legacy,Crackle connectomics,candidates_before,467828.0,legacy_enc_ms,505.2653
+v1 legacy,Crackle connectomics,candidates_before,655370.0,legacy_enc_ms,589.1128
+v1 legacy,Crackle connectomics,candidates_before,1793395.0,legacy_enc_ms,652.6588
+v1 legacy,Crackle connectomics,candidates_before,2678197.0,legacy_enc_ms,3470.1805
+v1 legacy,Crackle connectomics,candidates_before,2818981.0,legacy_enc_ms,1324.4331
+v1 legacy,Crackle connectomics,candidates_before,4590554.0,legacy_enc_ms,2861.1413
+v1 legacy,Crackle connectomics,candidates_before,13200033.0,legacy_enc_ms,14723.4312
+v1 legacy,Crackle ws,candidates_before,632171.0,legacy_enc_ms,192.7774
+v1 legacy,Crackle ws,candidates_before,4705618.0,legacy_enc_ms,2283.4804
+v1 legacy,Crackle ws,candidates_before,18353773.0,legacy_enc_ms,8978.6677
+v1 legacy,Crackle ws,candidates_before,38104234.0,legacy_enc_ms,35764.1135
+v1 legacy,CREMI A,candidates_before,212650.0,legacy_enc_ms,40.123833
+v1 legacy,CREMI A,candidates_before,804894.0,legacy_enc_ms,244.7291
+v1 legacy,CREMI A,candidates_before,3457192.0,legacy_enc_ms,1157.5378
+v1 legacy,CREMI A,candidates_before,14324342.0,legacy_enc_ms,4832.7256
+v1 legacy,CREMI A,candidates_before,22381767.0,legacy_enc_ms,5498.9844

@@ -1,0 +1,70 @@
+series,family,x_field,x,y_field,y
+CAPE-FAST,Crackle connectomics,voxels,262144,fast_enc_ms,1.643862
+CAPE-FAST,Crackle connectomics,voxels,524288,fast_enc_ms,2.926993
+CAPE-FAST,Crackle connectomics,voxels,1048576,fast_enc_ms,6.113535
+CAPE-FAST,Crackle connectomics,voxels,1048576,fast_enc_ms,6.895706
+CAPE-FAST,Crackle connectomics,voxels,2097152,fast_enc_ms,11.976806
+CAPE-FAST,Crackle connectomics,voxels,2097152,fast_enc_ms,27.203337
+CAPE-FAST,Crackle connectomics,voxels,4194304,fast_enc_ms,31.7693
+CAPE-FAST,Crackle connectomics,voxels,4194304,fast_enc_ms,39.11176
+CAPE-FAST,Crackle connectomics,voxels,8388608,fast_enc_ms,77.854
+CAPE-FAST,Crackle connectomics,voxels,8388608,fast_enc_ms,127.8844
+CAPE-FAST,Crackle connectomics,voxels,16777216,fast_enc_ms,179.1103
+CAPE-FAST,Crackle connectomics,voxels,16777216,fast_enc_ms,304.2054
+CAPE-FAST,Crackle connectomics,voxels,33554432,fast_enc_ms,617.2325
+CAPE-FAST,Crackle connectomics,voxels,33554432,fast_enc_ms,642.0062
+CAPE-FAST,Crackle connectomics,voxels,67108864,fast_enc_ms,1178.143
+CAPE-FAST,Crackle connectomics,voxels,134217728,fast_enc_ms,3431.4743
+CAPE-FAST,Crackle ws,voxels,2097152,fast_enc_ms,65.2846
+CAPE-FAST,Crackle ws,voxels,16777216,fast_enc_ms,795.9937
+CAPE-FAST,Crackle ws,voxels,67108864,fast_enc_ms,3243.2379
+CAPE-FAST,Crackle ws,voxels,134217728,fast_enc_ms,7091.8056
+CAPE-FAST,CREMI A,voxels,2048000,fast_enc_ms,24.5166
+CAPE-FAST,CREMI A,voxels,8192000,fast_enc_ms,113.9997
+CAPE-FAST,CREMI A,voxels,32768000,fast_enc_ms,483.3073
+CAPE-FAST,CREMI A,voxels,131072000,fast_enc_ms,2176.8315
+CAPE-FAST,CREMI A,voxels,195312500,fast_enc_ms,3113.0687
+v1 legacy,Crackle connectomics,voxels,262144,legacy_enc_ms,2.219335
+v1 legacy,Crackle connectomics,voxels,524288,legacy_enc_ms,4.049338
+v1 legacy,Crackle connectomics,voxels,1048576,legacy_enc_ms,11.035058
+v1 legacy,Crackle connectomics,voxels,1048576,legacy_enc_ms,12.849381
+v1 legacy,Crackle connectomics,voxels,2097152,legacy_enc_ms,22.6596
+v1 legacy,Crackle connectomics,voxels,2097152,legacy_enc_ms,112.8352
+v1 legacy,Crackle connectomics,voxels,4194304,legacy_enc_ms,61.5032
+v1 legacy,Crackle connectomics,voxels,4194304,legacy_enc_ms,72.6873
+v1 legacy,Crackle connectomics,voxels,8388608,legacy_enc_ms,165.7537
+v1 legacy,Crackle connectomics,voxels,8388608,legacy_enc_ms,589.1128
+v1 legacy,Crackle connectomics,voxels,16777216,legacy_enc_ms,505.2653
+v1 legacy,Crackle connectomics,voxels,16777216,legacy_enc_ms,652.6588
+v1 legacy,Crackle connectomics,voxels,33554432,legacy_enc_ms,1324.4331
+v1 legacy,Crackle connectomics,voxels,33554432,legacy_enc_ms,3470.1805
+v1 legacy,Crackle connectomics,voxels,67108864,legacy_enc_ms,2861.1413
+v1 legacy,Crackle connectomics,voxels,134217728,legacy_enc_ms,14723.4312
+v1 legacy,Crackle ws,voxels,2097152,legacy_enc_ms,192.7774
+v1 legacy,Crackle ws,voxels,16777216,legacy_enc_ms,2283.4804
+v1 legacy,Crackle ws,voxels,67108864,legacy_enc_ms,8978.6677
+v1 legacy,Crackle ws,voxels,134217728,legacy_enc_ms,35764.1135
+v1 legacy,CREMI A,voxels,2048000,legacy_enc_ms,40.123833
+v1 legacy,CREMI A,voxels,8192000,legacy_enc_ms,244.7291
+v1 legacy,CREMI A,voxels,32768000,legacy_enc_ms,1157.5378
+v1 legacy,CREMI A,voxels,131072000,legacy_enc_ms,4832.7256
+v1 legacy,CREMI A,voxels,195312500,legacy_enc_ms,5498.9844
+tuzatilgan stock,Crackle connectomics,voxels,262144,stock_enc_ms,2.684667
+tuzatilgan stock,Crackle connectomics,voxels,524288,stock_enc_ms,4.260362
+tuzatilgan stock,Crackle connectomics,voxels,1048576,stock_enc_ms,16.095661
+tuzatilgan stock,Crackle connectomics,voxels,1048576,stock_enc_ms,16.411054
+tuzatilgan stock,Crackle connectomics,voxels,2097152,stock_enc_ms,44.18802
+tuzatilgan stock,Crackle connectomics,voxels,2097152,stock_enc_ms,137.094
+tuzatilgan stock,Crackle connectomics,voxels,4194304,stock_enc_ms,115.9668
+tuzatilgan stock,Crackle connectomics,voxels,4194304,stock_enc_ms,183.7428
+tuzatilgan stock,Crackle connectomics,voxels,8388608,stock_enc_ms,351.3515
+tuzatilgan stock,Crackle connectomics,voxels,8388608,stock_enc_ms,1301.5741
+tuzatilgan stock,Crackle connectomics,voxels,16777216,stock_enc_ms,1032.0571
+tuzatilgan stock,Crackle connectomics,voxels,16777216,stock_enc_ms,7456.3292
+tuzatilgan stock,Crackle connectomics,voxels,33554432,stock_enc_ms,19476.5684
+tuzatilgan stock,Crackle connectomics,voxels,33554432,stock_enc_ms,22414.0547
+tuzatilgan stock,Crackle ws,voxels,2097152,stock_enc_ms,240.0476
+tuzatilgan stock,Crackle ws,voxels,16777216,stock_enc_ms,2026.3582
+tuzatilgan stock,CREMI A,voxels,2048000,stock_enc_ms,126.9781
+tuzatilgan stock,CREMI A,voxels,8192000,stock_enc_ms,591.4953
+tuzatilgan stock,CREMI A,voxels,32768000,stock_enc_ms,2587.7244

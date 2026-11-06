@@ -1,0 +1,14 @@
+data,method,native,refine sikli (zstd bilan),zstd + glue,zstd,refine (Python),glue
+v2 test (24 ko'rilmagan CREMI B/C crop),"CAPE yadrosi (FAST, raw)",29.72265,0,0.507373,,,
+v2 test (24 ko'rilmagan CREMI B/C crop),CAPE yadrosi + zstd9,28.63065,0,0.7039605,,,
+v2 test (24 ko'rilmagan CREMI B/C crop),SAFE-ARCHIVE,33.81695,0,1.1825265,,,
+v2 test (24 ko'rilmagan CREMI B/C crop),SAFE + refine [EXPERIMENTAL],34.6485,45.5109,2.43071,,,
+v2 test (24 ko'rilmagan CREMI B/C crop),tuzatilgan stock,155.91925,0,2.813,,,
+Z=512 width (4 Crackle crop),"CAPE yadrosi (FAST, raw)",1235.7767,0,21.82495,,,
+Z=512 width (4 Crackle crop),CAPE yadrosi + zstd9,1236.78975,0,48.91265,,,
+Z=512 width (4 Crackle crop),SAFE-ARCHIVE,1351.19885,0,88.11695,,,
+Z=512 width (4 Crackle crop),SAFE + refine [EXPERIMENTAL],1380.8336,2262.493,92.35465,,,
+Z=512 width (4 Crackle crop),tuzatilgan stock,38069.35365,0,0.52225,,,
+scaling (barcha crop'lar),"CAPE yadrosi (FAST, raw)",127.792,,,0,0,0.1643
+scaling (barcha crop'lar),SAFE-ARCHIVE,136.0975,,,6.4886,0,1.0955
+scaling (barcha crop'lar),SAFE + refine [EXPERIMENTAL],145.3707,,,64.3203,452.9378,2.5976

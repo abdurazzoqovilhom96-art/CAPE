@@ -1,0 +1,16 @@
+# Chunk / ROI panel C (spec sections 16 K7, 19). Second stage: disabled until K1-K6 results
+# exist; while disabled every ROI artifact is NOT_APPLICABLE with this reason.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: roi
+description: Chunk-level ROI access panel (second stage, disabled)
+input:
+  manifest: data/manifests/pilot.jsonl
+  splits: [development]
+methods: [cape_m0, crackle_pins_opt_m0, neuroglancer_b8, csgvr_sb_b64, blosc2_bshuffle_zstd5]
+panels: [C]
+roi:
+  enabled: false
+  chunk_xyz: [128, 128, 64]
+  queries_per_sample: 3

@@ -1,0 +1,64 @@
+# Artifact applicability and minimal-content rules (spec sections 28, 35.3, 37).
+# `when` names a condition evaluated by cape/artifact_manifest.py from the run's records.
+# Zero-byte files never satisfy a rule; a missing applicable artifact blocks SUCCESS.json.
+schema_version: 1
+sections:
+  01_environment:
+    required: [environment.json, build_report.json]
+    when: always
+  02_data_manifest:
+    required: [manifest.normalized.jsonl, splits.json, protocol_freeze.json]
+    when: always
+  03_bitstreams:
+    required_glob: "*.bin"
+    min_count: 1
+    when: any_ok_measurement
+  04_roundtrip:
+    required: [lossless_checks.csv]
+    when: any_measurement
+  05_raw_metrics:
+    required: [run.sqlite, measurements.jsonl, results_live.csv, results.csv, failures.csv, availability.csv]
+    when: any_measurement
+  06_solver_certificates:
+    required: [certificates.jsonl, certificate_summary.csv]
+    when: cape_measured
+  07_component_stats:
+    required: [component_stats.csv]
+    when: cape_measured
+  08_ablations:
+    required: [ablation_comparison.csv]
+    when: ablations_measured
+  09_statistics:
+    required: [summary.json, coverage.csv, effect_sizes.csv]
+    when: any_measurement
+  10_plot_data:
+    required_glob: "F*.csv"
+    min_count: 1
+    when: any_empirical_figure
+  11_figures:
+    required: [F01_algorithm.pdf, F01_algorithm.png]
+    when: always
+  12_tables:
+    required: [results_overall.csv, results_overall.md, results_overall.tex, availability.csv, failures.csv]
+    when: any_measurement
+  13_paper_assets:
+    required: [methods.md, experimental_setup.md, limitations.md, supported_claims.md, captions.md, references.bib, reproducibility_checklist.md]
+    when: paper_assets
+  14_logs:
+    required: [controller.log]
+    when: always
+  15_reports:
+    required: [LIVE_REPORT_UZ.md, final_report_UZ.md, RESULTS_INDEX.md]
+    when: always
+figures:
+  F01_algorithm: {when: always, empirical: false}
+  F02_bpv_vs_encode: {when: any_ok_measurement}
+  F03_bpv_vs_decode: {when: any_ok_measurement}
+  F04_per_dataset_gain: {when: primary_pair_measured}
+  F05_component_distribution: {when: cape_measured}
+  F06_reduction_time_memory: {when: cape_measured}
+  F07_gap_vs_cost: {when: cape_measured}
+  F08_ablation: {when: ablations_measured}
+  F09_scaling: {when: multiple_sizes}
+  F10_byte_breakdown: {when: crackle_family_measured}
+  F11_roi_latency: {when: roi_enabled}

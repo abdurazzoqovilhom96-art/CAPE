@@ -1,0 +1,25 @@
+# v2.1 equal-infrastructure internal comparison (review 2026-11-06, item 4), development analysis.
+# The 24 v2 test crops were already measured in the v2 test run, so this is NOT a new held-out test:
+# it only separates how much of CAPE-FAST's gain comes from the stronger pass-2 solver (exact DP, local
+# search) versus a weighted greedy that runs on exactly the same fast pipeline and reductions.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v2.1 equal-infrastructure 2x2 (exact DP x local search) on the v2 test crops + corrected stock
+input:
+  manifest: data/manifests/test_v2_unseen.jsonl
+  splits: [heldout]
+  require_real_data: true
+benchmark:
+  repeats: 5
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_fast_m0, cape_fast_exact_only_m0, greedy_local_fast_m0, weighted_greedy_fast_m0,
+          crackle_pins_opt_corrected_m0]
+panels: [B]
+primary:
+  new: cape_fast_m0
+  baseline: weighted_greedy_fast_m0
+oracle:
+  enabled: false

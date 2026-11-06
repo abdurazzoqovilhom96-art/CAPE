@@ -1,0 +1,72 @@
+{
+  "freeze_id": "pilot_ea09da150f90_3d2f368b489b",
+  "mode": "pilot",
+  "config_path": "D:\\CAPE_PINS\\configs\\pilot.yaml",
+  "config_hash": "ea09da150f901169f2cfd4ed504ee536edf57d73d6bc4410d258c96b8405b400",
+  "methods_hash": "fbb3211646bdfde78d90563f92040806d7272dc2339b1b5a755405358a8ace40",
+  "split_hash": "3d2f368b489b97f4a1ed4f32db5d7a89da32a528b33eb287f640a15abe39fe05",
+  "source_hash": "d52ab63e9a9a5150f0a3fa87d9ed963625ca986390f9f7d98fdc67060bac8b5d",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "cape_m0",
+    "cape_m5",
+    "cape_m0_minfmt",
+    "crackle_pins_opt_m0",
+    "crackle_pins_fast_m0",
+    "crackle_flat_m0",
+    "crackle_flat_m5",
+    "crackle_pins_opt_m5",
+    "crackle_vendor_pins_opt_m0",
+    "stock_cover",
+    "weighted_greedy",
+    "greedy_local",
+    "cape_core",
+    "cape_no_dedup",
+    "cape_no_dominance",
+    "cape_no_exact",
+    "cape_no_local",
+    "cape_no_dual_gate",
+    "cape_stock_background",
+    "cape_fixed_depth_width",
+    "cape_maximal_runs_only",
+    "compresso_native",
+    "compresso_lzma6",
+    "neuroglancer_b8",
+    "csgv_rans_b64",
+    "csgvr_sb_b64",
+    "zstd3",
+    "zstd9",
+    "lzma6_raw",
+    "blosc2_bshuffle_zstd5",
+    "raw"
+  ],
+  "primary": {
+    "new": "cape_m0",
+    "baseline": "crackle_pins_opt_m0"
+  },
+  "splits": [
+    "development"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-05T11:26:01.491+00:00",
+  "supersedes_source_hash": "4a7443a44f350541044a91408b1effd98688e9bb74023373bb861afdc38bcefb"
+}

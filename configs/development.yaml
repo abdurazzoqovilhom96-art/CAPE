@@ -1,0 +1,24 @@
+# Development tuning preset (spec sections 23 P3, 30). Its algorithm section is the
+# deterministic preset that freeze_protocol.py copies into benchmark freezes; changing it
+# after a freeze creates a new run.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: development
+description: Development split, all ablations, parameters to be frozen
+input:
+  manifest: data/manifests/pilot.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  repeats: 7
+  external_wrappers: [none, zstd3, zstd9]
+methods: [cape_m0, cape_m5, cape_m0_minfmt, crackle_pins_opt_m0, crackle_pins_fast_m0, crackle_flat_m0,
+          crackle_flat_m5, crackle_pins_opt_m5, crackle_vendor_pins_opt_m0, stock_cover, weighted_greedy,
+          greedy_local, cape_core, cape_no_dedup, cape_no_dominance, cape_no_exact, cape_no_local,
+          cape_no_dual_gate, cape_stock_background, cape_fixed_depth_width, cape_maximal_runs_only,
+          compresso_native, compresso_lzma6, neuroglancer_b8, csgv_rans_b64, csgvr_sb_b64, zstd3, zstd9,
+          lzma6_raw, blosc2_bshuffle_zstd5, raw]
+panels: [A, B]
+oracle:
+  enabled: true

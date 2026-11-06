@@ -1,0 +1,187 @@
+{
+  "generated_at": "2026-11-06T09:17:13+00:00",
+  "n_samples": 16,
+  "groups": [
+    "crackle_samples",
+    "cremi_A"
+  ],
+  "bytes_identical_all": true,
+  "bytes_mismatches": 0,
+  "decode_voxel_identical_all": true,
+  "decode_failures": 0,
+  "max_abs_shapley_residual": 1.1102230246251565e-16,
+  "shapley": [
+    {
+      "group": "crackle_samples",
+      "factor": "L",
+      "label": "column-major layout + one-pass runs",
+      "class": "code",
+      "n_samples": 4,
+      "n_clusters": 4,
+      "mean_log": 0.362794489698388,
+      "factor_x": 1.4373404406189936,
+      "share_of_total": 0.324496889202164,
+      "ci_lo_x": 1.2837243705596662,
+      "ci_hi_x": 1.631440567813056
+    },
+    {
+      "group": "crackle_samples",
+      "factor": "H",
+      "label": "multiply-add chain hash",
+      "class": "code",
+      "n_samples": 4,
+      "n_clusters": 4,
+      "mean_log": 0.04312440143254047,
+      "factor_x": 1.0440677702983936,
+      "share_of_total": 0.038572069066425255,
+      "ci_lo_x": 1.0231575560204895,
+      "ci_hi_x": 1.0588488197012669
+    },
+    {
+      "group": "crackle_samples",
+      "factor": "T",
+      "label": "hash-table equal-coverage grouping",
+      "class": "algorithmic",
+      "n_samples": 4,
+      "n_clusters": 4,
+      "mean_log": 0.2585760567434764,
+      "factor_x": 1.2950846460278775,
+      "share_of_total": 0.23128004536446287,
+      "ci_lo_x": 1.2635687988076454,
+      "ci_hi_x": 1.3273865593704657
+    },
+    {
+      "group": "crackle_samples",
+      "factor": "S",
+      "label": "reachable-state exact DP",
+      "class": "algorithmic",
+      "n_samples": 4,
+      "n_clusters": 4,
+      "mean_log": 0.1760891882846243,
+      "factor_x": 1.1925444148984363,
+      "share_of_total": 0.15750072132572585,
+      "ci_lo_x": 1.0273454814245884,
+      "ci_hi_x": 1.6022165921545943
+    },
+    {
+      "group": "crackle_samples",
+      "factor": "D",
+      "label": "depth regimes off (FAST)",
+      "class": "search_space",
+      "n_samples": 4,
+      "n_clusters": 4,
+      "mean_log": 0.27743733575826957,
+      "factor_x": 1.3197434158320838,
+      "share_of_total": 0.24815027504122203,
+      "ci_lo_x": 0.9999644158841429,
+      "ci_hi_x": 1.7417846634994008
+    },
+    {
+      "group": "crackle_samples",
+      "factor": "total",
+      "label": "v1 -> v2 FAST",
+      "class": "total",
+      "n_samples": 4,
+      "n_clusters": 4,
+      "mean_log": 1.1180214719172987,
+      "factor_x": 3.058796298026424,
+      "share_of_total": 1.0,
+      "ci_lo_x": 2.037481211369926,
+      "ci_hi_x": 4.592059421509647
+    },
+    {
+      "group": "cremi_A",
+      "factor": "L",
+      "label": "column-major layout + one-pass runs",
+      "class": "code",
+      "n_samples": 12,
+      "n_clusters": 6,
+      "mean_log": 0.2224257687958382,
+      "factor_x": 1.2491030937823455,
+      "share_of_total": 0.393816084837489,
+      "ci_lo_x": 1.2367361646480355,
+      "ci_hi_x": 1.2607609640788076
+    },
+    {
+      "group": "cremi_A",
+      "factor": "H",
+      "label": "multiply-add chain hash",
+      "class": "code",
+      "n_samples": 12,
+      "n_clusters": 6,
+      "mean_log": 0.0908035553141178,
+      "factor_x": 1.0950538666148844,
+      "share_of_total": 0.16077229197285048,
+      "ci_lo_x": 1.0897730484894477,
+      "ci_hi_x": 1.1008801049757397
+    },
+    {
+      "group": "cremi_A",
+      "factor": "T",
+      "label": "hash-table equal-coverage grouping",
+      "class": "algorithmic",
+      "n_samples": 12,
+      "n_clusters": 6,
+      "mean_log": 0.21132018571222397,
+      "factor_x": 1.2353078196610126,
+      "share_of_total": 0.3741530877238729,
+      "ci_lo_x": 1.213965886083543,
+      "ci_hi_x": 1.258593448653352
+    },
+    {
+      "group": "cremi_A",
+      "factor": "S",
+      "label": "reachable-state exact DP",
+      "class": "algorithmic",
+      "n_samples": 12,
+      "n_clusters": 6,
+      "mean_log": 0.03730146326978574,
+      "factor_x": 1.0380058943268158,
+      "share_of_total": 0.06604412925329757,
+      "ci_lo_x": 0.9986091671253652,
+      "ci_hi_x": 1.1086465618375865
+    },
+    {
+      "group": "cremi_A",
+      "factor": "D",
+      "label": "depth regimes off (FAST)",
+      "class": "search_space",
+      "n_samples": 12,
+      "n_clusters": 6,
+      "mean_log": 0.002945076027317494,
+      "factor_x": 1.0029494170241966,
+      "share_of_total": 0.005214406212490171,
+      "ci_lo_x": 0.9977463904955566,
+      "ci_hi_x": 1.0080834480600502
+    },
+    {
+      "group": "cremi_A",
+      "factor": "total",
+      "label": "v1 -> v2 FAST",
+      "class": "total",
+      "n_samples": 12,
+      "n_clusters": 6,
+      "mean_log": 0.5647960491192832,
+      "factor_x": 1.7590889783874275,
+      "share_of_total": 1.0,
+      "ci_lo_x": 1.670969298962836,
+      "ci_hi_x": 1.8635355124748563
+    }
+  ],
+  "classes": {
+    "crackle_samples": {
+      "code": 0.4059188911309285,
+      "algorithmic": 0.43466524502810067,
+      "search_space": 0.27743733575826957
+    },
+    "cremi_A": {
+      "code": 0.31322932410995596,
+      "algorithmic": 0.24862164898200972,
+      "search_space": 0.002945076027317494
+    }
+  },
+  "certificate_cost_v1_exact_vs_legacy": {
+    "crackle_samples": 0.9996736366266114,
+    "cremi_A": 0.9897802159654465
+  }
+}

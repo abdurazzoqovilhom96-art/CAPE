@@ -1,0 +1,289 @@
+{
+  "generated_at": "2026-11-06T03:28:43.652+00:00",
+  "runs": {
+    "20261105T122347Z_all_d1a76eb7": {
+      "primary": {
+        "new": "cape_m0",
+        "base": "crackle_pins_opt_m0",
+        "n_samples": 24,
+        "n_clusters": 12,
+        "n_source_volumes": 2,
+        "total_bytes_new": 519345,
+        "total_bytes_base": 520030,
+        "saved_bytes": 685,
+        "total_ratio": 0.9986827683018288,
+        "n_smaller": 23,
+        "n_ties": 1,
+        "n_regressions": 0,
+        "median_sample_gain_percent": 0.12224454337315671,
+        "geo_speedup_encode": 3.411518225363373,
+        "geo_speedup_decode": 1.00187356997754
+      },
+      "summary_check": {
+        "verified": true,
+        "problems": []
+      },
+      "gaps": {
+        "method": "cape_m0",
+        "n": 24,
+        "note": "ub/lb are whole-stream bytes; model = restricted certified pin model",
+        "room_bytes_total": 148.0,
+        "room_percent_of_files": 0.028497434268164708,
+        "file_gap_over_ub_median_percent": 0.02376696957340529,
+        "file_gap_over_ub_max_percent": 0.07942110836569008,
+        "file_gap_over_lb_median_percent": 0.023772627493299912,
+        "label_section_gap_median_percent": 0.4245400791157402,
+        "label_section_gap_max_percent": 1.2506012506012505
+      },
+      "determinism": {
+        "cells_with_repeats": 1176,
+        "nondeterministic_bytes": 0,
+        "nondeterministic_sha": 7
+      },
+      "extra_pairs": [
+        {
+          "new": "cape_m5",
+          "base": "crackle_pins_opt_m5",
+          "n_samples": 24,
+          "n_clusters": 12,
+          "n_source_volumes": 2,
+          "total_bytes_new": 373953,
+          "total_bytes_base": 374638,
+          "saved_bytes": 685,
+          "total_ratio": 0.9981715682872533,
+          "n_smaller": 23,
+          "n_ties": 1,
+          "n_regressions": 0,
+          "median_sample_gain_percent": 0.16645641887081952,
+          "geo_speedup_encode": 3.2574875438189106,
+          "geo_speedup_decode": 0.9827780404049238
+        },
+        {
+          "new": "cape_m0+zstd9",
+          "base": "crackle_flat_m0+zstd9",
+          "n_samples": 24,
+          "n_clusters": 12,
+          "n_source_volumes": 2,
+          "total_bytes_new": 306806,
+          "total_bytes_base": 306352,
+          "saved_bytes": -454,
+          "total_ratio": 1.0014819553977123,
+          "n_smaller": 5,
+          "n_ties": 0,
+          "n_regressions": 19,
+          "median_sample_gain_percent": -0.15755933365705355,
+          "geo_speedup_encode": 0.19243558001771083,
+          "geo_speedup_decode": 0.9766641441676767
+        },
+        {
+          "new": "cape_m5+zstd9",
+          "base": "crackle_flat_m5+zstd9",
+          "n_samples": 24,
+          "n_clusters": 12,
+          "n_source_volumes": 2,
+          "total_bytes_new": 288791,
+          "total_bytes_base": 288123,
+          "saved_bytes": -668,
+          "total_ratio": 1.0023184542712662,
+          "n_smaller": 3,
+          "n_ties": 2,
+          "n_regressions": 19,
+          "median_sample_gain_percent": -0.2550903379228142,
+          "geo_speedup_encode": 0.20457746941248103,
+          "geo_speedup_decode": 0.9740513985857605
+        }
+      ],
+      "compare": []
+    },
+    "20261105T112549Z_pilot_5fc4a006": {
+      "primary": {
+        "new": "cape_m0",
+        "base": "crackle_pins_opt_m0",
+        "n_samples": 12,
+        "n_clusters": 6,
+        "n_source_volumes": 1,
+        "total_bytes_new": 385013,
+        "total_bytes_base": 385222,
+        "saved_bytes": 209,
+        "total_ratio": 0.9994574557008686,
+        "n_smaller": 12,
+        "n_ties": 0,
+        "n_regressions": 0,
+        "median_sample_gain_percent": 0.059581892901494626,
+        "geo_speedup_encode": 3.4147722124673807,
+        "geo_speedup_decode": 1.007597572484799
+      },
+      "summary_check": {
+        "verified": true,
+        "problems": []
+      },
+      "gaps": {
+        "method": "cape_m0",
+        "n": 12,
+        "note": "ub/lb are whole-stream bytes; model = restricted certified pin model",
+        "room_bytes_total": 93.0,
+        "room_percent_of_files": 0.02415502853150413,
+        "file_gap_over_ub_median_percent": 0.015501539388693806,
+        "file_gap_over_ub_max_percent": 0.04764173415912339,
+        "file_gap_over_lb_median_percent": 0.015503944745094552,
+        "label_section_gap_median_percent": 0.10857081117892034,
+        "label_section_gap_max_percent": 0.2744474938610429
+      },
+      "determinism": {
+        "cells_with_repeats": 480,
+        "nondeterministic_bytes": 0,
+        "nondeterministic_sha": 2
+      },
+      "extra_pairs": [
+        {
+          "new": "cape_m5",
+          "base": "crackle_pins_opt_m5",
+          "n_samples": 12,
+          "n_clusters": 6,
+          "n_source_volumes": 1,
+          "total_bytes_new": 302180,
+          "total_bytes_base": 302389,
+          "saved_bytes": 209,
+          "total_ratio": 0.9993088372923619,
+          "n_smaller": 12,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": 0.0766714609588659,
+          "geo_speedup_encode": 3.156292196454463,
+          "geo_speedup_decode": 0.9959746213847774
+        },
+        {
+          "new": "cape_m0+zstd9",
+          "base": "crackle_flat_m0+zstd9",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        },
+        {
+          "new": "cape_m5+zstd9",
+          "base": "crackle_flat_m5+zstd9",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        }
+      ],
+      "compare": []
+    },
+    "20261105T145305Z_development_c1d12b3e": {
+      "primary": {
+        "new": "cape_m0",
+        "base": "crackle_pins_opt_m0",
+        "n_samples": 4,
+        "n_clusters": 4,
+        "n_source_volumes": 2,
+        "total_bytes_new": 8791287,
+        "total_bytes_base": 8856190,
+        "saved_bytes": 64903,
+        "total_ratio": 0.992671453525726,
+        "n_smaller": 4,
+        "n_ties": 0,
+        "n_regressions": 0,
+        "median_sample_gain_percent": 0.8027573800429844,
+        "geo_speedup_encode": 11.419790099363007,
+        "geo_speedup_decode": 1.038524667486153
+      },
+      "summary_check": {
+        "verified": true,
+        "problems": []
+      },
+      "gaps": {
+        "method": "cape_m0",
+        "n": 4,
+        "note": "ub/lb are whole-stream bytes; model = restricted certified pin model",
+        "room_bytes_total": 61166.0,
+        "room_percent_of_files": 0.6957570603712516,
+        "file_gap_over_ub_median_percent": 0.5870671911031241,
+        "file_gap_over_ub_max_percent": 0.8425490979753096,
+        "file_gap_over_lb_median_percent": 0.5905509786657177,
+        "label_section_gap_median_percent": 6.687790079282943,
+        "label_section_gap_max_percent": 7.141795954750939
+      },
+      "determinism": {
+        "cells_with_repeats": 40,
+        "nondeterministic_bytes": 0,
+        "nondeterministic_sha": 0
+      },
+      "extra_pairs": [
+        {
+          "new": "cape_m5",
+          "base": "crackle_pins_opt_m5",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        },
+        {
+          "new": "cape_m0+zstd9",
+          "base": "crackle_flat_m0+zstd9",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        },
+        {
+          "new": "cape_m5+zstd9",
+          "base": "crackle_flat_m5+zstd9",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        }
+      ],
+      "compare": []
+    }
+  },
+  "rel_tol": 1e-09,
+  "verified": true
+}

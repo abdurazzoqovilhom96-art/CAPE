@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cape-pins/artifact.schema.json",
+  "title": "artifact_manifest.json entry (spec section 37)",
+  "type": "object",
+  "required": ["artifact_id", "path", "bytes", "sha256", "generator", "source_measurements", "created_at", "status"],
+  "properties": {
+    "artifact_id": {"type": "string"},
+    "path": {"type": "string"},
+    "bytes": {"type": "integer", "minimum": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "generator": {"type": "string"},
+    "source_measurements": {"type": "array", "items": {"type": "integer"}},
+    "created_at": {"type": "string"},
+    "status": {"enum": ["COMPLETE", "PRELIMINARY", "PARTIAL"]}
+  },
+  "additionalProperties": true
+}

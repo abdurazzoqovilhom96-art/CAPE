@@ -1,0 +1,310 @@
+{
+  "generated_at": "2026-11-06T09:16:14+00:00",
+  "pinning": {
+    "cpu": 2,
+    "pinned": true,
+    "reason": "second performance core, first SMT thread"
+  },
+  "repeats_small": 7,
+  "repeats_large": 3,
+  "large_threshold_voxels": 16777216,
+  "seed": 20261106,
+  "cells": [
+    {
+      "cell": "-----",
+      "factors": "",
+      "impl_mask": 0,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "----D",
+      "factors": "D",
+      "impl_mask": 0,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "---S-",
+      "factors": "S",
+      "impl_mask": 16,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "---SD",
+      "factors": "DS",
+      "impl_mask": 16,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "--T--",
+      "factors": "T",
+      "impl_mask": 8,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "--T-D",
+      "factors": "DT",
+      "impl_mask": 8,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "--TS-",
+      "factors": "ST",
+      "impl_mask": 24,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "--TSD",
+      "factors": "DST",
+      "impl_mask": 24,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-H---",
+      "factors": "H",
+      "impl_mask": 4,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-H--D",
+      "factors": "DH",
+      "impl_mask": 4,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-H-S-",
+      "factors": "HS",
+      "impl_mask": 20,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-H-SD",
+      "factors": "DHS",
+      "impl_mask": 20,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-HT--",
+      "factors": "HT",
+      "impl_mask": 12,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-HT-D",
+      "factors": "DHT",
+      "impl_mask": 12,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-HTS-",
+      "factors": "HST",
+      "impl_mask": 28,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "-HTSD",
+      "factors": "DHST",
+      "impl_mask": 28,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L----",
+      "factors": "L",
+      "impl_mask": 3,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L---D",
+      "factors": "DL",
+      "impl_mask": 3,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L--S-",
+      "factors": "LS",
+      "impl_mask": 19,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L--SD",
+      "factors": "DLS",
+      "impl_mask": 19,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L-T--",
+      "factors": "LT",
+      "impl_mask": 11,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L-T-D",
+      "factors": "DLT",
+      "impl_mask": 11,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L-TS-",
+      "factors": "LST",
+      "impl_mask": 27,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "L-TSD",
+      "factors": "DLST",
+      "impl_mask": 27,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LH---",
+      "factors": "HL",
+      "impl_mask": 7,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LH--D",
+      "factors": "DHL",
+      "impl_mask": 7,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LH-S-",
+      "factors": "HLS",
+      "impl_mask": 23,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LH-SD",
+      "factors": "DHLS",
+      "impl_mask": 23,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LHT--",
+      "factors": "HLT",
+      "impl_mask": 15,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LHT-D",
+      "factors": "DHLT",
+      "impl_mask": 15,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LHTS-",
+      "factors": "HLST",
+      "impl_mask": 31,
+      "depth_policy": "full_width_first",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "LHTSD",
+      "factors": "DHLST",
+      "impl_mask": 31,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "factorial"
+    },
+    {
+      "cell": "fast_noR",
+      "factors": "HTSD+L-R",
+      "impl_mask": 29,
+      "depth_policy": "fixed_depth_width",
+      "certificate": "off",
+      "kind": "contrast"
+    },
+    {
+      "cell": "v1_exact",
+      "factors": "",
+      "impl_mask": 0,
+      "depth_policy": "full_width_first",
+      "certificate": "regime",
+      "kind": "contrast"
+    }
+  ],
+  "base_options": {
+    "markov_model_order": 0,
+    "format_policy": "same_as_stock",
+    "selector": "cape",
+    "certificate": "off"
+  },
+  "samples": [
+    "cremi_A_x0_y768_z0_128x128x64",
+    "cremi_A_x0_y768_z0_256x256x64",
+    "cremi_A_x256_y0_z0_128x128x64",
+    "cremi_A_x256_y0_z0_256x256x64",
+    "cremi_A_x512_y0_z0_128x128x64",
+    "cremi_A_x512_y0_z0_256x256x64",
+    "cremi_A_x512_y512_z0_128x128x64",
+    "cremi_A_x512_y512_z0_256x256x64",
+    "cremi_A_x768_y0_z0_128x128x64",
+    "cremi_A_x768_y0_z0_256x256x64",
+    "cremi_A_x768_y512_z0_128x128x64",
+    "cremi_A_x768_y512_z0_256x256x64",
+    "crackle_connectomics_x0_y0_z256_512x512x256",
+    "crackle_connectomics_x0_y0_z384_512x512x128",
+    "crackle_connectomics_x256_y256_z0_256x256x512",
+    "crackle_ws_x0_y0_z0_256x256x512"
+  ]
+}

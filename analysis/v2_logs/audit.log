@@ -1,0 +1,6 @@
+
+=== 2026-11-06T08:42:16+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/audit_report.py --runs results\20261106T041741Z_pilot_ca467036 results\20261106T044558Z_all_83c337ae results\20261106T062540Z_development_0227806a --out v2_audit --compare-to results/20261105T122347Z_all_d1a76eb7 --new cape_fast_m0 --base crackle_pins_opt_corrected_m0 --pairs cape_m0:crackle_pins_opt_m0 cape_fast_m0:crackle_pins_opt_m0 cape_m0:cape_m0_legacy
+audit verified=False -> D:\CAPE_PINS\analysis\v2_audit
+
+=== 2026-11-06T08:43:28+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/audit_report.py --runs results\20261106T041741Z_pilot_ca467036 results\20261106T044558Z_all_83c337ae results\20261106T062540Z_development_0227806a --out v2_audit --compare-to results/20261105T122347Z_all_d1a76eb7 --new cape_fast_m0 --base crackle_pins_opt_corrected_m0 --pairs cape_m0:crackle_pins_opt_m0 cape_fast_m0:crackle_pins_opt_m0 cape_m0:cape_m0_legacy
+audit verified=True -> D:\CAPE_PINS\analysis\v2_audit

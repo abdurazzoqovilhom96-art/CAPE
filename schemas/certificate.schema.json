@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cape-pins/certificate.schema.json",
+  "title": "CAPE-Pins online certificate summary (spec sections 27, 39.1, 39.6)",
+  "type": "object",
+  "required": ["sample_id", "method_id", "candidate_policy", "full_family_complete", "reductions", "background",
+               "widths", "regime_id", "ub_bytes", "lb_bytes", "label_ub_bytes", "label_lb_bytes",
+               "certificate_scope", "constraints_active", "global_or_restricted", "verifier_result"],
+  "properties": {
+    "candidate_policy": {"enum": ["depth_bounded_complete_windows", "maximal_runs_only"]},
+    "full_family_complete": {"type": "boolean"},
+    "reductions": {"type": "array", "items": {"type": "string"}},
+    "background": {"type": "integer", "minimum": 0},
+    "widths": {"type": "object"},
+    "regime_id": {"type": "string"},
+    "ub_bytes": {"type": "integer"},
+    "lb_bytes": {"type": "integer"},
+    "certificate_scope": {"type": "string"},
+    "constraints_active": {"type": "array", "items": {"type": "string"}},
+    "global_or_restricted": {"enum": ["global", "restricted"]},
+    "verifier_result": {"enum": ["VALID", "INVALID", "NOT_CHECKED"]}
+  },
+  "additionalProperties": true
+}

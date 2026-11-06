@@ -1,0 +1,167 @@
+{
+  "generated_at": "2026-11-06T10:14:49.071+00:00",
+  "runs": {
+    "20261106T091815Z_development_73f40dd8": {
+      "primary": {
+        "new": "cape_fast_m0",
+        "base": "cape_m0_legacy",
+        "n_samples": 25,
+        "n_clusters": 3,
+        "n_source_volumes": 3,
+        "total_bytes_new": 38994302,
+        "total_bytes_base": 38963621,
+        "saved_bytes": -30681,
+        "total_ratio": 1.0007874268153876,
+        "n_smaller": 0,
+        "n_ties": 20,
+        "n_regressions": 5,
+        "median_sample_gain_percent": 0.0,
+        "geo_speedup_encode": 2.4425258565768844,
+        "geo_speedup_decode": 0.9984865314008322
+      },
+      "summary_check": {
+        "verified": true,
+        "problems": []
+      },
+      "gaps": {
+        "method": "cape_m0",
+        "n": 25,
+        "note": "ub/lb are whole-stream bytes; model = restricted certified pin model",
+        "room_bytes_total": 287403.0,
+        "room_percent_of_files": 0.7376188162799345,
+        "file_gap_over_ub_median_percent": 0.21789398790466027,
+        "file_gap_over_ub_max_percent": 0.9312198466313698,
+        "file_gap_over_lb_median_percent": 0.21836980257587235,
+        "label_section_gap_median_percent": 2.7471798274717982,
+        "label_section_gap_max_percent": 7.972456406765461
+      },
+      "determinism": {
+        "cells_with_repeats": 150,
+        "nondeterministic_bytes": 0,
+        "nondeterministic_sha": 0
+      },
+      "extra_pairs": [
+        {
+          "new": "cape_fast_m0",
+          "base": "crackle_pins_opt_corrected_m0",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        },
+        {
+          "new": "safe_refine_e24_m0_zstd9",
+          "base": "safe_archive_m0_zstd9",
+          "n_samples": 25,
+          "n_clusters": 3,
+          "n_source_volumes": 3,
+          "total_bytes_new": 28316812,
+          "total_bytes_base": 28319570,
+          "saved_bytes": 2758,
+          "total_ratio": 0.999902611515641,
+          "n_smaller": 16,
+          "n_ties": 9,
+          "n_regressions": 0,
+          "median_sample_gain_percent": 0.0002963243922349257,
+          "geo_speedup_encode": 0.274443781111472,
+          "geo_speedup_decode": 1.0054420176367482
+        }
+      ],
+      "compare": []
+    },
+    "20261106T100701Z_development_9be56574": {
+      "primary": {
+        "new": "cape_fast_m0",
+        "base": "crackle_pins_opt_corrected_m0",
+        "n_samples": 19,
+        "n_clusters": 3,
+        "n_source_volumes": 3,
+        "total_bytes_new": 5388140,
+        "total_bytes_base": 5422829,
+        "saved_bytes": 34689,
+        "total_ratio": 0.9936031543683196,
+        "n_smaller": 15,
+        "n_ties": 4,
+        "n_regressions": 0,
+        "median_sample_gain_percent": 0.27574796635875254,
+        "geo_speedup_encode": 5.1086907475658965,
+        "geo_speedup_decode": 1.0104072459805489
+      },
+      "summary_check": {
+        "verified": true,
+        "problems": []
+      },
+      "gaps": null,
+      "determinism": {
+        "cells_with_repeats": 38,
+        "nondeterministic_bytes": 0,
+        "nondeterministic_sha": 0
+      },
+      "extra_pairs": [
+        {
+          "new": "cape_fast_m0",
+          "base": "cape_m0_legacy",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        },
+        {
+          "new": "cape_fast_m0",
+          "base": "crackle_pins_opt_corrected_m0",
+          "n_samples": 19,
+          "n_clusters": 3,
+          "n_source_volumes": 3,
+          "total_bytes_new": 5388140,
+          "total_bytes_base": 5422829,
+          "saved_bytes": 34689,
+          "total_ratio": 0.9936031543683196,
+          "n_smaller": 15,
+          "n_ties": 4,
+          "n_regressions": 0,
+          "median_sample_gain_percent": 0.27574796635875254,
+          "geo_speedup_encode": 5.1086907475658965,
+          "geo_speedup_decode": 1.0104072459805489
+        },
+        {
+          "new": "safe_refine_e24_m0_zstd9",
+          "base": "safe_archive_m0_zstd9",
+          "n_samples": 0,
+          "n_clusters": 0,
+          "n_source_volumes": 0,
+          "total_bytes_new": 0,
+          "total_bytes_base": 0,
+          "saved_bytes": 0,
+          "total_ratio": null,
+          "n_smaller": 0,
+          "n_ties": 0,
+          "n_regressions": 0,
+          "median_sample_gain_percent": null,
+          "geo_speedup_encode": null,
+          "geo_speedup_decode": null
+        }
+      ],
+      "compare": []
+    }
+  },
+  "rel_tol": 1e-09,
+  "verified": true
+}

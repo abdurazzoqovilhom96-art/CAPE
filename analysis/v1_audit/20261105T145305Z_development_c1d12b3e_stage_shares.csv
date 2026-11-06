@@ -1,0 +1,5 @@
+method,stage,n,median_share_percent,max_share_percent
+cape_core,candidate_ns,4,0.7702108596338719,1.0271775957095142
+cape_core,reduction_ns,4,57.009200490088254,74.93658941948718
+cape_core,pass1_ns,4,1.722981128718683,2.4627733504082516
+cape_core,pass2_ns,4,4.535528886320916,22.47760534820921

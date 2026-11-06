@@ -1,0 +1,70 @@
+series,family,x_field,x,y_field,y
+CAPE-FAST,Crackle connectomics,voxels,262144,fast_peak_mib,38.2578125
+CAPE-FAST,Crackle connectomics,voxels,524288,fast_peak_mib,41.234375
+CAPE-FAST,Crackle connectomics,voxels,1048576,fast_peak_mib,47.26171875
+CAPE-FAST,Crackle connectomics,voxels,1048576,fast_peak_mib,47.29296875
+CAPE-FAST,Crackle connectomics,voxels,2097152,fast_peak_mib,59.19140625
+CAPE-FAST,Crackle connectomics,voxels,2097152,fast_peak_mib,59.90625
+CAPE-FAST,Crackle connectomics,voxels,4194304,fast_peak_mib,83.546875
+CAPE-FAST,Crackle connectomics,voxels,4194304,fast_peak_mib,83.66015625
+CAPE-FAST,Crackle connectomics,voxels,8388608,fast_peak_mib,132.54296875
+CAPE-FAST,Crackle connectomics,voxels,8388608,fast_peak_mib,133.62890625
+CAPE-FAST,Crackle connectomics,voxels,16777216,fast_peak_mib,229.46484375
+CAPE-FAST,Crackle connectomics,voxels,16777216,fast_peak_mib,258.87890625
+CAPE-FAST,Crackle connectomics,voxels,33554432,fast_peak_mib,443.63671875
+CAPE-FAST,Crackle connectomics,voxels,33554432,fast_peak_mib,448.24609375
+CAPE-FAST,Crackle connectomics,voxels,67108864,fast_peak_mib,809.015625
+CAPE-FAST,Crackle connectomics,voxels,134217728,fast_peak_mib,1770.55078125
+CAPE-FAST,Crackle ws,voxels,2097152,fast_peak_mib,87.95703125
+CAPE-FAST,Crackle ws,voxels,16777216,fast_peak_mib,458.85546875
+CAPE-FAST,Crackle ws,voxels,67108864,fast_peak_mib,1709.40234375
+CAPE-FAST,Crackle ws,voxels,134217728,fast_peak_mib,3426.24609375
+CAPE-FAST,CREMI A,voxels,2048000,fast_peak_mib,67.625
+CAPE-FAST,CREMI A,voxels,8192000,fast_peak_mib,168.1875
+CAPE-FAST,CREMI A,voxels,32768000,fast_peak_mib,571.32421875
+CAPE-FAST,CREMI A,voxels,131072000,fast_peak_mib,2196.67578125
+CAPE-FAST,CREMI A,voxels,195312500,fast_peak_mib,3397.5625
+v1 legacy,Crackle connectomics,voxels,262144,legacy_peak_mib,37.64453125
+v1 legacy,Crackle connectomics,voxels,524288,legacy_peak_mib,39.5390625
+v1 legacy,Crackle connectomics,voxels,1048576,legacy_peak_mib,44.90234375
+v1 legacy,Crackle connectomics,voxels,1048576,legacy_peak_mib,45.1953125
+v1 legacy,Crackle connectomics,voxels,2097152,legacy_peak_mib,53.22265625
+v1 legacy,Crackle connectomics,voxels,2097152,legacy_peak_mib,69.31640625
+v1 legacy,Crackle connectomics,voxels,4194304,legacy_peak_mib,79.5
+v1 legacy,Crackle connectomics,voxels,4194304,legacy_peak_mib,81.10546875
+v1 legacy,Crackle connectomics,voxels,8388608,legacy_peak_mib,112.8671875
+v1 legacy,Crackle connectomics,voxels,8388608,legacy_peak_mib,137.07421875
+v1 legacy,Crackle connectomics,voxels,16777216,legacy_peak_mib,190.40234375
+v1 legacy,Crackle connectomics,voxels,16777216,legacy_peak_mib,270.2734375
+v1 legacy,Crackle connectomics,voxels,33554432,legacy_peak_mib,458.23046875
+v1 legacy,Crackle connectomics,voxels,33554432,legacy_peak_mib,458.5078125
+v1 legacy,Crackle connectomics,voxels,67108864,legacy_peak_mib,819.3046875
+v1 legacy,Crackle connectomics,voxels,134217728,legacy_peak_mib,1854.5078125
+v1 legacy,Crackle ws,voxels,2097152,legacy_peak_mib,91.0546875
+v1 legacy,Crackle ws,voxels,16777216,legacy_peak_mib,490.3046875
+v1 legacy,Crackle ws,voxels,67108864,legacy_peak_mib,1828.95703125
+v1 legacy,Crackle ws,voxels,134217728,legacy_peak_mib,3706.95703125
+v1 legacy,CREMI A,voxels,2048000,legacy_peak_mib,76.765625
+v1 legacy,CREMI A,voxels,8192000,legacy_peak_mib,170.03515625
+v1 legacy,CREMI A,voxels,32768000,legacy_peak_mib,577.6015625
+v1 legacy,CREMI A,voxels,131072000,legacy_peak_mib,2238.5390625
+v1 legacy,CREMI A,voxels,195312500,legacy_peak_mib,3457.84375
+tuzatilgan stock,Crackle connectomics,voxels,262144,stock_peak_mib,42.4140625
+tuzatilgan stock,Crackle connectomics,voxels,524288,stock_peak_mib,49.01171875
+tuzatilgan stock,Crackle connectomics,voxels,1048576,stock_peak_mib,59.75
+tuzatilgan stock,Crackle connectomics,voxels,1048576,stock_peak_mib,64.45703125
+tuzatilgan stock,Crackle connectomics,voxels,2097152,stock_peak_mib,90.02734375
+tuzatilgan stock,Crackle connectomics,voxels,2097152,stock_peak_mib,91.05859375
+tuzatilgan stock,Crackle connectomics,voxels,4194304,stock_peak_mib,135.70703125
+tuzatilgan stock,Crackle connectomics,voxels,4194304,stock_peak_mib,149.22265625
+tuzatilgan stock,Crackle connectomics,voxels,8388608,stock_peak_mib,249.0859375
+tuzatilgan stock,Crackle connectomics,voxels,8388608,stock_peak_mib,256.03125
+tuzatilgan stock,Crackle connectomics,voxels,16777216,stock_peak_mib,434.91796875
+tuzatilgan stock,Crackle connectomics,voxels,16777216,stock_peak_mib,474.5625
+tuzatilgan stock,Crackle connectomics,voxels,33554432,stock_peak_mib,872.41796875
+tuzatilgan stock,Crackle connectomics,voxels,33554432,stock_peak_mib,908.27734375
+tuzatilgan stock,Crackle ws,voxels,2097152,stock_peak_mib,153.75
+tuzatilgan stock,Crackle ws,voxels,16777216,stock_peak_mib,763.72265625
+tuzatilgan stock,CREMI A,voxels,2048000,stock_peak_mib,115.9609375
+tuzatilgan stock,CREMI A,voxels,8192000,stock_peak_mib,343.921875
+tuzatilgan stock,CREMI A,voxels,32768000,stock_peak_mib,1207.48828125

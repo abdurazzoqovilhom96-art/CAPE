@@ -1,0 +1,49 @@
+# Test-only method registry (acceptance tests): production methods + fault adapters.
+schema_version: 1
+methods:
+  cape_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape}
+    family: crackle_format
+    panels: [B]
+    role: new
+  cape_core:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, selector: cape}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  stock_cover:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: force_pins, selector: stock_greedy}
+    family: crackle_format
+    panels: [A]
+    role: internal
+  crackle_pins_opt_m0:
+    adapter: crackle_stock
+    options: {allow_pins: 2, markov_model_order: 0}
+    family: crackle_format
+    panels: [B]
+    role: baseline
+  zstd3:
+    adapter: generic
+    options: {codec: zstd, level: 3}
+    family: generic
+    panels: [B]
+    role: comparator
+  raw:
+    adapter: generic
+    options: {codec: none}
+    family: generic
+    panels: [B]
+    role: reference
+  test_raising:
+    adapter: "python:tests.fixtures.fault_adapters:RaisingAdapter"
+    family: test
+    panels: [B]
+    role: comparator
+  test_corrupting:
+    adapter: "python:tests.fixtures.fault_adapters:CorruptingAdapter"
+    family: test
+    panels: [B]
+    role: comparator

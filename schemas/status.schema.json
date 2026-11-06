@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cape-pins/status.schema.json",
+  "title": "Per-section STATUS.json (spec section 28)",
+  "type": "object",
+  "required": ["section", "applicable", "completed", "status", "artifacts", "reason", "updated_at"],
+  "properties": {
+    "section": {"type": "string"},
+    "applicable": {"type": "boolean"},
+    "completed": {"type": "boolean"},
+    "status": {"enum": ["COMPLETE", "PARTIAL", "NOT_APPLICABLE", "NOT_ENOUGH_DATA", "REPORT_FAILED", "PENDING"]},
+    "artifacts": {"type": "array", "items": {"type": "string"}},
+    "reason": {"type": ["string", "null"]},
+    "updated_at": {"type": "string"}
+  },
+  "additionalProperties": false
+}

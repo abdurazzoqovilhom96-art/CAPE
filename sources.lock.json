@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "crackle": {
+      "commit": "14b39b196a14b3b1ba7d1cd34f350c324308000f",
+      "fetched_at": "2026-11-05T08:09:36+00:00",
+      "license": "BSD-3-Clause; src/cc3d.hpp is LGPL-3.0-or-later (reduced cc3d)",
+      "path": "vendor/crackle",
+      "required": true,
+      "role": "stock baseline (_crackle_vendor) and CAPE upstream bridge (header, CC labeling, crack codes, markov, CRC)",
+      "tree": "734e41ca657f929372be5c9070f79f0f77507275",
+      "url": "https://github.com/seung-lab/crackle.git",
+      "working_tree_clean": true
+    },
+    "crackle_head": {
+      "commit": "3426263b0f0cd70bc2ee7d825566c0e6f566b48c",
+      "fetched_at": "2026-11-06T03:46:41+00:00",
+      "license": "BSD-3-Clause; src/cc3d.hpp is LGPL-3.0-or-later (reduced cc3d)",
+      "path": "vendor/crackle_head",
+      "required": false,
+      "role": "re-check of format_audit F2 on the current upstream (optional _crackle_head module; never a benchmark row)",
+      "tree": "34e0868e90d240efc7dd67876d61471972e981a6",
+      "url": "https://github.com/seung-lab/crackle.git",
+      "working_tree_clean": true
+    },
+    "volcanite": {
+      "commit": "c760814a425aa02b0a7c27a7817a3b0d242ce55f",
+      "fetched_at": "2026-11-05T10:17:43+00:00",
+      "license": "GPL-3.0 (external process only; not linked, not redistributed)",
+      "path": "vendor/volcanite",
+      "required": false,
+      "role": "CSGV / CSGV-R comparator (separate executable)",
+      "tree": "72d459326f34060151a0068dd886f8f795cd0e4b",
+      "url": "https://github.com/max-pio/volcanite.git",
+      "working_tree_clean": true
+    }
+  }
+}

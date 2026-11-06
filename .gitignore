@@ -1,0 +1,12 @@
+# CAPE-Pins: large or generated content stays out of version control
+/data/
+/results/
+/vendor/
+/.venv/
+/build/
+/release/
+__pycache__/
+*.pyc
+*.pyd
+!/snapshots/v21/*.pyd
+*.tmp

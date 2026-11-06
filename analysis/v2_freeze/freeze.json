@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-11-06T04:45:58.157+00:00",
+  "pilot_run": "20261106T041741Z_pilot_ca467036",
+  "rule": "(plan v2, user task 7):\n  1. Candidates: safe_refine_e{8,24,64}_m0_zstd9 against SAFE-ARCHIVE safe_archive_m0_zstd9, on the\n     pilot's real samples only; every row must be OK (decoded voxel-exact) or the variant is excluded.\n  2. gain(e) = sum(SAFE bytes) - sum(variant bytes).\n  3. If no variant has gain > 0, the declared default e = 24 is frozen and a null result is expected.\n     Otherwise the SMALLEST e with gain(e) >= 0.9 * max gain is frozen (cheapest near-best budget).\n  4. Moves stay unpin + anchor (the single-move ablations are reported, they do not change the rule).",
+  "n_samples": 12,
+  "safe_total_bytes": 270695,
+  "gain_bytes_by_budget": {
+    "8": 2,
+    "24": 10,
+    "64": 10
+  },
+  "non_ok_rows": {},
+  "ablation_gain_bytes": {
+    "safe_refine_unpin_e24_m0_zstd9": 10,
+    "safe_refine_anchor_e24_m0_zstd9": 0
+  },
+  "frozen_budget": 24,
+  "reason": "smallest budget with gain >= 0.9 x max gain (10 B)"
+}

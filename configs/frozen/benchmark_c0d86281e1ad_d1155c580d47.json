@@ -1,0 +1,62 @@
+{
+  "freeze_id": "benchmark_c0d86281e1ad_d1155c580d47",
+  "mode": "benchmark",
+  "config_path": "D:\\CAPE_PINS\\configs\\test_v2_frozen.yaml",
+  "config_hash": "c0d86281e1ad4081cf060e8d44bce2625f66e2e8be6f24f975da96bd34184893",
+  "methods_hash": "92dc15fc0f89d8a939d97249ec7636c01c414bd4d265e1b39b05468ee2a591f8",
+  "split_hash": "d1155c580d47c734ad30ca53cb4c13a7f1e4cc7a0c9e04b94ae5e78cd5d779cc",
+  "source_hash": "d68ac322c3cfef821d502799ae92514d91c626030962f6ec59ddc3aede963312",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "safe_refine_e24_m0_zstd9",
+    "safe_archive_m0_zstd9",
+    "safe_refine_e24_m0_zstd3",
+    "safe_archive_m0_zstd3",
+    "safe_refine_e24_m5_zstd9",
+    "safe_archive_m5_zstd9",
+    "safe_refine_e24_m5_zstd3",
+    "safe_archive_m5_zstd3",
+    "cape_fast_m0",
+    "cape_fast_m5",
+    "cape_certified_m0",
+    "cape_m0",
+    "cape_m0_legacy",
+    "crackle_flat_m0",
+    "crackle_flat_m5",
+    "crackle_pins_opt_m0",
+    "crackle_pins_opt_m5",
+    "crackle_pins_opt_corrected_m0",
+    "crackle_vendor_pins_opt_m0",
+    "cape_core",
+    "stock_cover",
+    "weighted_greedy"
+  ],
+  "primary": {
+    "new": "safe_refine_e24_m0_zstd9",
+    "baseline": "safe_archive_m0_zstd9"
+  },
+  "splits": [
+    "heldout"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-06T04:46:25.166+00:00"
+}

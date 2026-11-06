@@ -1,0 +1,26 @@
+series,family,x_field,x,y_field,y
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,64.0,solve_ms,0.0043
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,67.0,solve_ms,0.0348
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,128.0,solve_ms,0.005
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,131.0,solve_ms,0.0569
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,149.0,solve_ms,1.2161
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,163.0,solve_ms,1.6171
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,257.0,solve_ms,0.3184
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,257.0,solve_ms,1.6235
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,286.0,solve_ms,0.8854
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,318.0,solve_ms,6.4429
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,346.0,solve_ms,5.4791
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,703.0,solve_ms,22.1732
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,1085.0,solve_ms,46.7119
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,1222.0,solve_ms,45.2297
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,1856.0,solve_ms,96.3371
+CAPE-FAST pass1+pass2,Crackle connectomics,max_component_cc,10369.0,solve_ms,539.779
+CAPE-FAST pass1+pass2,Crackle ws,max_component_cc,213.0,solve_ms,5.5675
+CAPE-FAST pass1+pass2,Crackle ws,max_component_cc,374.0,solve_ms,91.8394
+CAPE-FAST pass1+pass2,Crackle ws,max_component_cc,954.0,solve_ms,401.8231
+CAPE-FAST pass1+pass2,Crackle ws,max_component_cc,954.0,solve_ms,839.8156
+CAPE-FAST pass1+pass2,CREMI A,max_component_cc,125.0,solve_ms,0.2784
+CAPE-FAST pass1+pass2,CREMI A,max_component_cc,217.0,solve_ms,0.7113
+CAPE-FAST pass1+pass2,CREMI A,max_component_cc,267.0,solve_ms,2.4243
+CAPE-FAST pass1+pass2,CREMI A,max_component_cc,1478.0,solve_ms,9.7767
+CAPE-FAST pass1+pass2,CREMI A,max_component_cc,1547.0,solve_ms,15.1302

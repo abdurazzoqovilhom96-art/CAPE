@@ -1,0 +1,46 @@
+{
+  "summary": [
+    {
+      "markov": 0,
+      "zstd": 3,
+      "n": 24,
+      "pins_raw_label_share_median_pct": 5.424987535122652,
+      "pins_archive_label_share_median_pct": 7.410702665296304,
+      "pins_archive_label_share_max_pct": 9.61656441717792,
+      "flat_archive_label_share_median_pct": 7.640879270917789
+    },
+    {
+      "markov": 0,
+      "zstd": 9,
+      "n": 24,
+      "pins_raw_label_share_median_pct": 5.424987535122652,
+      "pins_archive_label_share_median_pct": 7.292967808157075,
+      "pins_archive_label_share_max_pct": 9.72351662006834,
+      "flat_archive_label_share_median_pct": 7.30430748319677
+    },
+    {
+      "markov": 5,
+      "zstd": 3,
+      "n": 24,
+      "pins_raw_label_share_median_pct": 7.550048310841172,
+      "pins_archive_label_share_median_pct": 7.565499862894049,
+      "pins_archive_label_share_max_pct": 9.472000000000003,
+      "flat_archive_label_share_median_pct": 7.495456153581575
+    },
+    {
+      "markov": 5,
+      "zstd": 9,
+      "n": 24,
+      "pins_raw_label_share_median_pct": 7.550048310841172,
+      "pins_archive_label_share_median_pct": 7.541403048292733,
+      "pins_archive_label_share_max_pct": 9.522282782943247,
+      "flat_archive_label_share_median_pct": 7.302200512717722
+    }
+  ],
+  "gate": {
+    "gate_percent": 3.0,
+    "median_pins_archive_label_share_pct": 7.476052856794519,
+    "passed": true,
+    "meaning": "label side owns a meaningful share of the stored file"
+  }
+}

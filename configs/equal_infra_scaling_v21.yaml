@@ -1,0 +1,23 @@
+# v2.1 equal-infrastructure internal comparison on the scaling crops (development, descriptive).
+# Same 2x2 (exact DP x local search) on the CAPE-FAST pipeline; stock times for these crops are in the
+# scaling_stock run (crops <= 2^25 voxels).
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v2.1 equal-infrastructure 2x2 (exact DP x local search) on the nested scaling crops
+input:
+  manifest: data/manifests/scaling_v21.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  repeats: 3
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_fast_m0, cape_fast_exact_only_m0, greedy_local_fast_m0, weighted_greedy_fast_m0]
+panels: [B]
+primary:
+  new: cape_fast_m0
+  baseline: weighted_greedy_fast_m0
+oracle:
+  enabled: false

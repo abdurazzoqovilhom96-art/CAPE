@@ -1,0 +1,17 @@
+# Offline optimality audit (spec section 12): CP-SAT on small/medium CAPE components.
+# Audit time is never added to encode time; FEASIBLE/timeouts are never reported as OPTIMAL.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: oracle
+description: CP-SAT audit of CAPE component models (development split)
+input:
+  manifest: data/manifests/pilot.jsonl
+  splits: [development]
+methods: [cape_m0]
+panels: [A]
+oracle:
+  enabled: true
+  max_cc: 80
+  max_components: 500
+  time_limit_s: 30

@@ -1,0 +1,22 @@
+# Width sensitivity (spec 39.2) and scale panel on 512^3 Crackle repository samples
+# (development split). Z = 512 > 256, so the depth-width regimes (w_D = 2 full runs vs w_D = 1
+# windows of 256) are actually exercised; windowed incidences may exceed the memory forecast,
+# which is then reported as OOM_PREVENTED for that regime, never pruned silently.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: development
+description: Depth-width regimes (Z=512) and scale panel on Crackle repository samples
+input:
+  manifest: data/manifests/width_sensitivity.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  repeats: 3
+  external_wrappers: [none]
+  task_timeout_s: 1800
+methods: [cape_m0, cape_core, cape_fixed_depth_width, cape_maximal_runs_only, cape_no_exact, stock_cover,
+          crackle_pins_opt_m0, crackle_vendor_pins_opt_m0, crackle_flat_m0, zstd3]
+panels: [A, B]
+oracle:
+  enabled: false

@@ -1,0 +1,12 @@
+{
+  "role": "frozen v2.1 FAST etalon (CAPE v3 protocol section 2)",
+  "file": "_cape_native.cp312-win_amd64.pyd",
+  "sha256": "39dca94b1eeb1c59c98b1dcb117e2f46c3b4ddf6b3539dd067c2a4f40a4ff2cb",
+  "bytes": 2631806,
+  "copied_from": "cape/_cape_native.cp312-win_amd64.pyd",
+  "native_build_record": "build/native_build.json (built_at 2026-11-06T09:18:16Z, sha256 39dca94b...)",
+  "source_tree_hash_at_snapshot": "36652d2cd1c31689d42219387a99a792e7ee9f6f3719b4f3d989b2ce992bbd61",
+  "cpp_unchanged_since_build": "no file under cpp/ or CMakeLists.txt is newer than the .pyd (checked 2026-11-06)",
+  "snapshot_at": "2026-11-06T12:11:33+00:00",
+  "git_tag": "v2.1"
+}

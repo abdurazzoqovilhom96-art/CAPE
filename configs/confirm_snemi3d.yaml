@@ -1,0 +1,31 @@
+# Plan v2.1 PRE-REGISTERED confirmatory run on SNEMI3D (CREMI-independent family; frozen 2026-11-06,
+# before any codec ran on these crops). NOT RUN YET - start it only on an explicit request:
+#   py -3.12 run_all.py --stage all --config configs/confirm_snemi3d.yaml --manifest data/manifests/confirm_snemi3d.jsonl
+# Primary (raw): CAPE-FAST vs corrected stock pins. Secondary (archive): SAFE-ARCHIVE vs flat + zstd 9
+# (same zstd frame settings). The refinement is EXPERIMENTAL and deliberately not part of this run.
+# Statistics: paired per-sample ratios, cluster bootstrap over the 16 macroblocks (nested crops share a
+# cluster), 10 000 resamples, seed below. A null or negative result is reported as such.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: benchmark
+description: v2.1 confirmatory test on SNEMI3D (mouse cortex, CC-BY-4.0) - CAPE-FAST, CERTIFIED, corrected stock, stock, flat, SAFE-ARCHIVE
+input:
+  manifest: data/manifests/confirm_snemi3d.jsonl
+  splits: [heldout]
+  require_real_data: true
+benchmark:
+  repeats: 5
+  external_wrappers: [none, zstd9]
+methods: [cape_fast_m0, cape_certified_m0, crackle_pins_opt_corrected_m0, crackle_pins_opt_m0, crackle_flat_m0,
+          safe_archive_m0_zstd9, cape_fast_m5, crackle_flat_m5, crackle_pins_opt_m5, safe_archive_m5_zstd9]
+panels: [A, B]
+primary:
+  new: cape_fast_m0
+  baseline: crackle_pins_opt_corrected_m0
+oracle:
+  enabled: false
+stats:
+  bootstrap_resamples: 10000
+  seed: 20261106
+  cluster_by: macroblock_id

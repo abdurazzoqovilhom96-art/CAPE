@@ -1,0 +1,3 @@
+
+=== 2026-11-06T09:17:14+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/make_scaling_manifest.py
+scaling: 25 crops (19 for stock) -> data/manifests/scaling_v21*.jsonl; skipped/not-applicable: 6

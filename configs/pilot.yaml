@@ -1,0 +1,55 @@
+# Pilot on real labels (spec section 26 starting contract). Development split only.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: pilot
+description: Real-data pilot (CREMI A / Crackle sample crops), development split
+input:
+  manifest: data/manifests/pilot.jsonl
+  canonical_axes: ZYX
+  preserve_ids: true
+  allow_synthetic_for_real: false
+  splits: [development]
+  require_real_data: true
+algorithm:
+  candidate_policy: depth_bounded_complete_windows
+  reductions: [equal_coverage, subset, singleton_dominance]
+  online_dual: fixed_point_ascent
+  dual_scale: 1048576
+  exact_max_cc: 20
+  exact_max_transitions_per_component: 50000000
+  exact_max_transitions_total: 200000000
+  exact_memory_mib: 64
+  local_checks_per_component: 10000
+  local_checks_total: 1000000
+  count_policy: safe_then_compact
+  depth_policy: full_width_first
+  background_policy: min_current_serialized_cost
+  deterministic: true
+benchmark:
+  threads: 1
+  concurrent_timed_jobs: 1
+  warmups: 1
+  repeats: 7
+  min_batch_ms: 200
+  task_timeout_s: 600
+  process_memory_gib: 20
+  max_total_working_memory_gib: 24
+  memory_profile_separate: true
+  verify_every_result: true
+  external_wrappers: [none, zstd3]
+outputs:
+  root: results
+  write_bitstreams: true
+  write_decoded_arrays: false
+  archive_raw_metrics: true
+  paper_assets: true
+methods: [cape_m0, cape_m5, cape_m0_minfmt, crackle_pins_opt_m0, crackle_pins_fast_m0, crackle_flat_m0,
+          crackle_flat_m5, crackle_pins_opt_m5, crackle_vendor_pins_opt_m0, stock_cover, weighted_greedy,
+          greedy_local, cape_core, cape_no_dedup, cape_no_dominance, cape_no_exact, cape_no_local,
+          cape_no_dual_gate, cape_stock_background, cape_fixed_depth_width, cape_maximal_runs_only,
+          compresso_native, compresso_lzma6, neuroglancer_b8, csgv_rans_b64, csgvr_sb_b64, zstd3, zstd9,
+          lzma6_raw, blosc2_bshuffle_zstd5, raw]
+panels: [A, B]
+oracle:
+  enabled: true

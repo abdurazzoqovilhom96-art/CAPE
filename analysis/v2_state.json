@@ -1,0 +1,75 @@
+{
+  "created_at": "2026-11-06T04:17:18+00:00",
+  "steps": {
+    "tests": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "1766 passed, 12 deselected in 22.47s",
+      "started_at": "2026-11-06T04:17:18+00:00",
+      "ended_at": "2026-11-06T04:17:41+00:00",
+      "seconds": 23.1
+    },
+    "pilot": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results\\20261106T041741Z_pilot_ca467036",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T04:17:41+00:00",
+      "ended_at": "2026-11-06T04:45:58+00:00",
+      "seconds": 1696.4
+    },
+    "freeze": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v2_freeze/freeze.json, configs/test_v2_frozen.yaml",
+      "started_at": "2026-11-06T04:45:58+00:00",
+      "ended_at": "2026-11-06T04:45:58+00:00",
+      "seconds": 0.3
+    },
+    "test": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results\\20261106T044558Z_all_83c337ae",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T04:45:58+00:00",
+      "ended_at": "2026-11-06T06:25:40+00:00",
+      "seconds": 5982.4
+    },
+    "width": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results\\20261106T062540Z_development_0227806a",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T06:25:40+00:00",
+      "ended_at": "2026-11-06T08:42:11+00:00",
+      "seconds": 8191.0
+    },
+    "ceiling": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v2_ceiling_pilot, analysis/v2_ceiling_test",
+      "started_at": "2026-11-06T08:42:11+00:00",
+      "ended_at": "2026-11-06T08:42:16+00:00",
+      "seconds": 4.4
+    },
+    "audit": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v2_audit",
+      "started_at": "2026-11-06T08:43:28+00:00",
+      "ended_at": "2026-11-06T08:43:29+00:00",
+      "seconds": 0.6
+    },
+    "report": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v2_final/V2_YAKUNIY_HISOBOT_UZ.md",
+      "started_at": "2026-11-06T08:43:29+00:00",
+      "ended_at": "2026-11-06T08:43:30+00:00",
+      "seconds": 1.4
+    }
+  }
+}

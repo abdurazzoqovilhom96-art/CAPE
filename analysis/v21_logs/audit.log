@@ -1,0 +1,3 @@
+
+=== 2026-11-06T10:14:49+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/audit_report.py --runs results\20261106T091815Z_development_73f40dd8 results\20261106T100701Z_development_9be56574 --out v21_audit --new cape_fast_m0 --base cape_m0_legacy --pairs cape_fast_m0:crackle_pins_opt_corrected_m0 safe_refine_e24_m0_zstd9:safe_archive_m0_zstd9
+audit verified=True -> D:\CAPE_PINS\analysis\v21_audit

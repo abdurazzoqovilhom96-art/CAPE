@@ -1,0 +1,25 @@
+# Plan v2.1 scaling panel (development data only; descriptive): how encode time, peak memory,
+# candidate counts and the largest component grow with the volume, for CAPE core (FAST), CAPE with depth
+# regimes, the v1 implementation, SAFE-ARCHIVE and the EXPERIMENTAL refinement, with flat as the floor.
+#   python scripts/make_scaling_manifest.py
+#   py -3.12 run_all.py --stage development --config configs/scaling_v21.yaml --manifest data/manifests/scaling_v21.jsonl
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v2.1 scaling (seen development sources, origin-nested crops) - CAPE-FAST, depth regimes, v1 legacy, SAFE-ARCHIVE, SAFE+refine (experimental), flat
+input:
+  manifest: data/manifests/scaling_v21.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  repeats: 3
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_fast_m0, cape_m0, cape_m0_legacy, safe_archive_m0_zstd9, safe_refine_e24_m0_zstd9, crackle_flat_m0]
+panels: [A, B]
+primary:
+  new: cape_fast_m0
+  baseline: cape_m0_legacy
+oracle:
+  enabled: false

@@ -1,0 +1,109 @@
+{
+  "created_at": "2026-11-06T08:49:41+00:00",
+  "steps": {
+    "check_v2": {
+      "status": "DONE",
+      "detail": "v2 width run results\\20261106T062540Z_development_0227806a",
+      "width_run": "results\\20261106T062540Z_development_0227806a",
+      "test_run": "results\\20261106T044558Z_all_83c337ae",
+      "pilot_run": "results\\20261106T041741Z_pilot_ca467036",
+      "started_at": "2026-11-06T08:49:41+00:00",
+      "ended_at": "2026-11-06T08:49:41+00:00",
+      "seconds": 0.0
+    },
+    "build": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "build/native_build.json",
+      "started_at": "2026-11-06T08:49:41+00:00",
+      "ended_at": "2026-11-06T08:49:42+00:00",
+      "seconds": 0.9
+    },
+    "tests": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "1841 passed, 12 deselected in 33.13s",
+      "started_at": "2026-11-06T08:49:42+00:00",
+      "ended_at": "2026-11-06T08:50:16+00:00",
+      "seconds": 33.7
+    },
+    "snemi_prepare": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "data/manifests/confirm_snemi3d.jsonl (frozen; no compression run on it)",
+      "started_at": "2026-11-06T08:50:16+00:00",
+      "ended_at": "2026-11-06T08:50:17+00:00",
+      "seconds": 1.2
+    },
+    "attribution": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v21_speedup",
+      "started_at": "2026-11-06T08:50:17+00:00",
+      "ended_at": "2026-11-06T09:17:14+00:00",
+      "seconds": 1616.9
+    },
+    "scaling_prep": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "data/manifests/scaling_v21*.jsonl",
+      "started_at": "2026-11-06T09:17:14+00:00",
+      "ended_at": "2026-11-06T09:18:15+00:00",
+      "seconds": 60.8
+    },
+    "scaling": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results\\20261106T091815Z_development_73f40dd8",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T09:18:15+00:00",
+      "ended_at": "2026-11-06T10:07:01+00:00",
+      "seconds": 2926.6
+    },
+    "scaling_stock": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results\\20261106T100701Z_development_9be56574",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T10:07:01+00:00",
+      "ended_at": "2026-11-06T10:14:49+00:00",
+      "seconds": 467.3
+    },
+    "audit": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v21_audit",
+      "started_at": "2026-11-06T10:14:49+00:00",
+      "ended_at": "2026-11-06T10:14:49+00:00",
+      "seconds": 0.1
+    },
+    "report": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v21_final/V21_HISOBOT_UZ.md",
+      "started_at": "2026-11-06T10:17:26+00:00",
+      "ended_at": "2026-11-06T10:17:28+00:00",
+      "seconds": 1.7
+    },
+    "equal_infra_test": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results\\20261106T110439Z_development_8fdf0a60",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T11:04:39+00:00",
+      "ended_at": "2026-11-06T11:13:49+00:00",
+      "seconds": 550.3
+    },
+    "equal_infra_scaling": {
+      "status": "SUPERSEDED",
+      "started_at": "2026-11-06T11:13:49+00:00",
+      "ended_at": "2026-11-06T12:11:40+00:00",
+      "run_dir": "results\u008261106T111350Z_development_e91c32fe",
+      "run_status": "RUNNING (process died; last commit 2026-11-06T11:24:59Z)",
+      "detail": "interrupted at 307/400 tasks (all 307 OK, 0 failures); configs/methods.yaml changed at 11:15:04Z after INIT, so the source hash differs and the run cannot be resumed (results never mix sources). Partial run kept on disk. The equal-infrastructure (matched solver) comparison is re-measured in the CAPE v3 development stage."
+    }
+  }
+}

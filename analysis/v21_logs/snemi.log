@@ -1,0 +1,6 @@
+
+=== 2026-11-06T08:50:16+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/fetch_snemi3d.py
+OK already verified offline: snemi.zip md5=3d25a7025f66698f33c7850ace885939 sha256=59b72d89e14ddd4b.. (log kept, no download)
+
+=== 2026-11-06T08:50:17+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/freeze_data.py --snemi3d-confirm
+confirm_snemi3d.jsonl already frozen - not rewritten (delete it explicitly to re-freeze)

@@ -1,0 +1,6 @@
+variant,saved_bytes,saved_percent,extra_encode_ms_median
+safe_refine_e8_m0_zstd9,2,0.0007388389146456344,64.3216695
+safe_refine_e24_m0_zstd9,10,0.003694194573228172,164.5371695
+safe_refine_e64_m0_zstd9,10,0.003694194573228172,330.6749195
+safe_refine_unpin_e24_m0_zstd9,10,0.003694194573228172,162.98911950000002
+safe_refine_anchor_e24_m0_zstd9,0,0.0,16.990782

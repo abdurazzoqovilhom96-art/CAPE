@@ -1,0 +1,62 @@
+
+=== 2026-11-06T10:14:49+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/v21_report.py --state analysis\v21_state.json
+Traceback (most recent call last):
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 511, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 478, in main
+    figs = figures(rows, t_js.get("rows", []))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 429, in figures
+    scatter("V21_S3_time_vs_voxels", "Encode vaqti va hajm (log-log)", "voxels", "vokselllar soni V",
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 426, in scatter
+    save(fig, name, data)
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 407, in save
+    w.writerows(data)
+  File "C:\Users\azamat\AppData\Local\Programs\Python\Python312\Lib\csv.py", line 167, in writerows
+    return self.writer.writerows(map(self._dict_to_list, rowdicts))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azamat\AppData\Local\Programs\Python\Python312\Lib\csv.py", line 159, in _dict_to_list
+    raise ValueError("dict contains fields not in fieldnames: "
+ValueError: dict contains fields not in fieldnames: 'legacy_enc_ms'
+
+=== 2026-11-06T10:15:12+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/v21_report.py --state analysis\v21_state.json
+D:\CAPE_PINS\scripts\v21_report.py:426: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  ax.legend(fontsize=6.5, ncol=2, frameon=False)
+Traceback (most recent call last):
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 515, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 482, in main
+    figs = figures(rows, t_js.get("rows", []))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 461, in figures
+    save(fig, "V21_S7_time_breakdown", data)
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 407, in save
+    w.writerows(data)
+  File "C:\Users\azamat\AppData\Local\Programs\Python\Python312\Lib\csv.py", line 167, in writerows
+    return self.writer.writerows(map(self._dict_to_list, rowdicts))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azamat\AppData\Local\Programs\Python\Python312\Lib\csv.py", line 159, in _dict_to_list
+    raise ValueError("dict contains fields not in fieldnames: "
+ValueError: dict contains fields not in fieldnames: 'refine (Python)', 'glue'
+
+=== 2026-11-06T10:15:22+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/v21_report.py --state analysis\v21_state.json
+D:\CAPE_PINS\scripts\v21_report.py:427: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  ax.legend(fontsize=6.5, ncol=2, frameon=False)
+wrote D:\CAPE_PINS\analysis\v21_final\V21_HISOBOT_UZ.md (5 figures)
+
+=== 2026-11-06T10:16:27+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/v21_report.py --state analysis\v21_state.json
+  File "D:\CAPE_PINS\scripts\v21_report.py", line 261
+    "= FAST ichidagi qisqartirish va pass1+pass2 vaqti (bitta o'lchov).
+    ^
+SyntaxError: unterminated string literal (detected at line 261)
+
+=== 2026-11-06T10:16:38+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/v21_report.py --state analysis\v21_state.json
+wrote D:\CAPE_PINS\analysis\v21_final\V21_HISOBOT_UZ.md (5 figures)
+
+=== 2026-11-06T10:17:16+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/v21_report.py --state analysis\v21_state.json
+wrote D:\CAPE_PINS\analysis\v21_final\V21_HISOBOT_UZ.md (5 figures)
+
+=== 2026-11-06T10:17:26+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/v21_report.py --state analysis\v21_state.json
+wrote D:\CAPE_PINS\analysis\v21_final\V21_HISOBOT_UZ.md (5 figures)

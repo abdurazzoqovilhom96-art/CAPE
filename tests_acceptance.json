@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-11-06T04:15:19+00:00",
+  "tests": {
+    "test_T10_plot_failure_is_explicit": {
+      "outcome": "passed",
+      "duration_s": 5.71,
+      "detail": null
+    },
+    "test_T11_auto_freeze_before_heldout_metrics": {
+      "outcome": "passed",
+      "duration_s": 5.52,
+      "detail": null
+    },
+    "test_T12_mixed_scope_is_rejected": {
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "detail": null
+    },
+    "test_T1_normal_completion": {
+      "outcome": "passed",
+      "duration_s": 0.01,
+      "detail": null
+    },
+    "test_T2_negative_result_is_reported": {
+      "outcome": "passed",
+      "duration_s": 7.43,
+      "detail": null
+    },
+    "test_T3_worker_failure_is_isolated": {
+      "outcome": "passed",
+      "duration_s": 7.66,
+      "detail": null
+    },
+    "test_T4_lossless_failure_never_wins": {
+      "outcome": "passed",
+      "duration_s": 5.05,
+      "detail": null
+    },
+    "test_T5_controlled_interrupt_keeps_commits": {
+      "outcome": "passed",
+      "duration_s": 3.42,
+      "detail": null
+    },
+    "test_T6_hard_kill_and_recovery": {
+      "outcome": "passed",
+      "duration_s": 20.38,
+      "detail": null
+    },
+    "test_T7_report_only_rebuild": {
+      "outcome": "passed",
+      "duration_s": 3.67,
+      "detail": null
+    },
+    "test_T8_empty_artifact_blocks_success": {
+      "outcome": "passed",
+      "duration_s": 1.0,
+      "detail": null
+    },
+    "test_T9_no_real_data_is_blocked": {
+      "outcome": "passed",
+      "duration_s": 1.63,
+      "detail": null
+    }
+  },
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0
+  }
+}

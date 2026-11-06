@@ -1,0 +1,35 @@
+# Smoke: synthetic fixtures + deterministic crops of the Crackle repository samples.
+# Purpose: prove the whole chain (encode -> verify -> SQLite -> CSV -> tables -> figures ->
+# report -> ZIP) end to end. Not a paper result: synthetic rows are reported separately.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: smoke
+description: End-to-end smoke on synthetic fixtures and Crackle repository sample crops
+input:
+  manifest: data/manifests/smoke.jsonl
+  splits: [synthetic, development]
+algorithm:
+  exact_max_transitions_total: 50000000
+  local_checks_total: 200000
+benchmark:
+  warmups: 1
+  repeats: 2
+  min_batch_ms: 20
+  small_task_ms: 10
+  task_timeout_s: 300
+  process_memory_gib: 8
+  max_total_working_memory_gib: 12
+  external_wrappers: [none, zstd3]
+outputs:
+  live_plot_every: 25
+methods: [cape_m0, cape_m5, crackle_pins_opt_m0, crackle_pins_fast_m0, crackle_flat_m0,
+          crackle_pins_opt_m5, crackle_vendor_pins_opt_m0, stock_cover, weighted_greedy,
+          greedy_local, cape_core, cape_no_exact, compresso_native, neuroglancer_b8, zstd3,
+          blosc2_bshuffle_zstd5, raw, csgv_rans_b64]
+panels: [A, B]
+oracle:
+  enabled: true
+  max_cc: 40
+  max_components: 60
+  time_limit_s: 10

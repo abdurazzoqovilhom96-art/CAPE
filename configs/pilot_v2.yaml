@@ -1,0 +1,25 @@
+# Plan v2 pilot (development split, CREMI A only). Settings for the test run are chosen from THIS run
+# by the pre-registered rule in scripts/freeze_v2.py and written to configs/test_v2_frozen.yaml.
+#   .\run_experiment.cmd --stage pilot --config ".\configs\pilot_v2.yaml" --manifest ".\data\manifests\pilot.jsonl"
+schema_version: 1
+project: CAPE-Pins
+seed: 20261105
+mode: pilot
+description: v2 pilot (CREMI A, development) - old CAPE, CAPE-FAST/CERTIFIED, stock, corrected stock, flat, SAFE-ARCHIVE, SAFE+refine and refine ablations
+input:
+  manifest: data/manifests/pilot.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  repeats: 5
+  external_wrappers: [none, zstd3, zstd9]
+methods: [safe_refine_e24_m0_zstd9, safe_archive_m0_zstd9, safe_refine_e8_m0_zstd9, safe_refine_e64_m0_zstd9,
+          safe_refine_unpin_e24_m0_zstd9, safe_refine_anchor_e24_m0_zstd9, safe_refine_e24_m0_zstd3,
+          safe_archive_m0_zstd3, cape_fast_m0, cape_certified_m0, cape_m0, cape_m0_legacy, crackle_flat_m0,
+          crackle_pins_opt_m0, crackle_pins_opt_corrected_m0, cape_core, stock_cover, weighted_greedy]
+panels: [A, B]
+primary:
+  new: safe_refine_e24_m0_zstd9
+  baseline: safe_archive_m0_zstd9
+oracle:
+  enabled: false

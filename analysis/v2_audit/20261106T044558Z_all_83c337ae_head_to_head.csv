@@ -1,0 +1,13 @@
+competitor,cape_counterpart,n,cape_smaller,equal,cape_larger,sum_cape,sum_competitor,cape_vs_competitor_percent
+crackle_flat_m0,cape_m0,24,12,2,10,534485,535558,-0.2003517826267176
+crackle_flat_m0+zstd3,cape_m0+zstd3,24,15,0,9,328690,329888,-0.3631535551459897
+crackle_flat_m0+zstd9,cape_m0+zstd9,24,9,0,15,318839,319047,-0.06519415634687054
+crackle_pins_opt_corrected_m0,cape_m0,24,23,1,0,534485,535058,-0.1070911938518826
+crackle_pins_opt_corrected_m0+zstd3,cape_m0+zstd3,24,21,1,2,328690,329255,-0.17159952012877344
+crackle_pins_opt_corrected_m0+zstd9,cape_m0+zstd9,24,22,1,1,318839,319269,-0.13468266571449172
+crackle_pins_opt_m0,cape_m0,24,23,1,0,534485,535058,-0.1070911938518826
+crackle_pins_opt_m0+zstd3,cape_m0+zstd3,24,21,1,2,328690,329255,-0.17159952012877344
+crackle_pins_opt_m0+zstd9,cape_m0+zstd9,24,22,1,1,318839,319269,-0.13468266571449172
+crackle_vendor_pins_opt_m0,cape_m0,24,23,1,0,534485,535058,-0.1070911938518826
+safe_refine_e24_m0_zstd3,cape_m0,24,0,0,24,534485,328411,62.74881170240949
+safe_refine_e24_m0_zstd9,cape_m0,24,0,0,24,534485,318450,67.83953524886168

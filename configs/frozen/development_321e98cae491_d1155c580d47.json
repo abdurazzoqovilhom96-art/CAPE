@@ -1,0 +1,45 @@
+{
+  "freeze_id": "development_321e98cae491_d1155c580d47",
+  "mode": "development",
+  "config_path": "D:\\CAPE_PINS\\configs\\equal_infra_test_v21.yaml",
+  "config_hash": "321e98cae4911f1ea2242ed239733c51378f8cae447f305530f79307a24239e7",
+  "methods_hash": "247c5dedf0b18434110ed6c36c21e558bf2e2dba0363b0105fca973268bb3a9d",
+  "split_hash": "d1155c580d47c734ad30ca53cb4c13a7f1e4cc7a0c9e04b94ae5e78cd5d779cc",
+  "source_hash": "602ba41d6c5e5584fc652785bdb7bfde9b8d8d77ebfdc56f6da52d1af45ece1b",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "cape_fast_m0",
+    "cape_fast_exact_only_m0",
+    "greedy_local_fast_m0",
+    "weighted_greedy_fast_m0",
+    "crackle_pins_opt_corrected_m0"
+  ],
+  "primary": {
+    "new": "cape_fast_m0",
+    "baseline": "weighted_greedy_fast_m0"
+  },
+  "splits": [
+    "heldout"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-06T11:05:23.306+00:00"
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cape-pins/measurement.schema.json",
+  "title": "CAPE-Pins timed measurement (spec section 27): one row per committed timed sample",
+  "type": "object",
+  "required": ["run_id", "task_id", "sample_id", "method_id", "method_version", "config_hash", "source_hash",
+               "input_hash", "panel", "split", "repeat", "seed", "threads", "status", "reason", "original_dtype",
+               "canonical_shape", "input_bytes", "payload_bytes", "metadata_bytes", "total_bytes", "label_bytes",
+               "encode_ns", "decode_ns", "conversion_ns", "verify_ns", "peak_rss_bytes", "rss_measurement_mode",
+               "lossless", "candidate_count_before", "candidate_count_after", "incidence_count", "component_count",
+               "max_component_cc", "exact_cc_fraction", "ub_bytes", "lb_bytes", "certificate_scope",
+               "certificate_valid", "bitstream_sha256", "bitstream_path", "stdout_log", "stderr_log"],
+  "properties": {
+    "status": {"enum": ["OK", "FAILED_LOSSLESS", "FAILED_BUILD", "UNAVAILABLE", "UNSUPPORTED_DTYPE", "OOM",
+                        "TIMEOUT", "BLOCKED_DATA", "NOT_APPLICABLE", "INTERRUPTED"]},
+    "reason": {"type": ["string", "null"]},
+    "panel": {"enum": ["A", "B", "C", "MEM"]},
+    "repeat": {"type": "integer", "minimum": -1},
+    "total_bytes": {"type": ["integer", "null"], "minimum": 1},
+    "payload_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "metadata_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "label_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "encode_ns": {"type": ["integer", "null"], "minimum": 1},
+    "decode_ns": {"type": ["integer", "null"], "minimum": 1},
+    "lossless": {"type": ["boolean", "null"]},
+    "bitstream_sha256": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {"if": {"properties": {"status": {"const": "OK"}}},
+     "then": {"properties": {"lossless": {"const": true}, "total_bytes": {"type": "integer", "minimum": 1},
+                             "bitstream_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}
+  ],
+  "additionalProperties": true
+}

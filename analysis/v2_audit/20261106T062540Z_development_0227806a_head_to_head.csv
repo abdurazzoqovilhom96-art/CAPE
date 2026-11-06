@@ -1,0 +1,8 @@
+competitor,cape_counterpart,n,cape_smaller,equal,cape_larger,sum_cape,sum_competitor,cape_vs_competitor_percent
+crackle_flat_m0,cape_m0,4,4,0,0,8791287,9903553,-11.230979427282307
+crackle_flat_m0+zstd9,cape_m0+zstd9,4,4,0,0,6542448,6928780,-5.575757925637703
+crackle_pins_opt_corrected_m0,cape_m0,4,4,0,0,8791287,8856190,-0.7328546474273945
+crackle_pins_opt_corrected_m0+zstd9,cape_m0+zstd9,4,4,0,0,6542448,6574894,-0.49348324094654616
+crackle_pins_opt_m0,cape_m0,4,4,0,0,8791287,8856190,-0.7328546474273945
+crackle_pins_opt_m0+zstd9,cape_m0+zstd9,4,4,0,0,6542448,6574894,-0.49348324094654616
+safe_refine_e24_m0_zstd9,cape_m0,4,0,0,4,8791287,6542030,34.381636892524185

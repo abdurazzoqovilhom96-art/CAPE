@@ -1,0 +1,22 @@
+# Claim gates (spec sections 31, 39.7). gates.py evaluates each flag from validated records;
+# a flag is true only with evidence. q1_guaranteed / novelty_100_percent never exist.
+schema_version: 1
+claims:
+  lossless:
+    evidence: every committed CAPE measurement decoded voxel-exactly by the original decoder; zero FAILED_LOSSLESS CAPE rows
+  smaller_than_stock:
+    evidence: primary pair on real samples of the requested split, total-byte ratio < 1 and cluster-bootstrap 95% CI upper bound < 1, complete coverage
+  faster_than_stock:
+    evidence: primary pair encode speedup (geometric mean) > 1 with cluster-bootstrap 95% CI lower bound > 1, same timing protocol
+  joint_win:
+    evidence: smaller_than_stock and faster_than_stock both true for the pre-registered primary pair (no post-hoc primary switch)
+  restricted_optimality:
+    evidence: all online certificates internally valid and the offline CP-SAT audit never contradicts them; claim limited to the stated certificate_scope
+  modern_comparison_complete:
+    evidence: csgv_rans_b64 measured (status OK) on every real sample, plus neuroglancer_b8 and compresso_native
+    required_methods: [csgv_rans_b64, neuroglancer_b8, compresso_native]
+  roi_claim_supported:
+    evidence: ROI panel enabled, complete, and csgvr_sb_b64 available
+    required_methods: [csgvr_sb_b64]
+  heldout_complete:
+    evidence: every planned held-out task committed under a protocol freeze whose hashes match the run

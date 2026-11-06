@@ -1,0 +1,60 @@
+{
+  "freeze_id": "smoke_be041c479557_a25d4f359667",
+  "mode": "smoke",
+  "config_path": "D:\\CAPE_PINS\\configs\\smoke.yaml",
+  "config_hash": "be041c479557b510e1bd5d43200a1a13773d603d291251353978f327d039abe5",
+  "methods_hash": "a2f14b04787a152fdd3adc34805983f45ab441c637f943354d0fcefa536265d0",
+  "split_hash": "a25d4f3596673367fd0f34713d9bb9f908a5d866e3ebf21866d7f8c2e0f4a9f4",
+  "source_hash": "526cbc0e6fb19aea8433e708e69618a18f60548ff9956cfba79ca79bc4e898f6",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 50000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 200000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "cape_m0",
+    "cape_m5",
+    "crackle_pins_opt_m0",
+    "crackle_pins_fast_m0",
+    "crackle_flat_m0",
+    "crackle_pins_opt_m5",
+    "crackle_vendor_pins_opt_m0",
+    "stock_cover",
+    "weighted_greedy",
+    "greedy_local",
+    "cape_core",
+    "cape_no_exact",
+    "compresso_native",
+    "neuroglancer_b8",
+    "zstd3",
+    "blosc2_bshuffle_zstd5",
+    "raw",
+    "csgv_rans_b64"
+  ],
+  "primary": {
+    "new": "cape_m0",
+    "baseline": "crackle_pins_opt_m0"
+  },
+  "splits": [
+    "synthetic",
+    "development"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-05T09:34:05.952+00:00",
+  "supersedes_source_hash": "2a546d14c00702ce26e80c315a071d8269d31ad30dfa3ce0b296d0995b262f9e"
+}

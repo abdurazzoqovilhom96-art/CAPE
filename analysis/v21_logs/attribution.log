@@ -1,0 +1,56 @@
+
+=== 2026-11-06T08:50:17+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/speedup_attribution.py --memory
+[1/16] cremi_A_x0_y768_z0_128x128x64 reps=7 done 2026-11-06T08:50:21+00:00
+[2/16] cremi_A_x0_y768_z0_256x256x64 reps=7 done 2026-11-06T08:50:43+00:00
+[3/16] cremi_A_x256_y0_z0_128x128x64 reps=7 done 2026-11-06T08:50:47+00:00
+[4/16] cremi_A_x256_y0_z0_256x256x64 reps=7 done 2026-11-06T08:51:08+00:00
+[5/16] cremi_A_x512_y0_z0_128x128x64 reps=7 done 2026-11-06T08:51:11+00:00
+[6/16] cremi_A_x512_y0_z0_256x256x64 reps=7 done 2026-11-06T08:51:30+00:00
+[7/16] cremi_A_x512_y512_z0_128x128x64 reps=7 done 2026-11-06T08:51:35+00:00
+[8/16] cremi_A_x512_y512_z0_256x256x64 reps=7 done 2026-11-06T08:51:55+00:00
+[9/16] cremi_A_x768_y0_z0_128x128x64 reps=7 done 2026-11-06T08:51:59+00:00
+[10/16] cremi_A_x768_y0_z0_256x256x64 reps=7 done 2026-11-06T08:52:19+00:00
+[11/16] cremi_A_x768_y512_z0_128x128x64 reps=7 done 2026-11-06T08:52:23+00:00
+[12/16] cremi_A_x768_y512_z0_256x256x64 reps=7 done 2026-11-06T08:52:43+00:00
+[13/16] crackle_connectomics_x0_y0_z256_512x512x256 reps=3 done 2026-11-06T08:59:01+00:00
+[14/16] crackle_connectomics_x0_y0_z384_512x512x128 reps=3 done 2026-11-06T09:01:51+00:00
+[15/16] crackle_connectomics_x256_y256_z0_256x256x512 reps=3 done 2026-11-06T09:05:56+00:00
+[16/16] crackle_ws_x0_y0_z0_256x256x512 reps=3 done 2026-11-06T09:16:14+00:00
+mem crackle_connectomics_x0_y0_z256_512x512x256 ----- peak=1069 MiB
+mem crackle_connectomics_x0_y0_z256_512x512x256 L---- peak=1069 MiB
+mem crackle_connectomics_x0_y0_z256_512x512x256 LHTSD peak=999 MiB
+mem crackle_connectomics_x0_y0_z256_512x512x256 ----D peak=1069 MiB
+mem crackle_connectomics_x0_y0_z256_512x512x256 LHTS- peak=999 MiB
+mem crackle_connectomics_x0_y0_z384_512x512x128 ----- peak=535 MiB
+mem crackle_connectomics_x0_y0_z384_512x512x128 L---- peak=535 MiB
+mem crackle_connectomics_x0_y0_z384_512x512x128 LHTSD peak=505 MiB
+mem crackle_connectomics_x0_y0_z384_512x512x128 ----D peak=535 MiB
+mem crackle_connectomics_x0_y0_z384_512x512x128 LHTS- peak=505 MiB
+mem crackle_connectomics_x256_y256_z0_256x256x512 ----- peak=510 MiB
+mem crackle_connectomics_x256_y256_z0_256x256x512 L---- peak=509 MiB
+mem crackle_connectomics_x256_y256_z0_256x256x512 LHTSD peak=487 MiB
+mem crackle_connectomics_x256_y256_z0_256x256x512 ----D peak=508 MiB
+mem crackle_connectomics_x256_y256_z0_256x256x512 LHTS- peak=488 MiB
+mem crackle_ws_x0_y0_z0_256x256x512 ----- peak=963 MiB
+mem crackle_ws_x0_y0_z0_256x256x512 L---- peak=964 MiB
+mem crackle_ws_x0_y0_z0_256x256x512 LHTSD peak=891 MiB
+mem crackle_ws_x0_y0_z0_256x256x512 ----D peak=956 MiB
+mem crackle_ws_x0_y0_z0_256x256x512 LHTS- peak=897 MiB
+{
+ "n_samples": 16,
+ "bytes_identical_all": true,
+ "decode_voxel_identical_all": true,
+ "max_abs_shapley_residual": 1.1102230246251565e-16,
+ "classes": {
+  "crackle_samples": {
+   "code": 0.4059188911309285,
+   "algorithmic": 0.43466524502810067,
+   "search_space": 0.27743733575826957
+  },
+  "cremi_A": {
+   "code": 0.31322932410995596,
+   "algorithmic": 0.24862164898200972,
+   "search_space": 0.002945076027317494
+  }
+ }
+}

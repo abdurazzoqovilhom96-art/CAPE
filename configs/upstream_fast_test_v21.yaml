@@ -1,0 +1,23 @@
+# v2.1: CAPE-FAST against upstream Crackle's DEFAULT fast pin encoder (allow_pins=1, find_suboptimal_pins,
+# upstream PR #29, 2025-01). Earlier large-volume speed-ups were measured only against allow_pins=2
+# (the slower greedy). Development analysis on already-measured crops (not a new held-out test).
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v2.1 CAPE-FAST vs upstream default fast pins encoder (allow_pins=1) - test crops
+input:
+  manifest: data/manifests/test_v2_unseen.jsonl
+  splits: [heldout]
+  require_real_data: true
+benchmark:
+  repeats: 5
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_fast_m0, crackle_pins_fast_m0]
+panels: [B]
+primary:
+  new: cape_fast_m0
+  baseline: crackle_pins_fast_m0
+oracle:
+  enabled: false
