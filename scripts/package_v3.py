@@ -66,7 +66,9 @@ def main(argv=None) -> int:
               "configs/v3_dev_quality_check.yaml", "configs/v3_confirm_frozen.yaml", "configs/v3_confirm_scale_frozen.yaml",
               "analysis/v3_freeze/freeze.json", "analysis/v3_select/selected_methods.json",
               "data/manifests/v3_dev_core.jsonl", "data/manifests/v3_dev_quality.jsonl", "data/manifests/scaling_v21.jsonl",
-              "data/manifests/confirm_snemi3d.jsonl", "data/manifests/confirm_snemi3d_v3_scale.jsonl"]:
+              "data/manifests/confirm_snemi3d.jsonl", "data/manifests/confirm_snemi3d_v3_scale.jsonl",
+              "data/manifests/confirm_snemi3d_v3_scale_stock.jsonl", "data/manifests/confirm_snemi3d_v3_scale_skipped.json",
+              "configs/v3_confirm_scale_stock_frozen.yaml"]:
         put("00_protocol", ROOT / f)
     for f in ("configs/v3_dev_core_rerun.yaml", "configs/v3_dev_scale_rerun.yaml"):
         if (ROOT / f).exists():
@@ -108,7 +110,7 @@ def main(argv=None) -> int:
         put("09_ablations", ROOT / "analysis" / "v3_select" / f)
     # 10 scaling / 11 archive / 12 statistics / 13 tables / 14 plot data / 15 figures / 16 reports
     fin = ROOT / "analysis" / "v3_final"
-    for f in ("scale_track.csv", "scale_track_methods.csv"):
+    for f in ("scale_track.csv", "scale_track_methods.csv", "scale_track_stock_methods.csv", "scale_track_stock_skipped.csv"):
         put("10_scaling", fin / "tables" / f)
     for f in ("V3_F4_memory_vs_n.csv", "V3_F5_stage_time.csv"):
         put("10_scaling", fin / "plot_data" / f)

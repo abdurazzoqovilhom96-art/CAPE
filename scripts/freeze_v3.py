@@ -55,8 +55,8 @@ def confirm_methods(sel: dict) -> tuple[list[str], list[str]]:
                "safe_v3_fast_m0_zstd9", "safe_v3_fast_m0_zstd3", "safe_stock_m0_zstd9", "safe_stock_m0_zstd3",
                "cape_v3_fast_m5", "cape_v21_fast_m5", "crackle_pins_opt_corrected_m5", "crackle_flat_m5",
                "compresso_native", "neuroglancer_b8", "blosc2_bshuffle_zstd5", "zstd9", "lzma6_raw", "raw"]
-    scale = ["cape_v3_fast_m0", "cape_v21_fast_m0", "crackle_pins_opt_corrected_m0", "crackle_flat_m0",
-             "v3_fast_weighted_greedy_m0", "cape_v3_certified_m0", "safe_v3_fast_m0_zstd9", "safe_stock_m0_zstd9"]
+    scale = ["cape_v3_fast_m0", "cape_v21_fast_m0", "crackle_flat_m0",
+             "v3_fast_weighted_greedy_m0", "cape_v3_certified_m0", "safe_v3_fast_m0_zstd9"]
     if sel.get("memory_impl_mask") is not None and sel["memory_impl_mask"] != sel["fast_impl_mask"]:
         primary.append("cape_v3_memory_m0")
         scale.append("cape_v3_memory_m0")
@@ -64,6 +64,42 @@ def confirm_methods(sel: dict) -> tuple[list[str], list[str]]:
         primary.append("cape_v3_quality_m0")
         scale.append("cape_v3_quality_m0")
     return primary, scale
+
+
+# the corrected stock pin optimizer only runs on volumes <= 2^25 voxels (v2.1 rule, data/manifests/
+# scaling_v21_skipped.json: 269 s per encode already at 512x512x256); on the SNEMI3D scale track it therefore runs on
+# the four quadrants (2^24.6 voxels each) with v3 FAST repeated in the same run as the matched reference
+STOCK_MAX_VOXELS = 1 << 25
+SCALE_STOCK_METHODS = ["cape_v3_fast_m0", "crackle_pins_opt_corrected_m0", "safe_v3_fast_m0_zstd9", "safe_stock_m0_zstd9"]
+
+
+def stock_subset_manifest() -> tuple[str, list[dict]]:
+    """confirm_snemi3d_v3_scale_stock.jsonl = rows of the scale manifest with <= 2^25 voxels (unchanged rows);
+    every larger row is listed as SKIPPED_BUDGET with the reason. Written before any codec runs on SNEMI3D."""
+    src = ROOT / "data" / "manifests" / "confirm_snemi3d_v3_scale.jsonl"
+    out = ROOT / "data" / "manifests" / "confirm_snemi3d_v3_scale_stock.jsonl"
+    keep, skipped = [], []
+    for line in src.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        r = json.loads(line)
+        shape = r.get("shape") or r.get("canonical_shape")
+        vox = int(shape[0]) * int(shape[1]) * int(shape[2])
+        if vox <= STOCK_MAX_VOXELS:
+            keep.append(line)
+        else:
+            skipped.append({"sample_id": r["sample_id"], "voxels": vox, "method": "crackle_pins_opt_corrected_m0, "
+                            "safe_stock_m0_zstd9", "status": "SKIPPED_BUDGET",
+                            "reason": f"stock Crackle pin optimizer not run above {STOCK_MAX_VOXELS} voxels (v2.1 rule; "
+                                      "269 s per encode already at 512x512x256 = 2^26)"})
+    if not keep:
+        raise SystemExit("BLOCKED: no SNEMI3D scale row within the stock budget")
+    if out.exists() and out.read_text(encoding="utf-8") != "\n".join(keep) + "\n":
+        raise SystemExit(f"REFUSED: {out.name} exists with different content")
+    out.write_text("\n".join(keep) + "\n", encoding="utf-8")
+    (ROOT / "data" / "manifests" / "confirm_snemi3d_v3_scale_skipped.json").write_text(json.dumps(skipped, indent=2),
+                                                                                       encoding="utf-8")
+    return out.relative_to(ROOT).as_posix(), skipped
 
 
 def write_config(name: str, desc: str, manifest: str, methods: list[str], repeats: int, wrappers: list[str],
@@ -108,12 +144,16 @@ def main() -> int:
     c2 = write_config("v3_confirm_scale_frozen", "CAPE v3 CONFIRM scale track (frozen): whole SNEMI3D volume + 4 "
                       "non-overlapping quadrants; one acquisition (conditional)",
                       "data/manifests/confirm_snemi3d_v3_scale.jsonl", scale, 3, ["none", "zstd9"], False)
+    stock_manifest, skipped = stock_subset_manifest()
+    c3 = write_config("v3_confirm_scale_stock_frozen", "CAPE v3 CONFIRM scale track, corrected stock (frozen): the "
+                      "SNEMI3D scale rows <= 2^25 voxels (4 quadrants), v3 FAST repeated as the matched reference",
+                      stock_manifest, SCALE_STOCK_METHODS, 3, ["none", "zstd9"], False)
     methods = load_methods()
-    for c in (c1, c2):
+    for c in (c1, c2, c3):
         load_run_config(c, methods)  # validates every method id
     proto = yaml.safe_load(PROTO.read_text(encoding="utf-8"))
     manifests = {}
-    for name in ("confirm_snemi3d.jsonl", "confirm_snemi3d_v3_scale.jsonl"):
+    for name in ("confirm_snemi3d.jsonl", "confirm_snemi3d_v3_scale.jsonl", "confirm_snemi3d_v3_scale_stock.jsonl"):
         p = ROOT / "data" / "manifests" / name
         rows = load_manifest(p)
         manifests[name] = {"sha256": sha_file(p), "rows": len(rows),
@@ -127,13 +167,15 @@ def main() -> int:
         "frozen_v21": {"sha256": frozen["sha256"], "file": "snapshots/v21/" + frozen["file"]},
         "selection": {k: sel.get(k) for k in ("fast_impl_mask", "memory_impl_mask", "quality_selected",
                                               "quality_composite_options")},
-        "methods": {m: methods[m] for m in sorted(set(primary) | set(scale))},
-        "configs": {c.relative_to(ROOT).as_posix(): sha_file(c) for c in (c1, c2)},
+        "methods": {m: methods[m] for m in sorted(set(primary) | set(scale) | set(SCALE_STOCK_METHODS))},
+        "configs": {c.relative_to(ROOT).as_posix(): sha_file(c) for c in (c1, c2, c3)},
         "manifests": manifests,
+        "stock_budget": {"max_voxels": STOCK_MAX_VOXELS, "skipped": skipped},
         "confirm_runs": {"primary": {"config": c1.relative_to(ROOT).as_posix(),
                                      "manifest": "data/manifests/confirm_snemi3d.jsonl"},
                          "scale": {"config": c2.relative_to(ROOT).as_posix(),
-                                   "manifest": "data/manifests/confirm_snemi3d_v3_scale.jsonl"}},
+                                   "manifest": "data/manifests/confirm_snemi3d_v3_scale.jsonl"},
+                         "scale_stock": {"config": c3.relative_to(ROOT).as_posix(), "manifest": stock_manifest}},
         "statistics": proto["statistics"], "primary_family": proto["confirm"]["primary_family"],
         "secondary": proto["confirm"]["secondary"],
         "rules": ["the holdout is run once as a fixed batch; no budget, baseline or parameter changes after seeing it",

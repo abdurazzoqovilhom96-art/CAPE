@@ -35,6 +35,14 @@
       "started_at": "2026-11-06T13:13:04+00:00",
       "ended_at": "2026-11-06T17:11:58+00:00",
       "seconds": 14334.5
+    },
+    "select": {
+      "status": "DONE",
+      "exit_code": 0,
+      "detail": "analysis/v3_select/selected_methods.json",
+      "started_at": "2026-11-06T17:15:07+00:00",
+      "ended_at": "2026-11-06T18:36:12+00:00",
+      "seconds": 4865.5
     }
   },
   "panels": {
@@ -77,6 +85,36 @@
       "started_at": "2026-11-06T16:12:36+00:00",
       "ended_at": "2026-11-06T17:11:58+00:00",
       "seconds": 3562.2
+    },
+    "rerun_core": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results/20261106T171509Z_development_b46d5233",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T17:15:09+00:00",
+      "ended_at": "2026-11-06T17:37:37+00:00",
+      "seconds": 1347.7
+    },
+    "rerun_scale": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results/20261106T173737Z_development_c90d5032",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T17:37:37+00:00",
+      "ended_at": "2026-11-06T18:28:25+00:00",
+      "seconds": 3048.3
+    },
+    "quality_check": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results/20261106T182833Z_development_32f658eb",
+      "run_status": "COMPLETE",
+      "detail": null,
+      "started_at": "2026-11-06T18:28:33+00:00",
+      "ended_at": "2026-11-06T18:36:12+00:00",
+      "seconds": 458.9
     }
   }
 }

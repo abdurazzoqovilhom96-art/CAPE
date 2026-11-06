@@ -1,0 +1,42 @@
+
+=== 2026-11-06T17:15:07+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\scripts\pilot_select_v3.py --phase 1 --runs core=results/20261106T131304Z_development_2238806f scale=results/20261106T141028Z_development_bdc5fcbd quality=results/20261106T151919Z_development_31cbc70e tracks=results/20261106T161236Z_development_12de6862
+INCONCLUSIVE modules ['M5a']: rerun required -> {'core': 'configs/v3_dev_core_rerun.yaml', 'scale': 'configs/v3_dev_scale_rerun.yaml'}
+
+=== 2026-11-06T18:28:25+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\scripts\pilot_select_v3.py --phase 1 --runs core=results/20261106T131304Z_development_2238806f scale=results/20261106T141028Z_development_bdc5fcbd quality=results/20261106T151919Z_development_31cbc70e tracks=results/20261106T161236Z_development_12de6862 --rerun core=results/20261106T171509Z_development_b46d5233 scale=results/20261106T173737Z_development_c90d5032
+{
+ "fast_impl_mask": 575,
+ "memory_impl_mask": null,
+ "verdicts": {
+  "M1a": "PASS",
+  "M1b": "FAIL",
+  "M2": "FAIL",
+  "M5a": "FAIL_INCONCLUSIVE_AFTER_RERUN",
+  "M5b": "PASS"
+ },
+ "composite": {
+  "rc_fixing": true,
+  "regime_gate": true,
+  "repair": true,
+  "repair_max_r": 30,
+  "repair_max_pool": 128,
+  "repair_attempts": 4
+ },
+ "correctness_pass": true
+}
+
+=== 2026-11-06T18:36:12+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\scripts\pilot_select_v3.py --phase 2 --quality-check results/20261106T182833Z_development_32f658eb
+{
+ "run": "results/20261106T182833Z_development_32f658eb",
+ "group_G_B_pct": 0.13972543529123804,
+ "group_time_ratio_total": 1.7414899099314245,
+ "corpus_G_B_pct": 0.13778046956286483,
+ "corpus_time_ratio_total": 1.7220572203978521,
+ "corpus_larger": 0,
+ "never_larger": true,
+ "thresholds": {
+  "min_total_raw_saving": 0.001,
+  "max_total_encode_ratio_vs_fast": 1.5
+ },
+ "passed": false,
+ "decision": "no QUALITY default: the composite stays exploratory (reported, not a v3 mode)"
+}

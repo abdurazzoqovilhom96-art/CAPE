@@ -193,7 +193,8 @@ def figures(F: dict) -> dict:
     # 4. memory vs n
     def f4():
         rows = []
-        for src, cells in (("dev scale", F["dev"]["scale"]), ("confirm scale", F["csc"]), ("confirm 32", F["conf"])):
+        for src, cells in (("dev scale", F["dev"]["scale"]), ("confirm scale", F["csc"]), ("confirm 32", F["conf"]),
+                           ("confirm scale stock", {k: v for k, v in (F["css"] or {}).items() if k[1] == STOCK})):
             for (s, m), c in (cells or {}).items():
                 if m in (V21, "cape_v3_all_m0", V3, STOCK) and c["peak"]:
                     rows.append({"source": src, "sample_id": s, "method": m, "voxels": c["voxels"],
@@ -360,7 +361,8 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     st = json.loads((ROOT / a.state).read_text(encoding="utf-8"))
     P = st["panels"]
-    need = ["core", "scale", "quality", "tracks", "confirm_primary", "confirm_scale"]
+    frz = json.loads((ROOT / "analysis" / "v3_freeze" / "freeze.json").read_text(encoding="utf-8"))
+    need = ["core", "scale", "quality", "tracks"] + [f"confirm_{k}" for k in frz["confirm_runs"]]
     miss = [k for k in need if P.get(k, {}).get("status") != "DONE"]
     if miss:
         print(f"BLOCKED: panels not DONE: {miss}", file=sys.stderr)
@@ -368,19 +370,21 @@ def main(argv=None) -> int:
     for d in (OUT, FIG, PD, TAB):
         d.mkdir(parents=True, exist_ok=True)
     sel = json.loads((ROOT / "analysis" / "v3_select" / "selected_methods.json").read_text(encoding="utf-8"))
-    frz = json.loads((ROOT / "analysis" / "v3_freeze" / "freeze.json").read_text(encoding="utf-8"))
     aud = json.loads((ROOT / "analysis" / "v3_audit" / "audit_v3.json").read_text(encoding="utf-8"))
     dev = {k: load_cells(P[k]["run_dir"]) for k in ("core", "scale", "quality", "tracks")}
     if P.get("quality_check", {}).get("run_dir"):
         dev["quality_check"] = load_cells(P["quality_check"]["run_dir"])
     conf = load_cells(P["confirm_primary"]["run_dir"])
     csc = load_cells(P["confirm_scale"]["run_dir"])
+    # corrected stock on the scale track: separate run on the rows <= 2^25 voxels (v3 FAST repeated there)
+    css = load_cells(P["confirm_scale_stock"]["run_dir"]) if "scale_stock" in frz["confirm_runs"] else {}
+    stock_skipped = (frz.get("stock_budget") or {}).get("skipped", [])
     oracle_p = ROOT / P["confirm_primary"]["run_dir"] / "06_solver_certificates" / "oracle_summary.json"
     oracle = json.loads(oracle_p.read_text(encoding="utf-8")) if oracle_p.exists() else None
 
     # confirm run source hash must equal the freeze
     srcs = {}
-    for k in ("confirm_primary", "confirm_scale"):
+    for k in [f"confirm_{k}" for k in frz["confirm_runs"]]:
         rm = json.loads((ROOT / P[k]["run_dir"] / "run_manifest.json").read_text(encoding="utf-8"))
         srcs[k] = rm["source_hash"]
     freeze_ok = all(v == frz["expected_source_hash"] for v in srcs.values())
@@ -428,18 +432,22 @@ def main(argv=None) -> int:
     if any(m == "cape_v3_memory_m0" for _, m in conf):
         sec_pairs.insert(0, ("cape_v3_memory_m0", V3))
     secondary = [eff(conf, n, b) for n, b in sec_pairs if any(m == n for _, m in conf) and any(m == b for _, m in conf)]
-    scale_rows = [eff(csc, n, b) for n, b in ((V3, V21), (V3, STOCK), (V3, "crackle_flat_m0"),
-                                              (V3, "v3_fast_weighted_greedy_m0"),
-                                              ("safe_v3_fast_m0_zstd9", "safe_stock_m0_zstd9"),
-                                              ("cape_v3_quality_m0", V3), ("cape_v3_memory_m0", V3))
-                  if any(m == n for _, m in csc) and any(m == b for _, m in csc)]
+    def scale_cells(n, b):  # stock pairs come from the stock run (same run, matched reference)
+        return css if (css and {n, b} & {STOCK, "safe_stock_m0_zstd9"}) else csc
+
+    scale_rows = [eff(scale_cells(n, b), n, b) for n, b in ((V3, V21), (V3, STOCK), (V3, "crackle_flat_m0"),
+                                                            (V3, "v3_fast_weighted_greedy_m0"),
+                                                            ("safe_v3_fast_m0_zstd9", "safe_stock_m0_zstd9"),
+                                                            ("cape_v3_quality_m0", V3), ("cape_v3_memory_m0", V3))
+                  if any(m == n for _, m in scale_cells(n, b)) and any(m == b for _, m in scale_cells(n, b))]
     scale_v3_v21 = paired(csc, V3, V21, cluster=mb_cluster)
     main_tab = method_table(conf, STOCK, mb_cluster)
     scale_tab = method_table(csc, STOCK, mb_cluster)
+    scale_stock_tab = method_table(css, STOCK, mb_cluster) if css else []
 
     # partition total (non-overlapping quadrants) and whole volume, scale track
     quads = sorted(s for s in {s for s, _ in csc} if "_q_" in s)
-    partition = paired(csc, V3, STOCK, samples=quads, n_boot=0)
+    partition = paired(css or csc, V3, STOCK, samples=quads, n_boot=0)
     partition_v21 = paired(csc, V3, V21, samples=quads, n_boot=0)
 
     # certificates / oracle
@@ -455,6 +463,8 @@ def main(argv=None) -> int:
     # lossless / status across every v3 run
     every = {"core": dev["core"], "scale": dev["scale"], "quality": dev["quality"], "tracks": dev["tracks"],
              "confirm_primary": conf, "confirm_scale": csc}
+    if css:
+        every["confirm_scale_stock"] = css
     if "quality_check" in dev:
         every["quality_check"] = dev["quality_check"]
     status_rows, failed_cape = [], []
@@ -468,6 +478,7 @@ def main(argv=None) -> int:
     write_csv(TAB / "status_by_run.csv", status_rows)
 
     F = {"h1": h1, "h2": h2, "scale_v3_v21": scale_v3_v21, "main_table": main_tab, "dev": dev, "conf": conf, "csc": csc,
+         "css": css,
          "oracle": oracle}
     fig_status = figures(F)
 
@@ -517,7 +528,9 @@ def main(argv=None) -> int:
          "Shuning uchun natija shu volume'ga shartli; yangi mustaqil holdout (2+ volume) kerak. H01/MICrONS ruxsatsiz."),
         ("8. Masshtab va regressiyalar", verdict(not slow and not bad_status, not bad_status),
          f">10% sekin namunalar: {sorted(set(slow)) or 'yo`q'}; OK bo'lmagan holatlar: {bad_status or 'yo`q'}. Masshtab "
-         f"treki (to'liq volume + 4 kvadrant): `tables/scale_track.*`, Fig.4, Fig.9."),
+         f"treki (to'liq volume + 4 kvadrant): `tables/scale_track.*`, Fig.4, Fig.9. Stock byudjet qoidasi (v2.1, "
+         f"<= 2^25 voksel): {', '.join(x['sample_id'] for x in stock_skipped) or 'yo`q'} uchun stock SKIPPED_BUDGET "
+         f"(sababi `data/manifests/confirm_snemi3d_v3_scale_skipped.json`)."),
         ("9. Yangilik", "PARTIAL",
          "Hash, CSR, lazy/eager greedy, sparse DP, dual bound, reduced-cost fixing, LNS va min-selector umumiy vositalar. "
          "M2 g'oyasi Crackle issue #19 (2024-07, 2025-01 yopilgan) bilan bir xil. Yangilikka nomzod: Crackle 2D 4-bog'lanish "
@@ -607,6 +620,12 @@ def main(argv=None) -> int:
                                                    ("ratio_vs_ref", "/stock"), ("enc_ms_sum", "enc ms"),
                                                    ("peak_mib_median", "peak MiB"), ("statuses", "statuses")],
                 "Table 5. Scale track totals.")
+    if scale_stock_tab:
+        write_table("scale_track_stock_methods", scale_stock_tab,
+                    [("method", "method"), ("n_ok", "n"), ("total_bytes", "bytes"), ("ratio_vs_ref", "/stock"),
+                     ("enc_ms_sum", "enc ms"), ("peak_mib_median", "peak MiB"), ("statuses", "statuses")],
+                    "Table 5b. Scale track, corrected stock run (rows <= 2^25 voxels; v3 FAST repeated in the same run).")
+    write_csv(TAB / "scale_track_stock_skipped.csv", stock_skipped)
     mod_rows = [{"module": k, "verdict": d["verdict"], "loo_S_T": fmt(d["loo_S_T"]), "ci": ci_fmt(d["loo_S_T_ci"]),
                  "peak": fmt(d["loo_peak_ratio_median"]), "single_vs_off": fmt(d["single_S_T_vs_off"]),
                  "memory_profile": d["memory_profile"]} for k, d in mods.items()]

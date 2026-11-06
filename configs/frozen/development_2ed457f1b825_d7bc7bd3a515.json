@@ -1,0 +1,43 @@
+{
+  "freeze_id": "development_2ed457f1b825_d7bc7bd3a515",
+  "mode": "development",
+  "config_path": "D:\\CAPE_PINS\\configs\\v3_dev_scale_rerun.yaml",
+  "config_hash": "2ed457f1b8258fa53c05d0c68254cdbf3a1802cb916645b117d66b903e882861",
+  "methods_hash": "bc66faad2371a91f7854703ba139f6d8bc54780a7a8d1b78a7aa4a7ce59428d1",
+  "split_hash": "d7bc7bd3a515054a2a39c876d71a9f29aa26fa3ce79148e6ab8557d758911702",
+  "source_hash": "ef504d7377129fac42e37adc81568b611067cb39575f857b73d0d4374d5b65e7",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "cape_v21_fast_m0",
+    "cape_v3_all_m0",
+    "cape_v3_noF_m0"
+  ],
+  "primary": {
+    "new": "cape_v3_all_m0",
+    "baseline": "cape_v21_fast_m0"
+  },
+  "splits": [
+    "development"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-06T17:38:38.555+00:00"
+}
