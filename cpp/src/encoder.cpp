@@ -7,9 +7,13 @@
 #include <numeric>
 
 #include "cape/byte_model.hpp"
+#include "cape/candidate_store.hpp"
 #include "cape/candidates.hpp"
+#include "cape/component_repair.hpp"
 #include "cape/components.hpp"
+#include "cape/cover_incidence.hpp"
 #include "cape/dual_bound.hpp"
+#include "cape/dual_pruning.hpp"
 #include "cape/exact_dp.hpp"
 #include "cape/greedy.hpp"
 #include "cape/incidence.hpp"
@@ -53,6 +57,33 @@ LabelMap build_label_map(const LABEL* labels, const bridge::Labeling& lab) {
   return lm;
 }
 
+LabelMap build_label_map_from_values(std::vector<uint64_t>&& val) {
+  LabelMap lm;
+  lm.values = val;
+  std::sort(lm.values.begin(), lm.values.end());
+  lm.values.erase(std::unique(lm.values.begin(), lm.values.end()), lm.values.end());
+  lm.cc_label.resize(val.size());
+  for (uint64_t u = 0; u < val.size(); u++) {
+    lm.cc_label[u] = static_cast<uint32_t>(std::lower_bound(lm.values.begin(), lm.values.end(), val[u]) - lm.values.begin());
+  }
+  return lm;
+}
+
+// v3 M5a: max label and pixel pairs (equal consecutive voxels in memory order) in one pass; identical
+// results to crackle::lib::max_label / pixel_pairs.
+template <typename LABEL>
+void fused_scan(const LABEL* a, uint64_t V, uint64_t& maxlab, uint64_t& pairs) {
+  LABEL mx = a[0];
+  uint64_t pp = 0;
+  for (uint64_t i = 1; i < V; i++) {
+    const LABEL v = a[i];
+    mx = std::max(mx, v);
+    pp += (v == a[i - 1]) ? 1u : 0u;
+  }
+  maxlab = static_cast<uint64_t>(mx);
+  pairs = pp;
+}
+
 struct ComponentState {
   uint32_t label = 0;
   uint32_t n = 0;
@@ -75,11 +106,14 @@ struct RegimeOutcome {
   uint64_t P = 0, Q = 0;
   Diagnostics diag;
   std::vector<ExportedComponent> exported;
+  std::vector<uint64_t> dual_sum_q;  // v3 M3a: per label, sum of the pass-1 dual (q-scaled); regime_gate only
 };
 
 struct Budgets {
   uint64_t dp_remaining = 0;
   uint64_t local_remaining = 0;
+  uint64_t rc_remaining = 0;      // v3 M3b
+  uint64_t repair_remaining = 0;  // v3 M4
 };
 
 RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor, const LabelMap& lm,
@@ -98,14 +132,23 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   const CandidateForecast fc = forecast_candidates(runs, out.h, opt.candidate_policy);
   check_memory(forecast_solver_bytes(d.V(), N, runs.size(), fc.candidates, fc.incidences), opt.memory_cap_bytes,
                "candidate/incidence working set");
-  std::vector<Candidate> cands = make_candidates(runs, out.h, opt.candidate_policy);
-  const ChainAccess ch{colmajor ? nullptr : lab.cc.data(), d.XY(), &runs, colmajor, d.Z};
-  dg.i("candidate_ns", ns_since(t0));
-  dg.i("candidate_count_before", static_cast<int64_t>(cands.size()));
-  dg.i("incidence_count_before", static_cast<int64_t>(fc.incidences));
-
   const uint64_t c = static_cast<uint64_t>(base.w_I + w_D);
   const uint64_t s = static_cast<uint64_t>(base.w_C);
+  const int impl = opt.impl();
+  // v3 M1a: exact neighbour-column duplicate filter while generating (equal-coverage reduction on)
+  const bool adj_dedup = (impl & kImplAdjDedup) && opt.reduce_equal;
+  CandidateGenStats gen;
+  std::vector<Candidate> cands =
+      adj_dedup ? make_candidates_dedup(runs, out.h, opt.candidate_policy, d.X, d.XY(), opt.reduce_singleton, c, s, gen)
+                : make_candidates(runs, out.h, opt.candidate_policy);
+  const ChainAccess ch{colmajor ? nullptr : lab.cc.data(), d.XY(), &runs, colmajor, d.Z};
+  dg.i("candidate_ns", ns_since(t0));
+  dg.i("candidate_count_before", static_cast<int64_t>(adj_dedup ? gen.total : cands.size()));
+  dg.i("incidence_count_before", static_cast<int64_t>(fc.incidences));
+  if (adj_dedup) {
+    dg.i("candidates_after_adjacency", static_cast<int64_t>(cands.size()));
+    dg.i("candidates_adjacent_dropped", static_cast<int64_t>(gen.adjacent_dropped));
+  }
 
   t0 = Clock::now();
   ReductionConfig rc;
@@ -121,7 +164,7 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   ReductionStats rs;
   const std::vector<uint32_t> alive = reduce(cands, ch, N, rc, rs, nullptr);
   dg.i("reduction_ns", ns_since(t0));
-  dg.i("candidates_after_singleton", static_cast<int64_t>(rs.after_singleton));
+  dg.i("candidates_after_singleton", static_cast<int64_t>(adj_dedup ? gen.after_singleton : rs.after_singleton));
   dg.i("candidates_after_equal", static_cast<int64_t>(rs.after_equal));
   dg.i("candidate_count_after", static_cast<int64_t>(rs.after_subset));
   dg.i("equal_hash_collisions", static_cast<int64_t>(rs.equal_hash_collisions));
@@ -141,12 +184,44 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   dg.i("component_ns", ns_since(t0));
   dg.i("component_count", comps.count);
 
+  // ---- v3 M1b: component-ordered CSR (one sequential chain pass) ------------------------------
+  std::vector<uint32_t> scratch(N, 0);
+  const bool use_csr = (impl & kImplCsr) != 0;
+  const bool eager = (impl & kImplEagerGreedy) != 0;
+  ComponentCsr csr;
+  LocalModel mbuf;
+  std::vector<uint64_t> posbuf;
+  GreedyScratch gsc;
+  if (use_csr) {
+    t0 = Clock::now();
+    csr = build_component_csr(comps, alive, cands, ch, scratch);
+    dg.i("csr_ns", ns_since(t0));
+  }
+
   // ---- pass 1: greedy UB + dual LB for every component -------------------------------------
   t0 = Clock::now();
   std::vector<ComponentState> cs(comps.count);
-  std::vector<uint32_t> scratch(N, 0);
   bool dual_ok = true;
   uint64_t greedy_ns = 0, dual_ns = 0;
+  const bool want_dual_sums = opt.regime_gate || opt.certificate != CertificateMode::Off;
+  if (want_dual_sums) out.dual_sum_q.assign(K, 0);
+  auto pass1_component = [&](ComponentState& st, const LocalModel& m) {
+    auto tg = Clock::now();
+    st.sel = eager ? greedy_eager(m, gsc) : greedy(m);
+    greedy_ns += ns_since(tg);
+    auto td = Clock::now();
+    const DualResult dr = dual_ascent(m, opt.dual_scale);
+    dual_ns += ns_since(td);
+    dual_ok = dual_ok && dual_feasible(m, dr, opt.dual_scale);
+    st.ub = st.sel.cost;
+    st.lb = dr.lb;
+    st.status = st.ub == st.lb ? SolveStatus::LbTight : SolveStatus::Heuristic;
+    if (want_dual_sums) {
+      uint64_t sum = 0;
+      for (uint64_t a : dr.a) sum += a;
+      out.dual_sum_q[st.label] += sum;
+    }
+  };
   for (uint32_t k = 0; k < comps.count; k++) {
     ComponentState& st = cs[k];
     st.label = lm.cc_label[comps.ccs[comps.cc_off[k]]];
@@ -157,19 +232,16 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
       st.ub = st.lb = s * st.n;
       st.sel.cost = st.ub;
       st.status = SolveStatus::Trivial;
+      if (want_dual_sums) out.dual_sum_q[st.label] += opt.dual_scale * s * st.n;  // a_u = q s is feasible
       continue;
     }
-    const LocalModel m = build_local_model(comps, k, alive, cands, ch, scratch, c, s);
-    auto tg = Clock::now();
-    st.sel = greedy(m);
-    greedy_ns += ns_since(tg);
-    auto td = Clock::now();
-    const DualResult dr = dual_ascent(m, opt.dual_scale);
-    dual_ns += ns_since(td);
-    dual_ok = dual_ok && dual_feasible(m, dr, opt.dual_scale);
-    st.ub = st.sel.cost;
-    st.lb = dr.lb;
-    st.status = st.ub == st.lb ? SolveStatus::LbTight : SolveStatus::Heuristic;
+    if (use_csr) {
+      build_local_model_csr(mbuf, comps, csr, k, c, s, posbuf);
+      pass1_component(st, mbuf);
+    } else {
+      const LocalModel m = build_local_model(comps, k, alive, cands, ch, scratch, c, s);
+      pass1_component(st, m);
+    }
   }
   dg.i("greedy_ns", static_cast<int64_t>(greedy_ns));
   dg.i("dual_ns", static_cast<int64_t>(dual_ns));
@@ -236,9 +308,21 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   lim.sparse_states = (opt.impl() & kImplSparseDp) != 0;
   uint64_t dp_solved = 0, dp_skipped = 0, dp_exhausted = 0, dp_trans = 0, local_checks = 0, local_impr = 0;
   uint64_t dp_ns = 0, local_ns = 0;
-  for (uint32_t k : order) {
+  // v3 M3b / M4 counters
+  uint64_t rc_tried = 0, rc_proven = 0, rc_improved = 0, rc_fixed = 0, rc_forced = 0, rc_trans = 0, rc_ns = 0;
+  uint64_t rc_saved = 0;
+  RepairStats rst;
+  uint64_t repair_components = 0, repair_ns = 0;
+  RepairParams rprm;
+  rprm.max_r = static_cast<uint32_t>(std::clamp(opt.repair_max_r, 1, 30));
+  rprm.max_pool = static_cast<uint32_t>(std::max(1, opt.repair_max_pool));
+  rprm.attempts = static_cast<uint32_t>(std::max(0, opt.repair_attempts));
+  rprm.per_attempt_transitions = opt.repair_transitions_per_attempt;
+  rprm.max_states = opt.repair_max_states;
+  rprm.q = opt.dual_scale;
+  std::vector<std::pair<uint32_t, ComponentState>> repair_backup;
+  auto pass2_component = [&](uint32_t k, const LocalModel& m) {
     ComponentState& st = cs[k];
-    const LocalModel m = build_local_model(comps, k, alive, cands, ch, scratch, c, s);
     bool solved = false;
     if (opt.use_exact) {
       auto tdp = Clock::now();
@@ -259,6 +343,30 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
         dp_skipped++;
       }
     }
+    if (!solved && opt.rc_fixing && st.ub > st.lb && budgets.rc_remaining > 0) {
+      auto trc = Clock::now();
+      rc_tried++;
+      const FixResult fr = reduced_cost_solve(m, st.ub, opt.dual_scale, opt.rc_max_cc, opt.rc_transitions_per_component,
+                                              opt.rc_max_states, budgets.rc_remaining);
+      rc_ns += ns_since(trc);
+      rc_fixed += fr.fixed_out;
+      rc_forced += fr.forced_in;
+      rc_trans += fr.transitions;
+      if (fr.outcome == FixOutcome::Proven) {
+        rc_proven++;
+        st.lb = st.ub;  // no strictly cheaper cover of this component model exists
+        st.status = SolveStatus::ExactDp;
+        solved = true;
+      } else if (fr.outcome == FixOutcome::Improved) {
+        if (!is_cover(m, fr.sel) || fr.sel.cost >= st.ub) throw CapeError("internal: reduced-cost solve returned an invalid cover");
+        rc_improved++;
+        rc_saved += st.ub - fr.sel.cost;
+        st.sel = fr.sel;
+        st.ub = st.lb = fr.sel.cost;  // optimum of the component model
+        st.status = SolveStatus::ExactDp;
+        solved = true;
+      }
+    }
     if (!solved && opt.use_local && budgets.local_remaining > 0) {
       auto tl = Clock::now();
       LocalStats ls;
@@ -273,6 +381,88 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
         st.status = st.ub == st.lb ? SolveStatus::LbTight : SolveStatus::Heuristic;
       }
     }
+    if (opt.repair && st.status == SolveStatus::Heuristic && st.ub > st.lb && budgets.repair_remaining > 0) {
+      auto tr = Clock::now();
+      repair_components++;
+      const ComponentState before = st;
+      Selection rep = component_repair(m, st.sel, rprm, budgets.repair_remaining, rst);
+      repair_ns += ns_since(tr);
+      if (rep.cost < st.ub) {
+        if (!is_cover(m, rep)) throw CapeError("internal: component repair produced an invalid cover");
+        repair_backup.emplace_back(k, before);
+        st.sel = std::move(rep);
+        st.ub = st.sel.cost;
+        st.status = st.ub == st.lb ? SolveStatus::LbTight : SolveStatus::Heuristic;
+      }
+    }
+  };
+  for (uint32_t k : order) {
+    if (use_csr) {
+      build_local_model_csr(mbuf, comps, csr, k, c, s, posbuf);
+      pass2_component(k, mbuf);
+    } else {
+      const LocalModel m = build_local_model(comps, k, alive, cands, ch, scratch, c, s);
+      pass2_component(k, m);
+    }
+  }
+  if (opt.rc_fixing) {
+    dg.i("rc_components_tried", static_cast<int64_t>(rc_tried));
+    dg.i("rc_components_proven", static_cast<int64_t>(rc_proven));
+    dg.i("rc_components_improved", static_cast<int64_t>(rc_improved));
+    dg.i("rc_items_fixed_out", static_cast<int64_t>(rc_fixed));
+    dg.i("rc_items_forced_in", static_cast<int64_t>(rc_forced));
+    dg.i("rc_transitions", static_cast<int64_t>(rc_trans));
+    dg.i("rc_model_bytes_saved", static_cast<int64_t>(rc_saved));
+    dg.i("rc_ns", static_cast<int64_t>(rc_ns));
+  }
+  if (opt.repair) {
+    // M4 is kept only if the whole labels section gets strictly smaller (count / depth widths included)
+    auto section_of = [&](const std::vector<ComponentState>& states) -> uint64_t {
+      std::vector<uint64_t> pins(K, 0), singles(K, 0);
+      uint64_t P = 0, Q = 0, maxdepth = 0;
+      for (uint32_t k = 0; k < comps.count; k++) {
+        const ComponentState& x = states[k];
+        if (x.label == bg) continue;
+        pins[x.label] += x.sel.pins.size();
+        singles[x.label] += x.sel.singles.size();
+        P += x.sel.pins.size();
+        Q += x.sel.singles.size();
+        for (uint32_t p : x.sel.pins) {
+          maxdepth = std::max<uint64_t>(maxdepth, cands[alive[comps.cands[comps.cand_off[k] + p]]].len - 1);
+        }
+      }
+      uint64_t maxcount = 0;
+      for (uint32_t l = 0; l < K; l++) {
+        if (l != bg) maxcount = std::max(maxcount, std::max(pins[l], singles[l]));
+      }
+      Widths w = base;
+      w.w_D = byte_width(maxdepth);
+      w.w_N = byte_width(maxcount);
+      return predict_label_bytes(w, K ? K - 1 : 0, d.Z, P, Q);
+    };
+    int64_t delta = 0;
+    bool kept = false;
+    if (!repair_backup.empty()) {
+      const uint64_t with = section_of(cs);
+      std::vector<ComponentState> alt = cs;
+      for (auto& [k, before] : repair_backup) alt[k] = before;
+      const uint64_t without = section_of(alt);
+      delta = static_cast<int64_t>(without) - static_cast<int64_t>(with);
+      if (with < without) {
+        kept = true;
+      } else {
+        cs.swap(alt);
+      }
+    }
+    dg.i("repair_components", static_cast<int64_t>(repair_components));
+    dg.i("repair_attempts", static_cast<int64_t>(rst.attempts));
+    dg.i("repair_accepted", static_cast<int64_t>(rst.accepted));
+    dg.i("repair_model_bytes_saved", static_cast<int64_t>(rst.saved));
+    dg.i("repair_dp_unsolved", static_cast<int64_t>(rst.dp_unsolved));
+    dg.i("repair_transitions", static_cast<int64_t>(rst.transitions));
+    dg.i("repair_section_delta", delta);
+    dg.i("repair_kept", kept ? 1 : 0);
+    dg.i("repair_ns", static_cast<int64_t>(repair_ns));
   }
   dg.i("dp_ns", static_cast<int64_t>(dp_ns));
   dg.i("local_ns", static_cast<int64_t>(local_ns));
@@ -395,9 +585,15 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
     return res;
   }
   auto t0 = Clock::now();
-  const uint64_t maxlab = bridge::max_label(labels, V);
+  const int impl = opt.impl();
+  uint64_t maxlab = 0, pairs = 0;
+  if (impl & kImplFusedScan) {  // v3 M5a
+    fused_scan(labels, V, maxlab, pairs);
+  } else {
+    maxlab = bridge::max_label(labels, V);
+    pairs = bridge::pixel_pairs(labels, V);
+  }
   const int stored_width = byte_width(maxlab);
-  const uint64_t pairs = bridge::pixel_pairs(labels, V);
   const bool impermissible = pairs >= V / 2;
   const bool pins_possible = d.Z > 1;
   const bool stock_pins = pins_possible && pairs >= V / 2;
@@ -461,21 +657,38 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
                                                                       : "stock_fast");
   } else if (try_pins) {
     t0 = Clock::now();
-    bridge::Labeling lab = bridge::cc_label(labels, d);
-    if (opt.return_cc) res.cc = lab.cc;
-    if (lab.N >= (uint64_t{1} << 32) - 1) throw UnsupportedInput("CC count does not fit uint32 (format_audit F5)");
-    const LabelMap lm = build_label_map(labels, lab);
+    // v3 M5b: batched CC labeling straight into the column-major chain buffer (no z-major CC volume)
+    const bool batched = (impl & kImplBatchedCC) && (impl & kImplLayout) && (impl & kImplRuns) && !opt.return_cc;
+    bridge::Labeling lab;
+    LabelMap lm;
+    std::vector<uint32_t> colmajor;
+    if (batched) {
+      check_memory(4 * V, opt.memory_cap_bytes, "column-major chain buffer");
+      std::vector<uint64_t> cc_values;
+      lab = bridge::cc_label_colmajor(labels, d, colmajor, cc_values);
+      if (lab.N >= (uint64_t{1} << 32) - 1) throw UnsupportedInput("CC count does not fit uint32 (format_audit F5)");
+      lm = build_label_map_from_values(std::move(cc_values));
+    } else {
+      lab = bridge::cc_label(labels, d);
+      if (opt.return_cc) res.cc = lab.cc;
+      if (lab.N >= (uint64_t{1} << 32) - 1) throw UnsupportedInput("CC count does not fit uint32 (format_audit F5)");
+      lm = build_label_map(labels, lab);
+    }
     dg.i("cc_ns", ns_since(t0));
     dg.i("cc_count", static_cast<int64_t>(lab.N));
     dg.i("label_count", static_cast<int64_t>(lm.values.size()));
+    dg.i("batched_cc", batched ? 1 : 0);
 
     // v2 P1.2: column-major chain buffer. The z-major CC volume is not read again after this
     // point (crcs and per-slice counts are already in lab), so it is released: the extra memory
     // is transient (8V bytes during the transpose); the solver working set is unchanged.
-    std::vector<uint32_t> colmajor;
     std::vector<Run> runs;
-    const int impl = opt.impl();
-    if (impl & kImplLayout) {
+    if (batched) {
+      dg.i("transpose_ns", 0);  // the transpose is part of cc_ns in the batched path
+      t0 = Clock::now();
+      runs = column_runs_colmajor(colmajor.data(), lm.cc_label, d);
+      dg.i("runs_ns", ns_since(t0));
+    } else if (impl & kImplLayout) {
       int64_t runs_before_ns = 0;
       if (!(impl & kImplRuns)) {  // v2.1 attribution: layout without one-pass runs -> v1 runs before the release
         t0 = Clock::now();
@@ -510,7 +723,10 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
       dg.i("runs_ns", ns_since(t0));
     }
     dg.i("run_count", static_cast<int64_t>(runs.size()));
-    dg.t("reduction_impl", impl == kImplAll ? "fast" : (impl == 0 ? "legacy" : "mixed"));
+    {
+      const int low = impl & kImplAll;  // the v2.1 attribution bits keep their v2.1 meaning
+      dg.t("reduction_impl", low == kImplAll ? "fast" : (low == 0 ? "legacy" : "mixed"));
+    }
     dg.i("impl_mask", impl);
 
     Widths base;
@@ -527,13 +743,43 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
         if (wd < full) regimes.push_back(wd);
       }
     }
-    Budgets budgets{opt.exact_max_transitions_total, opt.local_checks_total};
+    Budgets budgets{opt.exact_max_transitions_total, opt.local_checks_total, opt.rc_transitions_total,
+                    opt.repair_transitions_total};
     RegimeOutcome best;
     std::vector<int64_t> regime_bytes;
     std::string regime_log;
     uint64_t lb_all = std::numeric_limits<uint64_t>::max();
     bool all_regimes_covered = true;
+    // v3 M3a regime gate: full-width pass-1 dual per label, scaled to a narrower regime
+    std::vector<uint64_t> full_dual;
+    uint64_t gate_checked = 0, gate_pruned = 0;
+    int64_t gate_ns = 0;
+    const uint64_t K_labels = lm.values.size();
     for (int wd : regimes) {
+      if (opt.regime_gate && wd != full && best.evaluated && !full_dual.empty()) {
+        const auto tg = Clock::now();
+        gate_checked++;
+        const uint64_t c_full = static_cast<uint64_t>(base.w_I + full), c_r = static_cast<uint64_t>(base.w_I + wd);
+        uint64_t sumL = 0, maxL = 0;
+        for (uint64_t l = 0; l < K_labels; l++) {
+          const uint64_t Ll = scaled_dual_bound(full_dual[l], c_r, c_full, opt.dual_scale);
+          sumL += Ll;
+          maxL = std::max(maxL, Ll);
+        }
+        Widths wl = base;
+        wl.w_N = 1;
+        const uint64_t lb = fixed_section_bytes(wl, d.Z) + (K_labels ? (K_labels - 1) : 0) * per_label_overhead(wl) +
+                            (sumL - maxL);
+        gate_ns += ns_since(tg);
+        if (lb >= best.section_bytes) {  // regime wd cannot be strictly smaller
+          gate_pruned++;
+          lb_all = std::min(lb_all, lb);
+          regime_log += "wD" + std::to_string(wd) + ":pruned_lb" + std::to_string(lb) + ";";
+          regime_bytes.push_back(-2);
+          continue;
+        }
+        regime_log += "gate_lb_wD" + std::to_string(wd) + ":" + std::to_string(lb) + ";";
+      }
       RegimeOutcome ro;
       try {
         ro = solve_regime(lab, colmajor.empty() ? nullptr : colmajor.data(), lm, runs, d, base, wd, opt, budgets);
@@ -547,11 +793,53 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
       regime_bytes.push_back(ro.evaluated ? static_cast<int64_t>(ro.section_bytes) : -1);
       if (!ro.evaluated) continue;
       lb_all = std::min(lb_all, ro.lb_section_bytes);
+      if ((opt.regime_gate || opt.certificate != CertificateMode::Off) && wd == full) {
+        bool feasible = true;
+        for (const auto& kv : ro.diag.ints) {
+          if (kv.first == "certificate_dual_feasible" && kv.second != 1) feasible = false;
+        }
+        if (feasible) full_dual = ro.dual_sum_q;  // only a verified feasible dual is scaled
+      }
       if (!best.evaluated || ro.section_bytes < best.section_bytes) best = std::move(ro);
+    }
+    // v3 certificate fix (found by tests/test_v3_invariants.py): with a fixed depth width the written stream
+    // may compact w_D below the regime width (no chosen pin is that deep). Such a stream is a cover from the
+    // full-width runs of length <= h_w priced at c_w = w_I + w, which the full-width regime LB does not bound
+    // (v2.1 could report lb_bytes > ub_bytes there). The full-width dual scaled by c_w / c_full is feasible
+    // for that family, so its bound is added for every narrower width. Stream bytes are unchanged.
+    auto scaled_lb = [&](int w) -> uint64_t {
+      const uint64_t c_full = static_cast<uint64_t>(base.w_I + full), c_r = static_cast<uint64_t>(base.w_I + w);
+      uint64_t sumL = 0, maxL = 0;
+      for (uint64_t l = 0; l < K_labels; l++) {
+        const uint64_t Ll = scaled_dual_bound(full_dual[l], c_r, c_full, opt.dual_scale);
+        sumL += Ll;
+        maxL = std::max(maxL, Ll);
+      }
+      Widths wl = base;
+      wl.w_N = 1;
+      return fixed_section_bytes(wl, d.Z) + (K_labels ? (K_labels - 1) : 0) * per_label_overhead(wl) + (sumL - maxL);
+    };
+    bool scaled_cert_ok = true;
+    if (opt.certificate == CertificateMode::Regime && opt.depth_policy == DepthPolicy::FixedDepthWidth && full > 1) {
+      if (full_dual.empty()) {
+        scaled_cert_ok = false;  // no verified dual: the certificate is reported as not valid
+      } else {
+        for (int w : {1, 2, 4}) {
+          if (w >= full) continue;
+          const uint64_t lbw = scaled_lb(w);
+          lb_all = std::min(lb_all, lbw);
+          regime_log += "cert_scaled_lb_wD" + std::to_string(w) + ":" + std::to_string(lbw) + ";";
+        }
+      }
+    }
+    if (opt.regime_gate) {
+      dg.i("regime_gate_checked", static_cast<int64_t>(gate_checked));
+      dg.i("regime_gate_pruned", static_cast<int64_t>(gate_pruned));
+      dg.i("regime_gate_ns", gate_ns);
     }
     if (!best.evaluated) throw MemoryCapExceeded("OOM_PREVENTED: no depth regime fits the memory cap (" + regime_log + ")");
     // v2 CERTIFIED: bound the regimes a fixed-depth stream search skipped (stream unchanged)
-    bool certificate_dual_ok = true;
+    bool certificate_dual_ok = scaled_cert_ok;
     for (const auto& kv : best.diag.ints) {
       if (kv.first == "certificate_dual_feasible" && kv.second != 1) certificate_dual_ok = false;
     }

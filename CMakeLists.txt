@@ -72,6 +72,10 @@ pybind11_add_module(_cape_native MODULE NO_EXTRAS
   cpp/src/encoder.cpp
   cpp/src/runs.cpp
   cpp/src/candidates.cpp
+  cpp/src/candidate_store.cpp
+  cpp/src/cover_incidence.cpp
+  cpp/src/dual_pruning.cpp
+  cpp/src/component_repair.cpp
   cpp/src/reductions.cpp
   cpp/src/incidence.cpp
   cpp/src/components.cpp

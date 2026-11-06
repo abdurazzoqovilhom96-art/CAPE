@@ -16,6 +16,10 @@ NATIVE_KEYS = {
     "exact_max_cc", "exact_max_transitions_per_component", "exact_max_transitions_total", "exact_memory_mib",
     "local_checks_per_component", "local_checks_total", "subset_checks_total", "memory_cap_bytes", "parallel",
     "collect_records", "export_components_max_cc", "export_components_limit",
+    # v3 QUALITY switches (M3 / M4)
+    "regime_gate", "rc_fixing", "rc_max_cc", "rc_transitions_total", "rc_transitions_per_component", "rc_max_states",
+    "repair", "repair_max_r", "repair_max_pool", "repair_attempts", "repair_transitions_total",
+    "repair_transitions_per_attempt", "repair_max_states",
 }
 
 

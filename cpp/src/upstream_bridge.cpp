@@ -39,6 +39,49 @@ Labeling cc_label(const LABEL* labels, const Dims& d) {
 }
 
 template <typename LABEL>
+Labeling cc_label_colmajor(const LABEL* labels, const Dims& d, std::vector<uint32_t>& colmajor,
+                           std::vector<uint64_t>& cc_values) {
+  Labeling out;
+  out.d = d;
+  const uint64_t V = d.V();
+  const uint64_t sxy = d.XY();
+  const uint64_t Z = d.Z;
+  out.per_slice.assign(Z, 0);
+  out.cc_crcs.assign(Z, 0);
+  cc_values.clear();
+  colmajor.resize(V);
+  if (V == 0) return out;
+  constexpr uint64_t B = 16;  // slices per batch: 16 consecutive z of one column = one 64-byte line
+  std::vector<uint32_t> batch(std::min<uint64_t>(B, Z) * sxy);
+  std::vector<uint32_t> local(sxy);
+  uint64_t N = 0;
+  for (uint64_t z0 = 0; z0 < Z; z0 += B) {
+    const uint64_t nb = std::min<uint64_t>(B, Z - z0);
+    for (uint64_t j = 0; j < nb; j++) {
+      const LABEL* src = labels + sxy * (z0 + j);
+      uint32_t* dst = batch.data() + sxy * j;
+      uint64_t tmp_N = 0;
+      // exactly the call crackle::cc3d::connected_components makes for slice z0 + j
+      crackle::cc3d::connected_components2d_4<LABEL, uint32_t>(src, static_cast<int64_t>(d.X),
+                                                               static_cast<int64_t>(d.Y), 1, dst, N, tmp_N);
+      out.per_slice[z0 + j] = tmp_N;
+      const uint32_t off = static_cast<uint32_t>(N);
+      for (uint64_t i = 0; i < sxy; i++) local[i] = dst[i] - off;
+      out.cc_crcs[z0 + j] = crackle::crc::crc32c(local.data(), sxy);
+      cc_values.resize(N + tmp_N);
+      for (uint64_t i = 0; i < sxy; i++) cc_values[dst[i]] = static_cast<uint64_t>(src[i]);
+      N += tmp_N;
+    }
+    for (uint64_t col = 0; col < sxy; col++) {
+      uint32_t* to = colmajor.data() + col * Z + z0;
+      for (uint64_t j = 0; j < nb; j++) to[j] = batch[sxy * j + col];
+    }
+  }
+  out.N = N;
+  return out;
+}
+
+template <typename LABEL>
 Boundary boundaries(const LABEL* labels, const Dims& d, bool impermissible, int markov_order, size_t parallel) {
   Boundary b;
   b.crack_format = impermissible ? static_cast<int>(crackle::CrackFormat::IMPERMISSIBLE)
@@ -332,6 +375,7 @@ uint32_t crc32c(const uint8_t* data, size_t n) { return crackle::crc::crc32c(dat
 
 #define CAPE_INSTANTIATE(T)                                                                                   \
   template Labeling cc_label<T>(const T*, const Dims&);                                                       \
+  template Labeling cc_label_colmajor<T>(const T*, const Dims&, std::vector<uint32_t>&, std::vector<uint64_t>&); \
   template Boundary boundaries<T>(const T*, const Dims&, bool, int, size_t);                                  \
   template std::vector<uint8_t> flat_section<T>(const T*, const Dims&, int, size_t, std::vector<uint32_t>&); \
   template std::vector<uint8_t> stock_pins_section<T>(const T*, const Dims&, bool, int, std::vector<uint32_t>&); \

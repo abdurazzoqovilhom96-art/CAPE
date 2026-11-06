@@ -62,8 +62,25 @@ enum class CertificateMode : int { Off = 0, Regime = 1, AllRegimes = 2 };
 //   H (hash fn):   multiply-add chain hash instead of a mix64 per element
 //   T (table):     open-addressing equal-coverage grouping instead of a full sort   [algorithmic]
 //   S (sparse DP): exact DP over reachable states only (n > 12)                     [algorithmic]
-enum ImplBit : int { kImplLayout = 1, kImplRuns = 2, kImplHashFn = 4, kImplTable = 8, kImplSparseDp = 16 };
-constexpr int kImplAll = kImplLayout | kImplRuns | kImplHashFn | kImplTable | kImplSparseDp;
+// v3 (plan CAPE v3, M1/M2/M5): further byte-preserving implementation switches. Every combination of
+// all ten bits writes the identical bitstream (tests/test_v3_invariants.py); only work and memory differ.
+//   A (adjacent dedup, M1a): a candidate whose left (x-1) or upper (y-1) neighbour column has a candidate with
+//                  the same z-range and label is dropped while candidates are generated. 2D CCs are
+//                  4-connected, so both chains are equal and the neighbour has the smaller start index: the
+//                  dropped one is never its equal-coverage class representative.          [algorithmic]
+//   C (CSR, M1b):  one component-ordered candidate->CC array built by a sequential chain pass; local models
+//                  are copied from it into reused buffers instead of re-reading chains.     [code]
+//   G (eager greedy, M2): exact fresh counts kept by CC->candidate decrements; same selection rule. [code]
+//   F (fused scan, M5a): max label and pixel pairs in one pass over the input.             [code]
+//   B (batched CC, M5b): 2D CC labeling in 16-slice batches written straight into the column-major
+//                  chain buffer; the z-major CC volume (4V bytes) is never allocated. Needs L and R. [memory]
+enum ImplBit : int {
+  kImplLayout = 1, kImplRuns = 2, kImplHashFn = 4, kImplTable = 8, kImplSparseDp = 16,
+  kImplAdjDedup = 32, kImplCsr = 64, kImplEagerGreedy = 128, kImplFusedScan = 256, kImplBatchedCC = 512
+};
+constexpr int kImplAll = kImplLayout | kImplRuns | kImplHashFn | kImplTable | kImplSparseDp;  // v2 / v2.1 "fast"
+constexpr int kImplV3 = kImplAdjDedup | kImplCsr | kImplEagerGreedy | kImplFusedScan | kImplBatchedCC;
+constexpr int kImplMaxMask = kImplAll | kImplV3;
 
 struct Options {
   int markov_model_order = 0;
@@ -74,7 +91,9 @@ struct Options {
   CandidatePolicy candidate_policy = CandidatePolicy::CompleteWindows;
   ReductionImpl reduction_impl = ReductionImpl::Fast;
   int impl_mask = -1;  // v2.1: -1 = derived from reduction_impl (legacy 0, fast kImplAll); else ImplBit flags
-  int impl() const { return impl_mask >= 0 ? (impl_mask & kImplAll) : (reduction_impl == ReductionImpl::Fast ? kImplAll : 0); }
+  int impl() const {
+    return impl_mask >= 0 ? (impl_mask & kImplMaxMask) : (reduction_impl == ReductionImpl::Fast ? kImplAll : 0);
+  }
   int debug_hash_bits = 64;  // tests only: keep this many low hash bits (forces equal-coverage collisions)
   bool reduce_equal = true;      // ablation no_dedup
   bool reduce_subset = true;     // ablation no_dominance (with reduce_singleton)
@@ -98,6 +117,28 @@ struct Options {
   bool keep_alternative = false;  // v2 SAFE-ARCHIVE: also return the losing flat/pins stream (one shared boundary pass)
   int export_components_max_cc = 0;      // >0: export written components with <= this many CCs (oracle audit)
   uint64_t export_components_limit = 0;  // maximum number of exported components
+
+  // ---- v3 QUALITY switches (M3 / M4). All default off: the FAST stream never uses them. ----
+  // M3a: skip a narrower depth regime r when a valid lower bound on its labels section (the full-width
+  // pass-1 dual scaled by c_r / c_full) is >= the best section found so far. Output-preserving with
+  // respect to the full regime search (a pruned regime cannot be strictly smaller).
+  bool regime_gate = false;
+  // M3b: reduced-cost fixing + forcing for components the plain DP did not solve; the strict-improvement
+  // residual is solved exactly when it has <= rc_max_cc CCs.
+  bool rc_fixing = false;
+  int rc_max_cc = 30;
+  uint64_t rc_transitions_total = 200'000'000ull;
+  uint64_t rc_transitions_per_component = 20'000'000ull;
+  uint64_t rc_max_states = uint64_t{1} << 21;
+  // M4: bounded exact repair (LNS) of heuristic components; accepted only when the whole labels section
+  // gets strictly smaller.
+  bool repair = false;
+  int repair_max_r = 24;          // CCs re-covered per neighbourhood (<= 30: 32-bit DP masks)
+  int repair_max_pool = 512;      // candidate pins per neighbourhood
+  int repair_attempts = 1;        // neighbourhoods per component
+  uint64_t repair_transitions_total = 200'000'000ull;
+  uint64_t repair_transitions_per_attempt = 5'000'000ull;
+  uint64_t repair_max_states = uint64_t{1} << 20;
 };
 
 class CapeError : public std::runtime_error {

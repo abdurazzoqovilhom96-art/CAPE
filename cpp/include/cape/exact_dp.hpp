@@ -10,7 +10,10 @@
 
 namespace cape {
 
-enum class DpOutcome : int { Solved = 0, SkippedSize = 1, SkippedForecast = 2, SkippedMemory = 3, BudgetExhausted = 4 };
+enum class DpOutcome : int {
+  Solved = 0, SkippedSize = 1, SkippedForecast = 2, SkippedMemory = 3, BudgetExhausted = 4,
+  Infeasible = 5  // v3: no cover exists with the allowed actions (LocalModel::no_single)
+};
 
 struct DpLimits {
   int max_cc = 20;
@@ -19,6 +22,11 @@ struct DpLimits {
   // v2: visit only reachable masks (ascending, hash map + min-heap) instead of all 2^n. The
   // admission rules above are unchanged and the result (cover, cost, transitions) is identical.
   bool sparse_states = false;
+  // v3 (M3b / M4): admit any n <= 30 and rely on the deterministic budgets instead of the dense
+  // 2^n memory / forecast gates; always uses the reachable-state DP. max_states (> 0) stops the
+  // search as BudgetExhausted when more reachable states would be stored.
+  bool sparse_admission = false;
+  uint64_t max_states = 0;
 };
 
 struct DpResult {

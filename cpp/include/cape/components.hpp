@@ -36,6 +36,9 @@ struct LocalModel {
   std::vector<uint32_t> inc;        // local candidate ids per CC, ascending
   uint64_t c = 0;
   uint64_t s = 0;
+  // v3 (M3b): singleton of local CC u is not allowed when no_single[u] != 0 (empty = all allowed).
+  // Only the exact DP reads it; every v2.1 model leaves it empty.
+  std::vector<uint8_t> no_single;
 
   uint32_t M() const { return static_cast<uint32_t>(cand.size()); }
 };

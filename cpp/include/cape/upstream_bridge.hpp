@@ -39,6 +39,14 @@ struct HeaderFields {
 template <typename LABEL>
 Labeling cc_label(const LABEL* labels, const Dims& d);
 
+// v3 M5b: the same upstream labeling (connected_components2d_4 per slice, identical ids, per-slice counts
+// and crcs) computed in 16-slice batches and written straight into the column-major chain buffer
+// colmajor[col * Z + z]; the z-major CC volume is never allocated (Labeling::cc stays empty).
+// cc_values[u] receives the label value of CC u.
+template <typename LABEL>
+Labeling cc_label_colmajor(const LABEL* labels, const Dims& d, std::vector<uint32_t>& colmajor,
+                           std::vector<uint64_t>& cc_values);
+
 template <typename LABEL>
 Boundary boundaries(const LABEL* labels, const Dims& d, bool impermissible, int markov_order, size_t parallel);
 

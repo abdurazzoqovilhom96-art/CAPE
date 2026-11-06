@@ -7,7 +7,11 @@
 #include <string>
 
 #include "cape/byte_model.hpp"
+#include "cape/candidate_store.hpp"
+#include "cape/component_repair.hpp"
 #include "cape/components.hpp"
+#include "cape/cover_incidence.hpp"
+#include "cape/dual_pruning.hpp"
 #include "cape/dual_bound.hpp"
 #include "cape/encoder.hpp"
 #include "cape/exact_dp.hpp"
@@ -66,7 +70,8 @@ Options parse_options(const py::dict& d) {
     else if (k == "debug_hash_bits") o.debug_hash_bits = v.cast<int>();
     else if (k == "impl_mask") {
       const int m = v.cast<int>();
-      if (m < -1 || m > kImplAll) throw py::value_error("impl_mask must be -1 or in [0, " + std::to_string(kImplAll) + "]");
+      if (m < -1 || m > kImplMaxMask)
+        throw py::value_error("impl_mask must be -1 or in [0, " + std::to_string(kImplMaxMask) + "]");
       o.impl_mask = m;
     }
     else if (k == "keep_alternative") o.keep_alternative = v.cast<bool>();
@@ -95,10 +100,27 @@ Options parse_options(const py::dict& d) {
     else if (k == "collect_records") o.collect_records = v.cast<bool>();
     else if (k == "export_components_max_cc") o.export_components_max_cc = v.cast<int>();
     else if (k == "export_components_limit") o.export_components_limit = v.cast<uint64_t>();
+    else if (k == "regime_gate") o.regime_gate = v.cast<bool>();
+    else if (k == "rc_fixing") o.rc_fixing = v.cast<bool>();
+    else if (k == "rc_max_cc") o.rc_max_cc = v.cast<int>();
+    else if (k == "rc_transitions_total") o.rc_transitions_total = v.cast<uint64_t>();
+    else if (k == "rc_transitions_per_component") o.rc_transitions_per_component = v.cast<uint64_t>();
+    else if (k == "rc_max_states") o.rc_max_states = v.cast<uint64_t>();
+    else if (k == "repair") o.repair = v.cast<bool>();
+    else if (k == "repair_max_r") o.repair_max_r = v.cast<int>();
+    else if (k == "repair_max_pool") o.repair_max_pool = v.cast<int>();
+    else if (k == "repair_attempts") o.repair_attempts = v.cast<int>();
+    else if (k == "repair_transitions_total") o.repair_transitions_total = v.cast<uint64_t>();
+    else if (k == "repair_transitions_per_attempt") o.repair_transitions_per_attempt = v.cast<uint64_t>();
+    else if (k == "repair_max_states") o.repair_max_states = v.cast<uint64_t>();
     else throw py::value_error("unknown CAPE option: " + k);
   }
   if (o.dual_scale == 0) throw py::value_error("dual_scale must be positive");
   if (o.exact_max_cc < 0 || o.exact_max_cc > 30) throw py::value_error("exact_max_cc must be in [0, 30]");
+  if (o.rc_max_cc < 0 || o.rc_max_cc > 30) throw py::value_error("rc_max_cc must be in [0, 30]");
+  if (o.repair_max_r < 1 || o.repair_max_r > 30) throw py::value_error("repair_max_r must be in [1, 30] (32-bit DP masks)");
+  if (o.repair_max_pool < 1) throw py::value_error("repair_max_pool must be positive");
+  if (o.repair_attempts < 0) throw py::value_error("repair_attempts must be >= 0");
   return o;
 }
 
@@ -221,6 +243,38 @@ py::dict py_solve_abstract(uint32_t n, const std::vector<std::vector<uint32_t>>&
   out["greedy_pins"] = g.pins;
   out["greedy_singles"] = g.singles;
   out["greedy_is_cover"] = is_cover(m, g);
+  {  // v3 M2: eager greedy must return the identical selection
+    GreedyScratch sc;
+    const Selection ge = greedy_eager(m, sc);
+    out["eager_cost"] = ge.cost;
+    out["eager_pins"] = ge.pins;
+    out["eager_singles"] = ge.singles;
+  }
+  {  // v3 M3b: reduced-cost fixing + residual DP against the greedy incumbent
+    uint64_t rem = o.rc_transitions_total;
+    const FixResult fr = reduced_cost_solve(m, g.cost, o.dual_scale, o.rc_max_cc, o.rc_transitions_per_component,
+                                            o.rc_max_states, rem);
+    out["rc_outcome"] = static_cast<int>(fr.outcome);  // 0 Proven, 1 Improved, 2 Unresolved
+    out["rc_cost"] = fr.outcome == FixOutcome::Improved ? fr.sel.cost : g.cost;
+    out["rc_is_cover"] = fr.outcome == FixOutcome::Improved ? is_cover(m, fr.sel) : true;
+    out["rc_fixed_out"] = fr.fixed_out;
+    out["rc_forced_in"] = fr.forced_in;
+  }
+  {  // v3 M4: bounded repair from the greedy incumbent
+    RepairParams rp;
+    rp.max_r = static_cast<uint32_t>(o.repair_max_r);
+    rp.max_pool = static_cast<uint32_t>(o.repair_max_pool);
+    rp.attempts = static_cast<uint32_t>(o.repair_attempts);
+    rp.per_attempt_transitions = o.repair_transitions_per_attempt;
+    rp.max_states = o.repair_max_states;
+    rp.q = o.dual_scale;
+    uint64_t rem = o.repair_transitions_total;
+    RepairStats rs;
+    const Selection rsel = component_repair(m, g, rp, rem, rs);
+    out["repair_cost"] = rsel.cost;
+    out["repair_is_cover"] = is_cover(m, rsel);
+    out["repair_accepted"] = rs.accepted;
+  }
   const DualResult dr = dual_ascent(m, o.dual_scale);
   out["dual_a"] = dr.a;
   out["dual_lb"] = dr.lb;
@@ -270,6 +324,19 @@ PYBIND11_MODULE(_cape_native, m) {
   m.def("solve_abstract", &py_solve_abstract, py::arg("n"), py::arg("sets"), py::arg("pin_cost"),
         py::arg("single_cost"), py::arg("options") = py::dict(),
         "Run greedy, dual, exact DP and local search on an abstract set-cover model (tests).");
+
+  m.def("_v3_candidate_guard_raises", []() {
+    // tests: one run of length 2^32-1 with h = 1 forecasts >= 2^32-1 candidates; the guard must throw
+    // before any candidate is allocated (no real large array is needed)
+    std::vector<Run> runs{Run{0, 0, 0xFFFFFFFFu, 0}};
+    CandidateGenStats st;
+    try {
+      make_candidates_dedup(runs, 1, CandidatePolicy::CompleteWindows, 1, 1, false, 5, 1, st);
+    } catch (const MemoryCapExceeded&) {
+      return true;
+    }
+    return false;
+  });
 
   py::register_exception<MemoryCapExceeded>(m, "MemoryCapExceeded");
   py::register_exception<UnsupportedInput>(m, "UnsupportedInput");

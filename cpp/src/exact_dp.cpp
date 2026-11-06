@@ -36,6 +36,8 @@ DpResult exact_dp_sparse(const LocalModel& m, const std::vector<uint32_t>& mask,
     }
   };
   std::priority_queue<uint32_t, std::vector<uint32_t>, std::greater<uint32_t>> heap;
+  bool state_cap_hit = false;
+  const bool single_rule = !m.no_single.empty();
   auto get = [&](uint32_t key, bool& fresh) -> Entry& {
     if (2 * (used + 1) > cap) {
       std::vector<Entry> old;
@@ -51,6 +53,7 @@ DpResult exact_dp_sparse(const LocalModel& m, const std::vector<uint32_t>& mask,
     if (fresh) {
       tab[i].key = key;
       used++;
+      if (lim.max_states != 0 && used > lim.max_states) state_cap_hit = true;
     }
     return tab[i];
   };
@@ -80,9 +83,11 @@ DpResult exact_dp_sparse(const LocalModel& m, const std::vector<uint32_t>& mask,
       trans++;
       relax(t | mask[p], c, p);
     }
-    trans++;
-    relax(t | (1u << low), s, M + low);
-    if (trans > limit) {
+    if (!single_rule || !m.no_single[low]) {
+      trans++;
+      relax(t | (1u << low), s, M + low);
+    }
+    if (trans > limit || state_cap_hit) {
       r.outcome = DpOutcome::BudgetExhausted;
       r.transitions = trans;
       remaining_total -= std::min(remaining_total, trans);
@@ -91,6 +96,10 @@ DpResult exact_dp_sparse(const LocalModel& m, const std::vector<uint32_t>& mask,
   }
   r.transitions = trans;
   remaining_total -= std::min(remaining_total, trans);
+  if (tab[slot_of(full)].key != full || tab[slot_of(full)].D == INF) {
+    r.outcome = DpOutcome::Infeasible;
+    return r;
+  }
   uint32_t t = full;
   while (t) {
     const Entry& e = tab[slot_of(t)];
@@ -121,6 +130,14 @@ DpResult exact_dp(const LocalModel& m, const DpLimits& lim, uint64_t& remaining_
   if (static_cast<int>(n) > lim.max_cc || n > 30) {
     r.outcome = DpOutcome::SkippedSize;
     return r;
+  }
+  if (lim.sparse_admission) {  // v3: budgets only (transitions, reachable states)
+    std::vector<uint32_t> mask(M, 0);
+    for (uint32_t p = 0; p < M; p++) {
+      for (uint64_t k = m.off[p]; k < m.off[p + 1]; k++) mask[p] |= (1u << m.elem[k]);
+    }
+    const uint32_t full = static_cast<uint32_t>((uint64_t{1} << n) - 1);
+    return exact_dp_sparse(m, mask, full, lim, remaining_total, r);
   }
   const uint64_t states = uint64_t{1} << n;
   const uint64_t bytes = states * 12ull;
@@ -161,7 +178,7 @@ DpResult exact_dp(const LocalModel& m, const DpLimits& lim, uint64_t& remaining_
         pa[t2] = p;
       }
     }
-    {
+    if (m.no_single.empty() || !m.no_single[low]) {
       const uint32_t t2 = t | (1u << low);
       trans++;
       if (D[t] + s < D[t2]) {
@@ -179,6 +196,10 @@ DpResult exact_dp(const LocalModel& m, const DpLimits& lim, uint64_t& remaining_
   }
   r.transitions = trans;
   remaining_total -= std::min(remaining_total, trans);
+  if (D[full] == INF) {
+    r.outcome = DpOutcome::Infeasible;
+    return r;
+  }
   uint32_t t = full;
   while (t) {
     const uint32_t a = pa[t];
