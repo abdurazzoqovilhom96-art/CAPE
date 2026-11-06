@@ -1,0 +1,14 @@
+{
+  "modules": [
+    "M5a"
+  ],
+  "configs": {
+    "core": "configs/v3_dev_core_rerun.yaml",
+    "scale": "configs/v3_dev_scale_rerun.yaml"
+  },
+  "manifests": {
+    "core": "data/manifests/v3_dev_core.jsonl",
+    "scale": "data/manifests/scaling_v21.jsonl"
+  },
+  "at": "2026-11-06T17:13:37+00:00"
+}
