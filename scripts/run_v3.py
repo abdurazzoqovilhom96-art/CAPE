@@ -155,11 +155,48 @@ def stage_develop(st):
     return {"status": "DONE" if ok else "FAILED", "detail": {p: r.get("run_dir") for p, r in results.items()}}
 
 
+def _panel_run(st: dict, key: str, config: str, manifest: str) -> dict:
+    prev = st["panels"].get(key, {})
+    if prev.get("status") == "DONE":
+        return prev
+    st["panels"][key] = dict(prev, status="RUNNING", started_at=now())
+    save_state(st)
+    t0 = time.time()
+    res = pipeline(config, manifest, key)
+    res.update(started_at=st["panels"][key]["started_at"], ended_at=now(), seconds=round(time.time() - t0, 1))
+    st["panels"][key] = res
+    save_state(st)
+    return res
+
+
 def stage_select(st):
+    """Phase 1 (gates on the development runs; at most one 15-repeat rerun under the inconclusive rule), then the
+    QUALITY composite is measured on the development QUALITY crops, then phase 2 (QUALITY gate)."""
     if st["stages"].get("develop", {}).get("status") != "DONE":
         return {"status": "BLOCKED", "detail": "develop not DONE"}
-    runs = [f"{p}={st['panels'][p]['run_dir']}" for p in PANELS]
-    return script_stage("pilot_select_v3.py", ["--runs", *runs], "select", "analysis/v3_select/selected_methods.json")
+    script = ROOT / "scripts" / "pilot_select_v3.py"
+    if not script.exists():
+        return {"status": "BLOCKED", "detail": "scripts/pilot_select_v3.py not written yet"}
+    args = ["--phase", "1", "--runs", *[f"{p}={st['panels'][p]['run_dir']}" for p in PANELS]]
+    if all(st["panels"].get(f"rerun_{p}", {}).get("status") == "DONE" for p in ("core", "scale")):
+        args += ["--rerun", *[f"{p}={st['panels'][f'rerun_{p}']['run_dir']}" for p in ("core", "scale")]]
+    code = run([PY, script, *args], "select")
+    if code == 3:  # inconclusive rule: one rerun with 15 repeats, then decide with the rerun only
+        rr = json.loads((ROOT / "analysis" / "v3_select" / "rerun_required.json").read_text(encoding="utf-8"))
+        for p in ("core", "scale"):
+            res = _panel_run(st, f"rerun_{p}", rr["configs"][p], rr["manifests"][p])
+            if res["status"] != "DONE":
+                return {"status": "FAILED", "detail": f"rerun_{p}: {res.get('detail')}"}
+        args += ["--rerun", *[f"{p}={st['panels'][f'rerun_{p}']['run_dir']}" for p in ("core", "scale")]]
+        code = run([PY, script, *args], "select")
+    if code != 0:
+        return {"status": "FAILED", "exit_code": code, "detail": "pilot_select_v3.py phase 1 failed (see select.log)"}
+    res = _panel_run(st, "quality_check", "configs/v3_dev_quality_check.yaml", "data/manifests/v3_dev_quality.jsonl")
+    if res["status"] != "DONE":
+        return {"status": "FAILED", "detail": f"quality_check: {res.get('detail')}"}
+    code = run([PY, script, "--phase", "2", "--quality-check", res["run_dir"]], "select")
+    return {"status": "DONE" if code == 0 else "FAILED", "exit_code": code,
+            "detail": "analysis/v3_select/selected_methods.json"}
 
 
 def stage_freeze(st):
@@ -172,6 +209,13 @@ def stage_confirm(st):
     if st["stages"].get("freeze", {}).get("status") != "DONE":
         return {"status": "BLOCKED", "detail": "freeze not DONE: the holdout is never touched before the freeze"}
     freeze = json.loads((ROOT / "analysis" / "v3_freeze" / "freeze.json").read_text(encoding="utf-8"))
+    sys.path.insert(0, str(ROOT))
+    from cape.provenance import source_tree_hash
+
+    src = source_tree_hash()
+    if src != freeze["expected_source_hash"]:
+        return {"status": "BLOCKED", "detail": f"source tree {src[:12]} differs from the freeze "
+                f"{freeze['expected_source_hash'][:12]}: a frozen input changed (a new freeze = protocol amendment)"}
     out = {}
     for name, spec in freeze["confirm_runs"].items():
         key = f"confirm_{name}"
@@ -182,7 +226,7 @@ def stage_confirm(st):
         st["panels"][key] = dict(prev, status="RUNNING", started_at=now())
         save_state(st)
         t0 = time.time()
-        res = pipeline(spec["config"], spec["manifest"], key, stage="benchmark")
+        res = pipeline(spec["config"], spec["manifest"], key, stage="all")
         res.update(started_at=st["panels"][key]["started_at"], ended_at=now(), seconds=round(time.time() - t0, 1))
         st["panels"][key] = res
         save_state(st)

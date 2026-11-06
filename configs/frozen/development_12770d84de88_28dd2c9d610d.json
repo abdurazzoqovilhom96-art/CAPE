@@ -1,0 +1,63 @@
+{
+  "freeze_id": "development_12770d84de88_28dd2c9d610d",
+  "mode": "development",
+  "config_path": "D:\\CAPE_PINS\\configs\\v3_dev_tracks.yaml",
+  "config_hash": "12770d84de88177d8db3d2d1a9f5a392fd3dd1a83162ab7fbc35f67a885f4f52",
+  "methods_hash": "945eb21686a48e1456ed45dc7cd2cb9d9647facfe8602ce89f23940d90ef68be",
+  "split_hash": "28dd2c9d610d86b8682c7e24ce9b289fccb0b7c91491b04799117c05d36a9fd8",
+  "source_hash": "fd41c57f2a4443d66fe73f60965030a23d02ffd4a0bef9c17a8d456d7c763ca7",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "cape_v3_all_m0",
+    "cape_v21_fast_m0",
+    "crackle_flat_m0",
+    "crackle_pins_opt_corrected_m0",
+    "crackle_pins_fast_m0",
+    "crackle_pins_opt_m0",
+    "v3_weighted_greedy_fast_m0",
+    "v3_greedy_local_fast_m0",
+    "v3_greedy_local_b4_fast_m0",
+    "v3_exact_only_fast_m0",
+    "v3_weighted_greedy_noreduce_fast_m0",
+    "v3_cape_noreduce_fast_m0",
+    "v3_weighted_greedy_rc_m0",
+    "cape_v3_rc_m0",
+    "v3_cape_certified_m0",
+    "v3_cape_certified_rc_m0",
+    "v3_weighted_greedy_certified_m0",
+    "safe_v3_archive_m0_zstd9",
+    "safe_v3_archive_m0_zstd3",
+    "safe_stock_m0_zstd9",
+    "safe_stock_m0_zstd3",
+    "cape_v21_fast_m5",
+    "cape_v3_all_m5"
+  ],
+  "primary": {
+    "new": "cape_v3_all_m0",
+    "baseline": "v3_weighted_greedy_fast_m0"
+  },
+  "splits": [
+    "development"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-06T16:13:33.747+00:00"
+}
