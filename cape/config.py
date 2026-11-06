@@ -210,16 +210,24 @@ def load_methods(path: Path | None = None) -> dict:
     from cape.provenance import METHODS_FILE
 
     path = path or METHODS_FILE
-    raw = _load_yaml(path)
-    if not isinstance(raw, dict) or set(raw) - {"schema_version", "methods"} or raw.get("schema_version") != 1:
-        raise ConfigError(f"{path}: expected keys schema_version: 1 and methods")
+    files = [Path(path)]
+    # CAPE v3: configs/v3_methods.yaml is merged into the default registry (never into a test registry)
+    v3 = ROOT / "configs" / "v3_methods.yaml"
+    if Path(path).resolve() == (ROOT / "configs" / "methods.yaml").resolve() and v3.exists():
+        files.append(v3)
     methods = {}
-    for mid, spec in raw["methods"].items():
-        m = validate(spec, METHOD_SCHEMA, f"methods.{mid}")
-        bad = set(m["panels"]) - set(KNOWN_PANELS)
-        if bad:
-            raise ConfigError(f"methods.{mid}.panels: unknown {sorted(bad)}")
-        methods[mid] = m
+    for f in files:
+        raw = _load_yaml(f)
+        if not isinstance(raw, dict) or set(raw) - {"schema_version", "methods"} or raw.get("schema_version") != 1:
+            raise ConfigError(f"{f}: expected keys schema_version: 1 and methods")
+        for mid, spec in raw["methods"].items():
+            if mid in methods:
+                raise ConfigError(f"{f.name}: method {mid} is defined twice")
+            m = validate(spec, METHOD_SCHEMA, f"methods.{mid}")
+            bad = set(m["panels"]) - set(KNOWN_PANELS)
+            if bad:
+                raise ConfigError(f"methods.{mid}.panels: unknown {sorted(bad)}")
+            methods[mid] = m
     return methods
 
 

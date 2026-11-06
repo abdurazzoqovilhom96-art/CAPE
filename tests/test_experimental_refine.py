@@ -16,8 +16,21 @@ def test_every_refine_method_is_experimental_and_never_new():
         assert spec["experimental"] is True, mid
         assert spec["role"] != "new", mid
         assert spec["description"].startswith("[EXPERIMENTAL"), mid
-    # nothing else became experimental by accident
-    assert all(not v["experimental"] for k, v in methods.items() if v["adapter"] != "safe_refine")
+    # nothing else became experimental by accident: besides refine, only the v3 QUALITY / M3 / M4 switches
+    # declared in configs/v3_methods.yaml are experimental (development candidates), and none of them is "new"
+    import yaml
+
+    from cape.config import ROOT
+
+    v3_file = ROOT / "configs" / "v3_methods.yaml"
+    v3 = set(yaml.safe_load(v3_file.read_text(encoding="utf-8"))["methods"]) if v3_file.exists() else set()
+    v3_switches = ("regime_gate", "rc_fixing", "repair")
+    for k, v in methods.items():
+        if not v["experimental"] or v["adapter"] == "safe_refine":
+            continue
+        assert k in v3, f"{k}: experimental outside refine and the v3 registry"
+        assert v["role"] != "new", k
+        assert any(v["options"].get(sw) for sw in v3_switches), f"{k}: experimental without a v3 QUALITY switch"
 
 
 def _array():

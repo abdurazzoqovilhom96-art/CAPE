@@ -1,0 +1,4 @@
+
+=== 2026-11-06T12:49:05+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe scripts/build_native.py
+_crackle_vendor: _crackle_vendor.cp312-win_amd64.pyd (2209301 B) sha256=58d92ef899f747f2
+_cape_native: _cape_native.cp312-win_amd64.pyd (2768525 B) sha256=f1029e19992af218

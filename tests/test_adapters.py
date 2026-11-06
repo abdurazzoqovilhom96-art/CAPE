@@ -18,7 +18,9 @@ VOLS = {
     "u32": syn.dense_drifting_voronoi((10, 24, 28), n_seeds=15, dtype=np.uint32, seed=2),
     "u64": syn.large_ids((6, 16, 12), seed=3),
 }
-TESTED = [m for m in METHODS if METHODS[m]["adapter"] not in ("csgv", "csgvr")]
+# the frozen v2.1 adapter is exercised in a separate process (tests/test_v3_invariants.py): loading two pybind11
+# modules with the same C++ exception names into this process would swap their Python exception classes
+TESTED = [m for m in METHODS if METHODS[m]["adapter"] not in ("csgv", "csgvr", "cape_frozen_v21")]
 
 
 @pytest.mark.parametrize("vol", sorted(VOLS))

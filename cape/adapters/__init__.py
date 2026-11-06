@@ -15,6 +15,12 @@ def make_adapter(method_id: str, spec: dict, run_cfg: dict | None = None, wrappe
 
         adapter: CodecAdapter = CapeNativeAdapter(method_id, opts, threads,
                                                   base_options=cape_native_options(run_cfg) if run_cfg else None)
+    elif name == "cape_frozen_v21":
+        from cape.adapters.cape_frozen import CapeFrozenV21Adapter
+        from cape.config import cape_native_options
+
+        adapter = CapeFrozenV21Adapter(method_id, opts, threads,
+                                       base_options=cape_native_options(run_cfg) if run_cfg else None)
     elif name == "safe_archive":
         from cape.adapters.safe_archive import SafeArchiveAdapter
         from cape.config import cape_native_options

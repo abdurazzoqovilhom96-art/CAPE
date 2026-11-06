@@ -261,3 +261,43 @@ def test_quality_never_exceeds_fast_and_is_lossless(rel):
     qbuf, _ = _enc(cn, zyx, dict(QUALITY, format_policy="same_as_stock"))
     assert len(qbuf) <= len(fbuf)
     np.testing.assert_array_equal(np.ascontiguousarray(crackle.decompress(qbuf).T), zyx)
+
+
+# ------------------------------------------------------------------ frozen v2.1 adapter contract (own process)
+FROZEN_ADAPTER_SCRIPT = r"""
+import sys, numpy as np
+sys.path.insert(0, sys.argv[1])
+from cape.adapters import make_adapter
+from cape.config import load_methods, load_run_config
+from cape import synthetic as syn
+M = load_methods(); RUN = load_run_config("configs/smoke.yaml", M)
+vols = [syn.blocky((12, 24, 20), n_labels=9, dtype=np.uint16, seed=1),
+        syn.dense_drifting_voronoi((10, 24, 28), n_seeds=15, dtype=np.uint32, seed=2), syn.large_ids((6, 16, 12), seed=3)]
+for mid in ("cape_v21_fast_m0", "cape_v21_fast_m5"):
+    for wrapper in ["none"] + (["zstd3", "zstd9"] if M[mid]["wrappable"] else []):
+        ad = make_adapter(mid, M[mid], RUN, wrapper)
+        assert ad.availability()["status"] == "AVAILABLE", mid
+        for a in vols:
+            s = ad.encode(a); out = ad.decode(s)
+            assert out.shape == a.shape and out.dtype == a.dtype and np.array_equal(out, a), (mid, wrapper)
+            assert all(v is True for v in ad.secondary_check(s, a).values())
+assert "cape._cape_native" not in sys.modules, "frozen adapter imported the v3 module"
+print("FROZEN_ADAPTER_OK")
+"""
+
+
+def test_frozen_v21_adapter_roundtrip_in_its_own_process():
+    if not FROZEN.exists():
+        pytest.skip("frozen v2.1 binary missing")
+    out = subprocess.run([sys.executable, "-c", FROZEN_ADAPTER_SCRIPT, str(ROOT)], cwd=ROOT, capture_output=True,
+                         text=True)
+    assert out.returncode == 0 and "FROZEN_ADAPTER_OK" in out.stdout, out.stderr[-2000:]
+
+
+def test_frozen_adapter_rejects_v3_options():
+    from cape.adapters.cape_frozen import CapeFrozenV21Adapter
+
+    with pytest.raises(ValueError):
+        CapeFrozenV21Adapter("x", {"rc_fixing": True})
+    with pytest.raises(ValueError):
+        CapeFrozenV21Adapter("x", {"impl_mask": 1023})

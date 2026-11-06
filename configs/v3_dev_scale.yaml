@@ -1,0 +1,24 @@
+# CAPE v3 development panel SCALE (configs/v3_development.yaml): byte-preserving modules on the nested scaling crops
+# (seen development sources, up to 1250x1250x125 and 512^3). 3 repeats, pre-set for cost (plan section 14).
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v3 development SCALE - M1/M2/M5 vs frozen v2.1 on nested scaling crops (descriptive slopes)
+input:
+  manifest: data/manifests/scaling_v21.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  warmups: 2
+  repeats: 3
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_v21_fast_m0, cape_v3_off_m0, cape_v3_A_m0, cape_v3_C_m0, cape_v3_G_m0, cape_v3_F_m0, cape_v3_B_m0,
+          cape_v3_all_m0, cape_v3_noA_m0, cape_v3_noC_m0, cape_v3_noG_m0, cape_v3_noF_m0, cape_v3_noB_m0]
+panels: [B]
+primary:
+  new: cape_v3_all_m0
+  baseline: cape_v21_fast_m0
+oracle:
+  enabled: false

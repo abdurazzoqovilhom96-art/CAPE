@@ -1,0 +1,30 @@
+# CAPE v3 development panel TRACKS (configs/v3_development.yaml): matched solvers on the same v3 infrastructure,
+# certificate track (+ CP-SAT oracle on small written components), archive track (SAFE-CAPE vs SAFE-stock, zstd9
+# primary / zstd3 secondary), external Crackle rows and Markov order 5. Development data only.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v3 development TRACKS - matched solvers, certificates, archive, external, m5
+input:
+  manifest: data/manifests/v3_dev_core.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  warmups: 2
+  repeats: 3
+  external_wrappers: [none, zstd3, zstd9]
+  task_timeout_s: 3600
+  memory_profile_separate: false
+methods: [cape_v3_all_m0, cape_v21_fast_m0, crackle_flat_m0, crackle_pins_opt_corrected_m0, crackle_pins_fast_m0,
+          crackle_pins_opt_m0, v3_weighted_greedy_fast_m0, v3_greedy_local_fast_m0, v3_greedy_local_b4_fast_m0,
+          v3_exact_only_fast_m0, v3_weighted_greedy_noreduce_fast_m0, v3_cape_noreduce_fast_m0, v3_weighted_greedy_rc_m0,
+          cape_v3_rc_m0, v3_cape_certified_m0, v3_cape_certified_rc_m0, v3_weighted_greedy_certified_m0,
+          safe_v3_archive_m0_zstd9, safe_v3_archive_m0_zstd3, safe_stock_m0_zstd9, safe_stock_m0_zstd3,
+          cape_v21_fast_m5, cape_v3_all_m5]
+panels: [B]
+primary:
+  new: cape_v3_all_m0
+  baseline: v3_weighted_greedy_fast_m0
+oracle:
+  enabled: true

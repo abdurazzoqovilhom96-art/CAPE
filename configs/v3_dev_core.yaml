@@ -1,0 +1,25 @@
+# CAPE v3 development panel CORE (configs/v3_development.yaml): byte-preserving modules M1a/M1b/M2/M5a/M5b, one at a
+# time and leave-one-out, against the FROZEN v2.1 binary. Development data only (all crops measured in v1/v2).
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v3 development CORE - M1/M2/M5 timing and memory vs frozen v2.1 (CREMI A pilot + CREMI B/C v2-unseen)
+input:
+  manifest: data/manifests/v3_dev_core.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  warmups: 2
+  repeats: 7
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_v21_fast_m0, cape_v3_off_m0, cape_v3_A_m0, cape_v3_C_m0, cape_v3_G_m0, cape_v3_F_m0, cape_v3_B_m0,
+          cape_v3_all_m0, cape_v3_noA_m0, cape_v3_noC_m0, cape_v3_noG_m0, cape_v3_noF_m0, cape_v3_noB_m0,
+          crackle_pins_opt_corrected_m0, crackle_flat_m0]
+panels: [B]
+primary:
+  new: cape_v3_all_m0
+  baseline: cape_v21_fast_m0
+oracle:
+  enabled: false

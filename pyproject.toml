@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "cape-pins"
-version = "0.1.0.dev0"
+version = "0.3.0.dev0"
 description = "CAPE-Pins: Crackle-compatible componentwise adaptive pin encoder and benchmark pipeline"
 readme = "README_UZ.md"
 requires-python = ">=3.12,<3.13"

@@ -1,0 +1,27 @@
+# CAPE v3 development panel QUALITY (configs/v3_development.yaml): depth regimes, M3a regime gate, M3b reduced-cost
+# fixing and the M4 bounded-repair grid on the pre-registered Z > 256 group + the CREMI A pilot crops. 3 repeats.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261106
+mode: development
+description: v3 development QUALITY - regimes, M3a, M3b, M4 grid (Z>256 group + CREMI A)
+input:
+  manifest: data/manifests/v3_dev_quality.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  warmups: 2
+  repeats: 3
+  external_wrappers: [none]
+  task_timeout_s: 3600
+  memory_profile_separate: false
+methods: [cape_v3_all_m0, cape_v3_regimes_m0, cape_v3_regimes_gate_m0, cape_v3_rc_m0, cape_v3_regimes_rc_m0,
+          cape_v3_rep_r16_p128_a1_m0, cape_v3_rep_r16_p128_a4_m0, cape_v3_rep_r16_p512_a1_m0, cape_v3_rep_r16_p512_a4_m0,
+          cape_v3_rep_r24_p128_a1_m0, cape_v3_rep_r24_p128_a4_m0, cape_v3_rep_r24_p512_a1_m0, cape_v3_rep_r24_p512_a4_m0,
+          cape_v3_rep_r30_p128_a1_m0, cape_v3_rep_r30_p128_a4_m0, cape_v3_rep_r30_p512_a1_m0, cape_v3_rep_r30_p512_a4_m0]
+panels: [B]
+primary:
+  new: cape_v3_regimes_m0
+  baseline: cape_v3_all_m0
+oracle:
+  enabled: false

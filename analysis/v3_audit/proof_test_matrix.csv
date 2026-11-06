@@ -1,0 +1,19 @@
+invariant,spec,evidence,where
+every v3 implementation bit combination writes the frozen v2.1 bytes,11.1,test,tests/test_v3_invariants.py::test_every_v3_bit_combination_matches_frozen_v21 (36 cases x 2 depth policies x 32 v3 combos x 2 low masks; frozen digests from a separate process)
+"problem-describing diagnostics unchanged (candidates, classes, components)",11.1,test,tests/test_v3_invariants.py::test_v3_fast_preset_matches_frozen_v21_same_as_stock
+M1a neighbour-column rule never drops an equal-coverage class representative,5.1,proof + test,docs/V3_MATHEMATICS.md M1a; byte identity tests; adjacency counts test
+hash collisions never merge different coverage (with v3 bits),11.6,test,tests/test_v3_invariants.py::test_forced_hash_collisions_keep_bytes_with_v3_bits; tests/test_reduction_fast.py
+"exact roundtrip for every dtype / shape / edge case (0, uint64 max, Z=1, many labels)",11.2-11.3,test,tests/test_v3_invariants.py::test_v3_roundtrip_edge_cases; tests/test_input_axes_dtype.py; worker verifies every measured row with the original decoder
+F2 count-width reproducer; corrected stock = minimal diff,11.4,test,tests/test_stock_corrected.py; docs/format_audit.md F2
+"32-bit candidate index overflow is reported, never silent",11.7,test,tests/test_v3_invariants.py::test_candidate_index_guard_without_allocating
+brute force = DP = CP-SAT on small cover problems,11.8,test,tests/test_dp_oracle.py; cape/oracle.py (dev TRACKS panel)
+reductions keep the optimum,11.9,proof + test,docs/mathematics.md 4; tests/test_reduction_optimum.py
+dual feasibility; LB <= exact optimum; scaled regime bound <= regime section,11.10,proof + test,"tests/test_dual_certificate.py; tests/test_v3_invariants.py::test_regime_gate_is_output_preserving_and_its_bound_is_valid, ::test_scaled_dual_bound_never_exceeds_*"
+"reduced-cost fixing keeps the strict-improvement optimum ('Improved' = optimum, 'Proven' holds)",11.11,proof + test,docs/V3_MATHEMATICS.md M3b; tests/test_v3_invariants.py::test_abstract_models_eager_rc_repair_against_brute_force (360 random models)
+"M4 repair: outside coverage kept, never above the incumbent, never below the optimum, lossless",11.12,test,tests/test_v3_invariants.py (abstract models + real crops)
+QUALITY never larger than FAST; raw and zstd costs never mixed,11.13,test + design,"tests/test_v3_invariants.py::test_quality_never_exceeds_fast_and_is_lossless; zstd only in wrappers / SAFE (measured, not bounded)"
+certificate LB <= written stream (incl. w_D compaction),6 / 11.10,test,tests/test_v3_invariants.py::test_quality_never_exceeds_fast_and_is_lossless (lb <= ub asserted); worker certificate_valid
+SAFE candidates and headers counted; decoder needs only the stored file,11.14,test,tests/test_safe_archive.py
+"resume keys, timeout / OOM logging, partial reports",11.15,test,tests/test_runner_resume.py; tests/test_failure_finalization.py; acceptance T1-T12
+M2 eager greedy = lazy greedy selection,6,proof + test,docs/V3_MATHEMATICS.md M2; tests/test_v3_invariants.py::test_abstract_models_*; byte identity tests
+"M5b batched CC labeling = upstream labeling (ids, per-slice counts, crcs)",9,test,byte identity tests (crcs and ids are part of the stream)

@@ -1,0 +1,98 @@
+# CAPE v3 protocol (plan CAPE v3, sections 10, 12, 14). WRITTEN BEFORE THE FIRST v3 DEVELOPMENT MEASUREMENT
+# (git commit on branch v3 that adds this file precedes every results/ run of the v3 panels). Read by
+# scripts/run_v3.py and scripts/pilot_select_v3.py. Not a run config (no RUN_SCHEMA); historical freezes untouched.
+schema: cape_v3_protocol/1
+written: 2026-11-06
+etalon: {method: cape_v21_fast_m0, binary: snapshots/v21/_cape_native.cp312-win_amd64.pyd,
+         sha256: 39dca94b1eeb1c59c98b1dcb117e2f46c3b4ddf6b3539dd067c2a4f40a4ff2cb}
+
+# ---------------------------------------------------------------- development panels (all data already seen)
+panels:
+  core:    {config: configs/v3_dev_core.yaml,    manifest: data/manifests/v3_dev_core.jsonl,
+            role: "M1/M2/M5 timing + memory, 7 repeats (CREMI A pilot + CREMI B/C v2-unseen crops)"}
+  scale:   {config: configs/v3_dev_scale.yaml,   manifest: data/manifests/scaling_v21.jsonl,
+            role: "M1/M2/M5 on nested scaling crops up to 1250x1250x125 and 512^3, 3 repeats (pre-set for cost)"}
+  tracks:  {config: configs/v3_dev_tracks.yaml,  manifest: data/manifests/v3_dev_core.jsonl,
+            role: "matched solvers, certificate, archive, external, m5; 3 repeats; CP-SAT oracle"}
+  quality: {config: configs/v3_dev_quality.yaml, manifest: data/manifests/v3_dev_quality.jsonl,
+            role: "M3/M4 QUALITY candidates + M4 grid on the Z>256 group and CREMI A, 3 repeats"}
+
+# module -> implementation bit (types.hpp ImplBit) and the matched variants that isolate it
+modules:
+  M1a: {bit: 32,  single: cape_v3_A_m0, leave_one_out: cape_v3_noA_m0, byte_preserving: true}
+  M1b: {bit: 64,  single: cape_v3_C_m0, leave_one_out: cape_v3_noC_m0, byte_preserving: true}
+  M2:  {bit: 128, single: cape_v3_G_m0, leave_one_out: cape_v3_noG_m0, byte_preserving: true}
+  M5a: {bit: 256, single: cape_v3_F_m0, leave_one_out: cape_v3_noF_m0, byte_preserving: true}
+  M5b: {bit: 512, single: cape_v3_B_m0, leave_one_out: cape_v3_noB_m0, byte_preserving: true}
+  M3a: {option: regime_gate, variant: cape_v3_regimes_gate_m0, base: cape_v3_regimes_m0, byte_preserving: true}
+  M3b: {option: rc_fixing, variant: cape_v3_rc_m0, base: cape_v3_all_m0, byte_preserving: false}
+  M4:  {option: repair, grid_prefix: cape_v3_rep_, base: cape_v3_all_m0, byte_preserving: false}
+
+# ---------------------------------------------------------------- section 10 gates (fixed before any result)
+gates:
+  correctness:
+    every_row_lossless: true            # original decoder, voxel by voxel (worker)
+    byte_preserving_equal_to: cape_v21_fast_m0   # every byte-preserving variant, every sample
+  fast:                                  # per module, decided on the LEAVE-ONE-OUT contrast: all vs all-minus-module
+    panels: [core, scale]                # pooled development crops; geometric mean over crops
+    geo_speedup_min: 1.05                # S_T = exp(mean log(T_without / T_with)), T = median of repeats
+    ci_lower_gt: 1.0                     # 95% paired cluster bootstrap (macroblock), 10000 resamples
+    peak_memory_median_increase_max: 0.05
+    per_sample_slowdown_flag: 0.10       # every sample slower by >10% is listed by name (never hidden)
+    single_bit_contrast: reported        # v2.1 FAST + one bit vs v2.1 FAST, reported next to the decision
+  memory_profile:                        # separate MEMORY profile, never a FAST win
+    peak_reduction_min: 0.10             # median of per-sample peak working set (fresh process, OS peak)
+    time_increase_max: 0.05
+  quality:                               # M3 / M4 and the QUALITY composite
+    group: [crackle_connectomics_x256_y256_z0_256x256x512, crackle_ws_x0_y0_z0_256x256x512,
+            scale_crackle_connectomics_128x128x512, scale_crackle_connectomics_256x256x512,
+            scale_crackle_connectomics_512x512x512, scale_crackle_connectomics_64x64x512,
+            scale_crackle_ws_512x512x512]          # every development crop with Z > 256, fixed in advance
+    min_total_raw_saving: 0.001          # 1 - sum B_quality / sum B_fast over the group
+    max_total_encode_ratio_vs_fast: 1.5  # sum of median encode times, quality / fast, over the group
+    never_larger_than_fast: true         # every sample
+    whole_corpus: reported               # gain / loss on every development crop is reported as well
+  m3a_regime_gate:                       # output-identical; kept only if it saves time
+    must_equal_bytes_of: cape_v3_regimes_m0
+    min_pruned_fraction: 0.0             # reported; FAST never uses it
+    keep_if_total_encode_ratio_below: 1.0
+  m4_grid_choice: "largest group raw saving among grid points within the QUALITY time gate; ties -> smaller budget
+                   (R, then pool, then attempts); none within the gate -> M4 stays experimental"
+  inconclusive:                          # optional stopping is not allowed
+    rule: "point estimate passes but the CI lower bound does not (or vice versa) -> INCONCLUSIVE"
+    rerun_once: {repeats: 15, scope: "all matched variants of that panel"}
+    after_rerun: "decide with the rerun only; still inconclusive -> module not in FAST (experimental)"
+
+# ---------------------------------------------------------------- pilot budget (section 10.5)
+budget:
+  per_module: "first implementation + one justified fix round"
+  development_runs: [core, scale, tracks, quality]   # + at most one 15-repeat rerun per panel (inconclusive rule)
+  max_cpu_hours: 6
+  no_hyperparameter_search_beyond: "the M4 grid above"
+
+# ---------------------------------------------------------------- selection (section 20) and confirm plan
+selection:
+  fast: "v2.1 FAST + every byte-preserving module that passed the FAST gate (or the MEMORY profile separately)"
+  quality: "FAST + depth regimes + M3b + the M4 grid point, only if the QUALITY gate passes; otherwise no QUALITY
+            default (reported as exploratory)"
+  certified: "FAST stream + all-regime LB (+ M3b if it tightens the LB without changing the stream rule)"
+  removed_modules: "kept in code behind their switch, flagged experimental, reason written to selected_methods.json"
+confirm:
+  primary_manifest: data/manifests/confirm_snemi3d.jsonl          # frozen in v2.1, never compressed so far
+  scale_manifest: data/manifests/confirm_snemi3d_v3_scale.jsonl   # whole volume + 4 quadrants, made at FREEZE
+  repeats: 7
+  warmups: 2
+  repeats_scale_track: 3
+  primary_family:                        # Holm-corrected together
+    - {id: H1, metric: encode_time, new: v3_fast, base: cape_v21_fast_m0, effect: geo_speedup}
+    - {id: H2a, metric: total_bytes, new: v3_fast, base: crackle_pins_opt_corrected_m0, effect: G_B}
+    - {id: H2b, metric: encode_time, new: v3_fast, base: crackle_pins_opt_corrected_m0, effect: geo_speedup}
+  secondary: [quality_vs_fast, archive_zstd9_safe_cape_vs_safe_stock, archive_vs_flat_zstd9, m5, zstd3]
+statistics:
+  bootstrap_resamples: 10000
+  seed: 20261106
+  cluster_by: macroblock_id
+  ci: 0.95
+  multiplicity: holm
+  sizes_are_deterministic: "repeats never multiply byte samples; repeats only describe timing"
+  single_volume_note: "SNEMI3D is one acquisition: CIs are conditional on that volume"

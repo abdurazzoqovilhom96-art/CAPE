@@ -1,0 +1,49 @@
+
+=== 2026-11-06T12:48:18+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\scripts\audit_v3.py
+{
+ "claims": [
+  [
+   "C1",
+   "MATCH",
+   0.107091
+  ],
+  [
+   "C2",
+   "MATCH",
+   5.631201
+  ],
+  [
+   "C3",
+   "MATCH",
+   42
+  ],
+  [
+   "C4",
+   "MATCH",
+   2.72867
+  ],
+  [
+   "C5",
+   "MATCH",
+   0.639685
+  ],
+  [
+   "C6",
+   "MATCH",
+   5.108691
+  ],
+  [
+   "C7",
+   "MATCH",
+   0.693731
+  ]
+ ],
+ "certificate_invalid": 12,
+ "overlap": {
+  "score": 0.09621012955904007,
+  "snemi_z": 7,
+  "crackle": "connectomics",
+  "crackle_z": 73
+ },
+ "snemi_used": []
+}

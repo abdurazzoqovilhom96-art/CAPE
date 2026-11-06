@@ -1,0 +1,366 @@
+# CAPE v3 method registry (merged into configs/methods.yaml by cape.config.load_methods).
+# impl_mask bits (cpp/include/cape/types.hpp): v2.1 L=1 R=2 H=4 T=8 S=16 (31 = v2.1 FAST implementation);
+# v3 A=32 (M1a adjacent dedup) C=64 (M1b component CSR) G=128 (M2 eager greedy) F=256 (M5a fused scan)
+# B=512 (M5b batched CC). Every impl_mask writes the same bytes (tests/test_v3_invariants.py).
+# QUALITY switches (may change bytes, never upwards): regime_gate (M3a), rc_fixing (M3b), repair (M4).
+schema_version: 1
+methods:
+  # ---------------------------------------------------------------- frozen v2.1 etalon
+  cape_v21_fast_m0:
+    adapter: cape_frozen_v21
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    description: FROZEN v2.1 CAPE-FAST binary (snapshots/v21, sha256 39dca94b...) - the v3 primary internal baseline
+  cape_v21_fast_m5:
+    adapter: cape_frozen_v21
+    options: {markov_model_order: 5, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off"}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: false
+    role: baseline
+    description: FROZEN v2.1 CAPE-FAST binary, Markov order 5 crack codes (secondary)
+  cape_v3_off_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 31}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 binary with every v3 bit off (the v2.1 algorithm compiled in the v3 binary; build-drift control)
+  # ---------------------------------------------------------------- one v3 bit at a time (on top of v2.1 FAST)
+  cape_v3_A_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 63}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 M1a only - exact neighbour-column duplicate filter during candidate generation
+  cape_v3_C_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 95}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 M1b only - component-ordered CSR, local models copied into reused buffers
+  cape_v3_G_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 159}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 M2 only - eager inverted-incidence greedy (identical selection)
+  cape_v3_F_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 287}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 M5a only - max label and pixel pairs in one pass
+  cape_v3_B_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 543}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 M5b only - batched CC labeling straight into the column-major buffer (no z-major CC volume)
+  # ---------------------------------------------------------------- all v3 bits, and all but one
+  cape_v3_all_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: true
+    role: internal
+    description: v3 FAST candidate - all five byte-preserving v3 implementation changes
+  cape_v3_all_m5:
+    adapter: cape_native
+    options: {markov_model_order: 5, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 FAST candidate, Markov order 5 crack codes (secondary)
+  cape_v3_noA_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 991}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all v3 bits except M1a
+  cape_v3_noC_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 959}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all v3 bits except M1b
+  cape_v3_noG_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 895}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all v3 bits except M2
+  cape_v3_noF_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 767}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all v3 bits except M5a
+  cape_v3_noB_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 511}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all v3 bits except M5b
+  # ---------------------------------------------------------------- QUALITY candidates (M3 / M4)
+  cape_v3_regimes_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: full_width_first,
+              certificate: "off", impl_mask: 1023}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 implementation with the full depth-regime search (v1 search space)
+  cape_v3_regimes_gate_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: full_width_first,
+              certificate: "off", impl_mask: 1023, regime_gate: true}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    experimental: true
+    description: M3a - depth-regime search with the scaled-dual regime gate (output-identical to cape_v3_regimes_m0)
+  cape_v3_rc_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, rc_fixing: true}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    experimental: true
+    description: M3b - FAST + reduced-cost fixing / forcing with an exact residual DP
+  cape_v3_regimes_rc_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: full_width_first,
+              certificate: "off", impl_mask: 1023, rc_fixing: true}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    experimental: true
+    description: depth regimes + M3b
+  # M4 development grid: R in {16,24,30} (32 is above the 32-bit DP mask limit), pool in {128,512}, attempts in {1,4}
+  cape_v3_rep_r16_p128_a1_m0: &rep
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 16, repair_max_pool: 128, repair_attempts: 1}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    experimental: true
+    description: M4 bounded repair grid point (development only)
+  cape_v3_rep_r16_p128_a4_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 16, repair_max_pool: 128, repair_attempts: 4}
+  cape_v3_rep_r16_p512_a1_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 16, repair_max_pool: 512, repair_attempts: 1}
+  cape_v3_rep_r16_p512_a4_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 16, repair_max_pool: 512, repair_attempts: 4}
+  cape_v3_rep_r24_p128_a1_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 24, repair_max_pool: 128, repair_attempts: 1}
+  cape_v3_rep_r24_p128_a4_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 24, repair_max_pool: 128, repair_attempts: 4}
+  cape_v3_rep_r24_p512_a1_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 24, repair_max_pool: 512, repair_attempts: 1}
+  cape_v3_rep_r24_p512_a4_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 24, repair_max_pool: 512, repair_attempts: 4}
+  cape_v3_rep_r30_p128_a1_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 30, repair_max_pool: 128, repair_attempts: 1}
+  cape_v3_rep_r30_p128_a4_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 30, repair_max_pool: 128, repair_attempts: 4}
+  cape_v3_rep_r30_p512_a1_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 30, repair_max_pool: 512, repair_attempts: 1}
+  cape_v3_rep_r30_p512_a4_m0:
+    <<: *rep
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, repair: true, repair_max_r: 30, repair_max_pool: 512, repair_attempts: 4}
+  # ---------------------------------------------------------------- matched solvers on the SAME v3 infrastructure
+  v3_weighted_greedy_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, use_exact: false, use_local: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: matched baseline - optimized weighted greedy (eager), same runs/candidates/reductions/components as CAPE
+  v3_greedy_local_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, use_exact: false, use_local: true}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: matched baseline - weighted greedy + the same local search
+  v3_greedy_local_b4_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, use_exact: false, use_local: true, local_checks_per_component: 40000,
+              local_checks_total: 4000000}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: matched baseline - greedy + local search with 4x budget (budget-quality curve)
+  v3_exact_only_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, use_exact: true, use_local: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: matched - greedy + exact DP on small components, no local search
+  v3_weighted_greedy_noreduce_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, use_exact: false, use_local: false, reduce_equal: false,
+              reduce_subset: false, reduce_singleton: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: reduction x solver ablation - weighted greedy, safe reductions OFF (M1a needs equal coverage, so it is off too)
+  v3_cape_noreduce_fast_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, reduce_equal: false, reduce_subset: false, reduce_singleton: false}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    description: reduction x solver ablation - CAPE solver, safe reductions OFF
+  v3_weighted_greedy_rc_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1023, use_exact: false, use_local: false, rc_fixing: true}
+    family: crackle_format
+    categories: [K1, K2, K5]
+    panels: [B]
+    role: internal
+    experimental: true
+    description: matched - weighted greedy + the same M3b reduced-cost module (the dual module is not reserved for CAPE)
+  # ---------------------------------------------------------------- certificate track
+  v3_cape_certified_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: all_regimes, impl_mask: 1023}
+    family: crackle_format
+    categories: [K1, K2, K6]
+    panels: [B]
+    role: internal
+    description: CAPE-FAST stream (byte-identical) + restricted-model LB over all depth regimes
+  v3_cape_certified_rc_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: all_regimes, impl_mask: 1023, rc_fixing: true}
+    family: crackle_format
+    categories: [K1, K2, K6]
+    panels: [B]
+    role: internal
+    experimental: true
+    description: CAPE-FAST + M3b (proven components get LB = UB) + LB over all depth regimes
+  v3_weighted_greedy_certified_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: all_regimes, impl_mask: 1023, use_exact: false, use_local: false}
+    family: crackle_format
+    categories: [K1, K2, K6]
+    panels: [B]
+    role: internal
+    description: matched certificate - weighted greedy with the same integer dual LB over all depth regimes
+  # ---------------------------------------------------------------- archive track
+  safe_v3_archive_m0_zstd9:
+    adapter: safe_archive
+    options: {zstd: zstd9, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, certificate: "off",
+              impl_mask: 1023}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    role: internal
+    description: SAFE-CAPE (v3) - min(zstd9(flat), zstd9(CAPE-FAST v3)), one shared boundary pass
+  safe_v3_archive_m0_zstd3:
+    adapter: safe_archive
+    options: {zstd: zstd3, markov_model_order: 0, selector: cape, depth_policy: fixed_depth_width, certificate: "off",
+              impl_mask: 1023}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    role: internal
+    description: SAFE-CAPE (v3), zstd3 (secondary)
+  safe_stock_m0_zstd3:
+    adapter: safe_archive
+    options: {zstd: zstd3, markov_model_order: 0, selector: stock_greedy_corrected, depth_policy: fixed_depth_width}
+    family: crackle_format
+    categories: [K1, K3]
+    panels: [B]
+    role: baseline
+    description: SAFE-stock - min(zstd3(flat), zstd3(corrected stock pins)) (secondary)

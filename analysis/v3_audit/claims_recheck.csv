@@ -1,0 +1,8 @@
+claim_id,claim,source,recomputed,stated,tolerance,unit,status,detail
+C1,CREMI v2 test: CAPE-FAST smaller than corrected stock,V2_YAKUNIY_HISOBOT_UZ.md,0.107091,0.1071,0.0005,% bytes,MATCH,n=24 smaller/equal/larger=23/1/0
+C2,CREMI v2 test: CAPE-FAST encode speed-up vs corrected stock ('geometric 5.63x'),V2_YAKUNIY_HISOBOT_UZ.md (table: 'stock'dan tez x'),5.631201,5.63,0.05,x,MATCH,geometric over samples = 5.631; ratio of summed medians = 5.879; ratio of mean medians = 5.879. The stated 5.63 matches the geometric mean over samples
+C3,Refine on the v2 test: bytes saved vs SAFE,V2_YAKUNIY_HISOBOT_UZ.md,42,42,0,B,MATCH,saving 0.0132%
+C4,Refine on the v2 test: encode time multiplier,V2_YAKUNIY_HISOBOT_UZ.md,2.72867,2.73,0.03,x,MATCH,1/geo = 2.729; sum ratio = 2.451
+C5,Scaling (crops <= 2^25 voxels): CAPE-FAST smaller than corrected stock,user summary / V21_HISOBOT_UZ.md,0.639685,0.64,0.05,% bytes,MATCH,"n=19 (seen development crops, nested)"
+C6,Scaling: CAPE-FAST encode speed-up vs corrected stock,user summary,5.108691,5.1,0.2,x,MATCH,geometric; summed-median ratio 15.95
+C7,Depth regimes on some Z=512 crops: full search ~0.64-0.69% smaller than FAST,user summary,0.693731,0.69,0.02,% bytes (max over Z=512 crops),MATCH,scale_crackle_connectomics_128x128x512: 0.694% (time x1.50); scale_crackle_connectomics_256x256x512: 0.684% (time x1.55); scale_crackle_connectomics_512x512x512: 0.639% (time x1.68); scale_crackle_connectomics_64x64x512: 0.159% (time x1.47); scale_crackle_ws_512x512x512: 0.000% (time x1.68); crackle_connectomics_x256_y256_z0_256x256x512: 0.000% (time x1.56); crackle_ws_x0_y0_z0_256x256x512: 0.000% (time x1.61)
