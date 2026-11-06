@@ -1,0 +1,485 @@
+{
+  "generated_at": "2026-11-06T22:01:03+00:00",
+  "freeze_ok": true,
+  "confirm_sources": {
+    "confirm_primary": "d07368c771ee3d31b8fd89b802e049b3396a7241fc0e79c7ca9964ca9a2ef294",
+    "confirm_scale": "d07368c771ee3d31b8fd89b802e049b3396a7241fc0e79c7ca9964ca9a2ef294",
+    "confirm_scale_stock": "d07368c771ee3d31b8fd89b802e049b3396a7241fc0e79c7ca9964ca9a2ef294"
+  },
+  "primary_family": [
+    {
+      "id": "H1",
+      "metric": "encode time",
+      "new": "cape_v3_fast_m0",
+      "base": "cape_v21_fast_m0",
+      "effect": "S_T",
+      "estimate": "1.343",
+      "ci95": "[1.330, 1.357]",
+      "p": "0.0001",
+      "p_holm": "0.0003",
+      "n": 32,
+      "clusters": 16,
+      "bytes_identical": true
+    },
+    {
+      "id": "H2a",
+      "metric": "total bytes",
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_pins_opt_corrected_m0",
+      "effect": "G_B %",
+      "estimate": "0.1199",
+      "ci95": "[0.1121, 0.1276]",
+      "p": "0.0001",
+      "p_holm": "0.0003",
+      "n": 32,
+      "clusters": 16,
+      "bytes_identical": false
+    },
+    {
+      "id": "H2b",
+      "metric": "encode time",
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_pins_opt_corrected_m0",
+      "effect": "S_T",
+      "estimate": "12.902",
+      "ci95": "[11.781, 13.993]",
+      "p": "0.0001",
+      "p_holm": "0.0003",
+      "n": 32,
+      "clusters": 16,
+      "bytes_identical": false
+    }
+  ],
+  "secondary": [
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_flat_m0",
+      "n": 32,
+      "G_B_pct": "5.4001",
+      "G_B_ci": "[5.0453, 5.7356]",
+      "S_T": "0.498",
+      "S_T_ci": "[0.481, 0.519]",
+      "S_D": "0.964",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "1.218",
+      "slowdowns>10%": 32,
+      "src_w_S_T": "0.498"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_pins_opt_m0",
+      "n": 32,
+      "G_B_pct": "0.1199",
+      "G_B_ci": "[0.1121, 0.1276]",
+      "S_T": "14.836",
+      "S_T_ci": "[13.591, 16.043]",
+      "S_D": "1.002",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "0.414",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "14.836"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_pins_fast_m0",
+      "n": 32,
+      "G_B_pct": "1.2578",
+      "G_B_ci": "[1.1986, 1.3162]",
+      "S_T": "6.358",
+      "S_T_ci": "[6.251, 6.457]",
+      "S_D": "1.014",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "0.439",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "6.358"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_vendor_pins_opt_m0",
+      "n": 32,
+      "G_B_pct": "0.1199",
+      "G_B_ci": "[0.1121, 0.1276]",
+      "S_T": "12.869",
+      "S_T_ci": "[11.811, 13.896]",
+      "S_D": "0.721",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "0.443",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "12.869"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "v3_fast_weighted_greedy_m0",
+      "n": 32,
+      "G_B_pct": "0.0343",
+      "G_B_ci": "[0.0296, 0.0396]",
+      "S_T": "1.001",
+      "S_T_ci": "[0.995, 1.007]",
+      "S_D": "1.000",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "1.001",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "1.001"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "v3_fast_greedy_local_m0",
+      "n": 32,
+      "G_B_pct": "0.0027",
+      "G_B_ci": "[0.0019, 0.0034]",
+      "S_T": "1.002",
+      "S_T_ci": "[0.999, 1.005]",
+      "S_D": "1.001",
+      "smaller/equal/larger": "19/13/0",
+      "peak_ratio": "1.001",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "1.002"
+    },
+    {
+      "new": "safe_v3_fast_m0_zstd9",
+      "base": "safe_stock_m0_zstd9",
+      "n": 32,
+      "G_B_pct": "0.1690",
+      "G_B_ci": "[0.1597, 0.1790]",
+      "S_T": "10.729",
+      "S_T_ci": "[9.812, 11.622]",
+      "S_D": "1.000",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "0.431",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "10.729"
+    },
+    {
+      "new": "safe_v3_fast_m0_zstd9",
+      "base": "crackle_flat_m0+zstd9",
+      "n": 32,
+      "G_B_pct": "3.0169",
+      "G_B_ci": "[2.8964, 3.1360]",
+      "S_T": "0.438",
+      "S_T_ci": "[0.425, 0.455]",
+      "S_D": "0.965",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "NA",
+      "slowdowns>10%": 32,
+      "src_w_S_T": "0.438"
+    },
+    {
+      "new": "safe_stock_m0_zstd9",
+      "base": "crackle_flat_m0+zstd9",
+      "n": 32,
+      "G_B_pct": "2.8527",
+      "G_B_ci": "[2.7309, 2.9741]",
+      "S_T": "0.041",
+      "S_T_ci": "[0.037, 0.046]",
+      "S_D": "0.965",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "NA",
+      "slowdowns>10%": 32,
+      "src_w_S_T": "0.041"
+    },
+    {
+      "new": "cape_v3_fast_m0+zstd9",
+      "base": "crackle_pins_opt_corrected_m0+zstd9",
+      "n": 32,
+      "G_B_pct": "0.1690",
+      "G_B_ci": "[0.1597, 0.1790]",
+      "S_T": "12.549",
+      "S_T_ci": "[11.518, 13.558]",
+      "S_D": "1.003",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "NA",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "12.549"
+    },
+    {
+      "new": "cape_v3_fast_m0+zstd9",
+      "base": "crackle_flat_m0+zstd9",
+      "n": 32,
+      "G_B_pct": "3.0169",
+      "G_B_ci": "[2.8964, 3.1360]",
+      "S_T": "0.516",
+      "S_T_ci": "[0.499, 0.537]",
+      "S_D": "0.968",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "NA",
+      "slowdowns>10%": 32,
+      "src_w_S_T": "0.516"
+    },
+    {
+      "new": "safe_v3_fast_m0_zstd3",
+      "base": "safe_stock_m0_zstd3",
+      "n": 32,
+      "G_B_pct": "0.1906",
+      "G_B_ci": "[0.1586, 0.2225]",
+      "S_T": "11.134",
+      "S_T_ci": "[10.166, 12.081]",
+      "S_D": "0.999",
+      "smaller/equal/larger": "31/0/1",
+      "peak_ratio": "0.431",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "11.134"
+    },
+    {
+      "new": "cape_v3_fast_m0+zstd3",
+      "base": "crackle_flat_m0+zstd3",
+      "n": 32,
+      "G_B_pct": "3.2419",
+      "G_B_ci": "[3.1325, 3.3544]",
+      "S_T": "0.502",
+      "S_T_ci": "[0.485, 0.523]",
+      "S_D": "0.962",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "NA",
+      "slowdowns>10%": 32,
+      "src_w_S_T": "0.502"
+    },
+    {
+      "new": "cape_v3_fast_m5",
+      "base": "cape_v21_fast_m5",
+      "n": 32,
+      "G_B_pct": "0.0000",
+      "G_B_ci": "[0.0000, 0.0000]",
+      "S_T": "1.289",
+      "S_T_ci": "[1.276, 1.302]",
+      "S_D": "1.003",
+      "smaller/equal/larger": "0/32/0",
+      "peak_ratio": "0.899",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "1.289"
+    },
+    {
+      "new": "cape_v3_fast_m5",
+      "base": "crackle_pins_opt_corrected_m5",
+      "n": 32,
+      "G_B_pct": "0.1704",
+      "G_B_ci": "[0.1593, 0.1814]",
+      "S_T": "11.139",
+      "S_T_ci": "[10.122, 12.121]",
+      "S_D": "1.003",
+      "smaller/equal/larger": "32/0/0",
+      "peak_ratio": "0.431",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "11.139"
+    },
+    {
+      "new": "cape_v3_certified_m0",
+      "base": "cape_v3_fast_m0",
+      "n": 32,
+      "G_B_pct": "0.0000",
+      "G_B_ci": "[0.0000, 0.0000]",
+      "S_T": "0.994",
+      "S_T_ci": "[0.991, 0.997]",
+      "S_D": "0.999",
+      "smaller/equal/larger": "0/32/0",
+      "peak_ratio": "1.000",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "0.994"
+    }
+  ],
+  "scale": [
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "cape_v21_fast_m0",
+      "n": 5,
+      "G_B_pct": "0.0000",
+      "G_B_ci": "[0.0000, 0.0000]",
+      "S_T": "1.460",
+      "S_T_ci": "[1.413, 1.509]",
+      "S_D": "1.004",
+      "smaller/equal/larger": "0/5/0",
+      "peak_ratio": "0.725",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "1.460"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_pins_opt_corrected_m0",
+      "n": 4,
+      "G_B_pct": "0.0976",
+      "G_B_ci": "[0.0889, 0.1078]",
+      "S_T": "53.962",
+      "S_T_ci": "[43.162, 67.463]",
+      "S_D": "0.993",
+      "smaller/equal/larger": "4/0/0",
+      "peak_ratio": "0.221",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "53.962"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "crackle_flat_m0",
+      "n": 5,
+      "G_B_pct": "7.4023",
+      "G_B_ci": "[4.6802, 9.1285]",
+      "S_T": "0.395",
+      "S_T_ci": "[0.387, 0.403]",
+      "S_D": "0.989",
+      "smaller/equal/larger": "5/0/0",
+      "peak_ratio": "1.904",
+      "slowdowns>10%": 5,
+      "src_w_S_T": "0.395"
+    },
+    {
+      "new": "cape_v3_fast_m0",
+      "base": "v3_fast_weighted_greedy_m0",
+      "n": 5,
+      "G_B_pct": "0.0368",
+      "G_B_ci": "[0.0257, 0.0435]",
+      "S_T": "0.993",
+      "S_T_ci": "[0.974, 1.010]",
+      "S_D": "0.999",
+      "smaller/equal/larger": "5/0/0",
+      "peak_ratio": "1.000",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "0.993"
+    },
+    {
+      "new": "safe_v3_fast_m0_zstd9",
+      "base": "safe_stock_m0_zstd9",
+      "n": 4,
+      "G_B_pct": "-0.0034",
+      "G_B_ci": "[-0.2548, 0.1751]",
+      "S_T": "44.935",
+      "S_T_ci": "[35.972, 56.131]",
+      "S_D": "0.987",
+      "smaller/equal/larger": "3/0/1",
+      "peak_ratio": "0.221",
+      "slowdowns>10%": 0,
+      "src_w_S_T": "44.935"
+    }
+  ],
+  "partition_quadrants_vs_stock": {
+    "n": 4,
+    "G_B_pct": 0.09757459177047734,
+    "S_T": 53.961569282557804,
+    "bytes_new": 1646362.0,
+    "bytes_base": 1647970.0
+  },
+  "partition_quadrants_vs_v21": {
+    "n": 4,
+    "S_T": 1.439774940405921,
+    "bytes_identical": true
+  },
+  "questions": [
+    {
+      "q": "1. To'g'rilik",
+      "status": "PASS",
+      "answer": "CAPE/v3 qatorlarida FAILED_LOSSLESS: 0; v3 sertifikatlari yaroqsiz: 0; confirm run'lari freeze source hash bilan mos: True. OK bo'lmagan holatlar (barcha usullar): {'UNSUPPORTED_DTYPE': 672}. Jadval: `tables/status_by_run.csv`, `tables/certificates_confirm.csv`."
+    },
+    {
+      "q": "2. v3 ning o'z foydasi (v2.1 ga nisbatan)",
+      "status": "PASS",
+      "answer": "SNEMI3D 32 crop: S_T 1.343 [1.330, 1.357], Holm p 0.0003; baytlar bir xil: True; peak nisbati 0.897. Masshtab treki: S_T 1.460 (n=5, bitta volume). `primary_family.csv`, Fig.1."
+    },
+    {
+      "q": "3. Tashqi raqib (tuzatilgan stock, flat)",
+      "status": "PASS",
+      "answer": "Tuzatilgan stock'ga: tejash 0.1199% (CI [0.1121, 0.1276]), S_T 12.902 [11.781, 13.993]; regressiyalar (bayt): 0. Flat va boshqalar: `tables/secondary_confirm.*`."
+    },
+    {
+      "q": "4. Algoritmik hissa (matched greedy / local)",
+      "status": "PASS",
+      "answer": "Bir xil v3 infratuzilmasida CAPE vs optimallashtirilgan weighted greedy: tejash 0.0343% [0.0296, 0.0396], vaqt S_T 1.001 (<1 = CAPE sekinroq). Fig.3."
+    },
+    {
+      "q": "5. M1-M5 hissasi",
+      "status": "PASS",
+      "answer": "M1a: PASS (LOO S_T 1.261 [1.236, 1.298], peak 0.937); M1b: FAIL (LOO S_T 1.009 [0.997, 1.019], peak 1.000); M2: FAIL (LOO S_T 1.002 [0.991, 1.010], peak 1.000); M5a: FAIL_INCONCLUSIVE_AFTER_RERUN (LOO S_T 1.026 [1.020, 1.035], peak 1.000); M5b: PASS (LOO S_T 1.127 [1.085, 1.165], peak 1.000). M3a: KEEP (output-identical, faster); M4: grid point cape_v3_rep_r30_p128_a4_m0; QUALITY: no QUALITY default: the composite stays exploratory (reported, not a v3 mode)."
+    },
+    {
+      "q": "6. Kafolat",
+      "status": "PASS",
+      "answer": "v3 sertifikat qatorlari: 69, yaroqsiz 0; oracle: {\"components_audited\": 200, \"cpsat_optimal\": 200, \"contradictions\": 0}. Doira: nomzod oilasi, xavfsiz reduksiyalar, barcha depth regime'lar, w_N>=1, barcha background'lar; global Crackle optimumi emas; zstd uchun bound yo'q. Fig.10."
+    },
+    {
+      "q": "7. Umumlashuv",
+      "status": "PARTIAL",
+      "answer": "Mustaqil manba: faqat SNEMI3D (bitta acquisition, 16 klaster). CREMI va Crackle namunalari v3 uchun development. Shuning uchun natija shu volume'ga shartli; yangi mustaqil holdout (2+ volume) kerak. H01/MICrONS ruxsatsiz."
+    },
+    {
+      "q": "8. Masshtab va regressiyalar",
+      "status": "FAIL",
+      "answer": ">10% sekin namunalar: yo`q; OK bo'lmagan holatlar: {'UNSUPPORTED_DTYPE': 672}. Masshtab treki (to'liq volume + 4 kvadrant): `tables/scale_track.*`, Fig.4, Fig.9. Stock byudjet qoidasi (v2.1, <= 2^25 voksel): snemi3d_v3_full_1024x1024x100 uchun stock SKIPPED_BUDGET (sababi `data/manifests/confirm_snemi3d_v3_scale_skipped.json`)."
+    },
+    {
+      "q": "9. Yangilik",
+      "status": "PARTIAL",
+      "answer": "Hash, CSR, lazy/eager greedy, sparse DP, dual bound, reduced-cost fixing, LNS va min-selector umumiy vositalar. M2 g'oyasi Crackle issue #19 (2024-07, 2025-01 yopilgan) bilan bir xil. Yangilikka nomzod: Crackle 2D 4-bog'lanish qoidasidan kelib chiqadigan qo'shni-ustun dedup isboti (M1a) va formatga bog'langan sertifikatdagi w_D siqilish tuzatishi; prior-art auditi to'liq emas (`docs/V3_NOVELTY_MATRIX.md`)."
+    },
+    {
+      "q": "10. Reproduksiya va qaror",
+      "status": "PASS",
+      "answer": "`run_v3.cmd --stage all --resume`; freeze `analysis/v3_freeze/freeze.json`; paket stage'i checksumlarni yozadi. Maqolaga: claim ledger'dagi SUPPORTED/CONDITIONAL da'volar doirasi bilan; qolganlari olib tashlanadi."
+    }
+  ],
+  "figures": {
+    "V3_F1_v3_vs_v21_speed": {
+      "status": "OK",
+      "rows": 37,
+      "caption": "Fig.1 SNEMI3D confirm (1 source volume; 32 crops, 16 macroblock clusters) + scale track (5 volumes, same acquisition). Metric: median-of-repeats encode time ratio per sample. Geo S_T = 1.343 95% cluster-bootstrap CI [1.330, 1.357] (conditional on this volume)."
+    },
+    "V3_F2_size_time_pareto": {
+      "status": "OK",
+      "rows": 42,
+      "caption": "Fig.2 SNEMI3D confirm, 32 crops, every method incl. wrappers; raw and zstd-wrapped rows together (wrapper in the name). No CI (totals)."
+    },
+    "V3_F3_matched_budget_quality": {
+      "status": "OK",
+      "rows": 8,
+      "caption": "Fig.3 Matched solvers on the same v3 infrastructure (same runs, candidates, reductions, components, format rule). Dev: CREMI 36 crops, 3 repeats; confirm: SNEMI3D 32 crops. Negative = smaller than weighted greedy."
+    },
+    "V3_F4_memory_vs_n": {
+      "status": "OK",
+      "rows": 160,
+      "caption": "Fig.4 Peak OS working set of one encode+decode in a fresh process (platform definition: Windows peak working set incl. the input array). Dev scale crops are nested (descriptive); confirm = SNEMI3D."
+    },
+    "V3_F5_stage_time": {
+      "status": "OK",
+      "rows": 8,
+      "caption": "Fig.5 Stage times inside one encode (native timers) for the four largest dev scaling crops, frozen v2.1 vs v3 all bits. Development data (seen), descriptive."
+    },
+    "V3_F6_dual_pruning": {
+      "status": "OK",
+      "rows": 38,
+      "caption": "Fig.6 M3a regime gate (base: depth regimes) and M3b reduced-cost fixing (base: FAST) on the dev QUALITY panel (Z>256 group + CREMI A, 3 repeats). Development only."
+    },
+    "V3_F7_fast_vs_regimes": {
+      "status": "OK",
+      "rows": 19,
+      "caption": "Fig.7 Full depth-regime search vs FAST per dev crop (QUALITY panel). Dashed: the pre-registered 1.5x time gate. Development only."
+    },
+    "V3_F8_safe_archive": {
+      "status": "OK",
+      "rows": 128,
+      "caption": "Fig.8 Archive track on SNEMI3D confirm (32 crops): SAFE-CAPE = min(zstd9(flat), zstd9(v3 FAST)); SAFE-stock = min(zstd9(flat), zstd9(corrected stock)); all headers counted."
+    },
+    "V3_F9_regressions": {
+      "status": "OK",
+      "rows": 96,
+      "caption": "Fig.9 Every SNEMI3D confirm crop: ratios above the red line are regressions (listed by name in the tables)."
+    },
+    "V3_F10_certificate_gap": {
+      "status": "OK",
+      "rows": 69,
+      "caption": "Fig.10 Restricted-model certificate gap on SNEMI3D (candidate family, safe reductions, all depth regimes, w_N>=1, all backgrounds). CP-SAT oracle: 200 components, optimal 200, contradictions 0."
+    }
+  },
+  "oracle": {
+    "status": "COMPLETE",
+    "components_audited": 200,
+    "cpsat_optimal": 200,
+    "cpsat_not_optimal": 0,
+    "contradictions": 0,
+    "heuristic_components_with_known_optimum": 29,
+    "heuristic_components_at_optimum": 9,
+    "max_cc": 60,
+    "time_limit_s": 20,
+    "note": "audit time is excluded from encode time; FEASIBLE/UNKNOWN never counted as OPTIMAL"
+  },
+  "failed_lossless_cape": [],
+  "selection": {
+    "fast_impl_mask": 575,
+    "memory_impl_mask": null,
+    "quality_selected": false
+  }
+}

@@ -129,7 +129,9 @@ Etalon: muzlatilgan v2.1 binari `snapshots/v21/` (sha256 `39dca94b…`), adapter
 | develop | DONE | core `20261106T131304Z_development_2238806f`, scale `…141028Z…bdc5fcbd`, quality `…151919Z…31cbc70e`, tracks `…161236Z…12de6862` |
 | select | DONE | `analysis/v3_select/SELECT_V3_UZ.md`, `selected_methods.json` |
 | freeze | DONE | `analysis/v3_freeze/freeze.json`, commit `b395b9a`, source `d07368c7…` |
-| confirm / analyze / package | ishga tushirilgan | SNEMI3D: 32 crop (7 repeat) → masshtab treki (butun volume + 4 kvadrant) → stock masshtab treki (4 kvadrant) |
+| confirm | DONE | primary `20261106T184116Z_all_d6786080` (32 crop, 7 repeat, 10880 o'lchov), scale `…213428Z_all_080b15b8` (butun volume + 4 kvadrant), scale_stock `…213921Z_all_751ff9ac` (4 kvadrant); uchala run source `d07368c7…` = freeze |
+| analyze | DONE | `analysis/v3_final/V3_YAKUNIY_TAHLIL_UZ.md` (+ jadvallar, 10 grafik, claim ledger) |
+| package | DONE | `results/v3_20261106T220103Z_d07368c7/` (`status.json`: complete, blockers yo'q) |
 
 SELECT (oldindan yozilgan gate'lar, faqat development ma'lumoti):
 - FAST `impl_mask = 575` = v2.1 bitlari + **M1a** (qo'shni ustun dedup; LOO S_T 1.261 [1.236, 1.298]) + **M5b** (batched CC; 1.127 [1.085, 1.165]).
@@ -138,7 +140,30 @@ SELECT (oldindan yozilgan gate'lar, faqat development ma'lumoti):
 - To'g'rilik: 732 byte-preserving katak muzlatilgan v2.1 bilan teng; OK bo'lmagan katak 0.
 - Stock byudjet qoidasi (v2.1 dan): tuzatilgan stock faqat ≤2^25 voksel; SNEMI3D butun hajmi uchun `SKIPPED_BUDGET` (freeze'da, holdoutga qaralmasdan yozilgan).
 
-Yakuniy tahlil: `analysis/v3_final/V3_YAKUNIY_TAHLIL_UZ.md`; paket: `results/LATEST_V3_PACKAGE.txt` (confirm tugagach).
+CONFIRM (SNEMI3D holdout, bitta volume, 32 crop / 16 klaster, 10000 klaster-bootstrap, Holm):
+
+| ID | Taqqoslash | Natija | 95% CI | p Holm |
+|---|---|---|---|---|
+| H1 | v3 FAST vs v2.1 FAST, vaqt | S_T **1.343** | [1.330, 1.357] | 0.0003 |
+| H2a | v3 FAST vs tuzatilgan stock, hajm | **0.1199%** kichik | [0.1121, 0.1276] | 0.0003 |
+| H2b | v3 FAST vs tuzatilgan stock, vaqt | S_T **12.90** | [11.78, 13.99] | 0.0003 |
+
+- Baytlar v2.1 bilan aynan teng (32/32); peak xotira nisbati 0.897; stock'dan katta crop 0; >10% sekin crop 0.
+  H1/H2a/H2b va weighted-greedy farqi xom `results.csv` dan mustaqil qayta hisoblandi (bir xil).
+- Matched: CAPE vs weighted greedy (bir xil v3 infratuzilmasi) 0.0343% kichik, vaqt teng (S_T 1.001); greedy+local'ga 0.0027%.
+- Flat'ga nisbatan: 5.40% kichik, lekin 2× sekin (S_T 0.498). CERTIFIED rejimi FAST'dan 0.6% sekin, bayt bir xil.
+- Masshtab treki: v3 vs v2.1 S_T 1.460 (n=5); 4 kvadrantda stock'ga 0.098% kichik, S_T 53.96. Butun volume'da stock SKIPPED_BUDGET.
+- Lossless buzilishi: 0 (uchala run). OK bo'lmagan qatorlar faqat `neuroglancer_b8` `UNSUPPORTED_DTYPE` (SNEMI3D uint16;
+  kodek faqat uint32/uint64, jim cast yo'q). Shu sabab avtomatik Q8 verdikti **FAIL** — qoida freeze'da barcha usullarning
+  statuslarini sanaydi; natijadan keyin o'zgartirilmadi.
+- Arxiv treki salbiy holatlari: SAFE-v3 zstd3 bitta crop'da (`snemi3d_x768_y256_z0_128x128x64`) SAFE-stock'dan 11 B katta;
+  kvadrantlarda SAFE-v3 zstd9 jami −0.003% [−0.255, 0.175] (`snemi3d_v3_q_x512_y512` da 910 B katta) — farq yo'q deb yoziladi.
+- Decode: vendor Crackle binari stock oqimini tezroq ochadi (S_D 0.721) — boshqa kompilyator/binari, da'vo qilinmaydi.
+- Claim ledger: SUPPORTED L1 (bayt tengligi), L6 (sertifikat); CONDITIONAL L2–L5, L8 (bitta volume); UNSUPPORTED L7 (QUALITY),
+  L9 (yangilik), L10 (umumlashuv), L11.
+
+Yakuniy tahlil: `analysis/v3_final/V3_YAKUNIY_TAHLIL_UZ.md`; paket: `results/v3_20261106T220103Z_d07368c7/`
+(`results/LATEST_V3_PACKAGE.txt`). Keyingi qadam uchun: ikkinchi mustaqil holdout volume kerak (H01/MICrONS — ruxsat so'rash).
 
 ```powershell
 .\run_v3.cmd --stage report-status   # bosqichlar jadvali

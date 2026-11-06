@@ -1,0 +1,10 @@
+method,n_ok,n_samples,statuses,total_bytes,bpv,enc_ms_sum,dec_ms_sum,peak_mib_median
+cape_v21_fast_m0,5,5,OK:15,3270728,0.1248,3755.2,436.8,366
+cape_v21_fast_m0+zstd9,5,5,OK:15,1868711,0.0713,3785.6,438.6,NA
+cape_v3_certified_m0,5,5,OK:15,3270728,0.1248,2517.9,433.6,264
+cape_v3_fast_m0,5,5,OK:15,3270728,0.1248,2515.1,436.6,264
+cape_v3_fast_m0+zstd9,5,5,OK:15,1868711,0.0713,2581.0,439.3,NA
+crackle_flat_m0,5,5,OK:15,3532192,0.1347,980.6,432.3,139
+crackle_flat_m0+zstd9,5,5,OK:15,1934691,0.0738,1049.0,432.5,NA
+safe_v3_fast_m0_zstd9,5,5,OK:15,1868711,0.0713,2974.8,443.3,264
+v3_fast_weighted_greedy_m0,5,5,OK:15,3271932,0.1248,2510.6,436.0,264

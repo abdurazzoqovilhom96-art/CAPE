@@ -1,0 +1,61 @@
+
+=== 2026-11-06T22:00:55+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\scripts\report_v3.py --state analysis\v3_state.json
+{
+ "primary_family": [
+  {
+   "id": "H1",
+   "metric": "encode time",
+   "new": "cape_v3_fast_m0",
+   "base": "cape_v21_fast_m0",
+   "effect": "S_T",
+   "estimate": "1.343",
+   "ci95": "[1.330, 1.357]",
+   "p": "0.0001",
+   "p_holm": "0.0003",
+   "n": 32,
+   "clusters": 16,
+   "bytes_identical": true
+  },
+  {
+   "id": "H2a",
+   "metric": "total bytes",
+   "new": "cape_v3_fast_m0",
+   "base": "crackle_pins_opt_corrected_m0",
+   "effect": "G_B %",
+   "estimate": "0.1199",
+   "ci95": "[0.1121, 0.1276]",
+   "p": "0.0001",
+   "p_holm": "0.0003",
+   "n": 32,
+   "clusters": 16,
+   "bytes_identical": false
+  },
+  {
+   "id": "H2b",
+   "metric": "encode time",
+   "new": "cape_v3_fast_m0",
+   "base": "crackle_pins_opt_corrected_m0",
+   "effect": "S_T",
+   "estimate": "12.902",
+   "ci95": "[11.781, 13.993]",
+   "p": "0.0001",
+   "p_holm": "0.0003",
+   "n": 32,
+   "clusters": 16,
+   "bytes_identical": false
+  }
+ ],
+ "questions": {
+  "1. To'g'rilik": "PASS",
+  "2. v3 ning o'z foydasi (v2.1 ga nisbatan)": "PASS",
+  "3. Tashqi raqib (tuzatilgan stock, flat)": "PASS",
+  "4. Algoritmik hissa (matched greedy / local)": "PASS",
+  "5. M1-M5 hissasi": "PASS",
+  "6. Kafolat": "PASS",
+  "7. Umumlashuv": "PARTIAL",
+  "8. Masshtab va regressiyalar": "FAIL",
+  "9. Yangilik": "PARTIAL",
+  "10. Reproduksiya va qaror": "PASS"
+ },
+ "failed_figures": []
+}

@@ -1,0 +1,7 @@
+
+=== 2026-11-06T22:01:03+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\scripts\package_v3.py --state analysis\v3_state.json
+{
+ "package": "results\\v3_20261106T220103Z_d07368c7",
+ "files": 317,
+ "blockers": []
+}

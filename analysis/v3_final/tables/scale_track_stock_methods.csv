@@ -1,0 +1,7 @@
+method,n_ok,n_samples,statuses,total_bytes,bpv,enc_ms_sum,dec_ms_sum,peak_mib_median,ratio_vs_ref,geo_speedup_vs_ref,n_paired
+cape_v3_fast_m0,4,4,OK:12,1646362,0.1256,1193.1,220.6,262,0.99902,53.96,4
+cape_v3_fast_m0+zstd9,4,4,OK:12,957436,0.0730,1229.1,221.4,NA,0.58098,52.45,4
+crackle_pins_opt_corrected_m0,4,4,OK:12,1647970,0.1257,66858.5,218.9,1240,,,
+crackle_pins_opt_corrected_m0+zstd9,4,4,OK:12,957403,0.0730,66855.5,220.5,NA,0.58096,1.00,4
+safe_stock_m0_zstd9,4,4,OK:12,957403,0.0730,67023.0,220.3,1240,0.58096,1.00,4
+safe_v3_fast_m0_zstd9,4,4,OK:12,957436,0.0730,1437.6,223.2,262,0.58098,44.77,4

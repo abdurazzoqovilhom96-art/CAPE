@@ -1,0 +1,9 @@
+source,method,bytes_vs_greedy_pct,time_vs_greedy
+dev tracks (CREMI),v3_weighted_greedy_fast_m0,-0.0,1.0
+dev tracks (CREMI),v3_greedy_local_fast_m0,-0.022723714424888186,0.9949942897461898
+dev tracks (CREMI),v3_greedy_local_b4_fast_m0,-0.022723714424888186,1.0099524814321568
+dev tracks (CREMI),v3_exact_only_fast_m0,-0.009894057476866891,1.0023579058699494
+dev tracks (CREMI),cape_v3_all_m0,-0.026746572959435166,1.0019847979726055
+confirm (SNEMI3D),v3_fast_weighted_greedy_m0,-0.0,1.0
+confirm (SNEMI3D),v3_fast_greedy_local_m0,-0.03160426359940516,1.0013535859156952
+confirm (SNEMI3D),cape_v3_fast_m0,-0.03429700354733445,0.9992851431670543

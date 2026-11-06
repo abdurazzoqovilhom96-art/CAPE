@@ -1,0 +1,17 @@
+claim_id,wording,track,run_id,table,scope,limitations,status
+L1,v3 FAST writes byte-identical streams to the frozen v2.1 FAST on every measured input,raw,results/20261106T184116Z_all_d6786080,primary_family.csv,"dev 36+25 crops, SNEMI3D 32 crops + scale track",implementation equivalence only,SUPPORTED
+L2,"v3 FAST encodes 1.34x faster than v2.1 FAST (geo, SNEMI3D)",raw,results/20261106T184116Z_all_d6786080,primary_family.csv,"SNEMI3D one volume, 32 crops / 16 clusters, 1 CPU thread",single acquisition; Windows/MinGW i7-13700F,CONDITIONAL
+L3,v3 FAST is 0.120% smaller than corrected stock pins,raw,results/20261106T184116Z_all_d6786080,primary_family.csv,SNEMI3D one volume,label section only differs; boundary identical,CONDITIONAL
+L4,v3 FAST encodes 12.90x faster than corrected stock pins,raw,results/20261106T184116Z_all_d6786080,primary_family.csv,SNEMI3D one volume,"stock = pinned upstream + count-width fix, same compiler",CONDITIONAL
+L5,CAPE solver is smaller than an optimized weighted greedy on the same infrastructure,matched,results/20261106T184116Z_all_d6786080,secondary_confirm.csv,SNEMI3D one volume,gain size in table; time cost listed,CONDITIONAL
+L6,v3 certificates are valid (LB <= written stream) incl. w_D compaction,guarantee,results/20261106T184116Z_all_d6786080,certificates_confirm.csv,restricted model,not a global optimum; raw only,SUPPORTED
+L7,a QUALITY mode gives >= 0.1% raw saving within 1.5x FAST time,quality,results/20261106T182833Z_development_32f658eb,analysis/v3_select,dev Z>256 group (pre-registered),development data only,UNSUPPORTED
+L8,the regime gate (M3a) saves time,quality,results/20261106T151919Z_development_31cbc70e,analysis/v3_select,dev,scaled-dual bound is weak,CONDITIONAL
+L9,the v3 mechanisms are new algorithms,novelty,-,docs/V3_NOVELTY_MATRIX.md,-,general tools; M2 = Crackle issue #19 idea,UNSUPPORTED
+L10,results generalize beyond the tested volumes,generalization,-,-,-,one independent acquisition,UNSUPPORTED
+L11,Q1 10/10,-,-,-,-,never derived automatically; not claimed,UNSUPPORTED
+M-M1a,M1a speeds up v3 FAST (leave-one-out S_T 1.261),raw (dev),results/20261106T131304Z_development_2238806f + results/20261106T141028Z_development_bdc5fcbd,analysis/v3_select/SELECT_V3_UZ.md,development crops (seen),development only; nested scaling crops cluster by source,CONDITIONAL
+M-M1b,M1b speeds up v3 FAST (leave-one-out S_T 1.009),raw (dev),results/20261106T131304Z_development_2238806f + results/20261106T141028Z_development_bdc5fcbd,analysis/v3_select/SELECT_V3_UZ.md,development crops (seen),development only; nested scaling crops cluster by source,UNSUPPORTED
+M-M2,M2 speeds up v3 FAST (leave-one-out S_T 1.002),raw (dev),results/20261106T131304Z_development_2238806f + results/20261106T141028Z_development_bdc5fcbd,analysis/v3_select/SELECT_V3_UZ.md,development crops (seen),development only; nested scaling crops cluster by source,UNSUPPORTED
+M-M5a,M5a speeds up v3 FAST (leave-one-out S_T 1.026),raw (dev),results/20261106T131304Z_development_2238806f + results/20261106T141028Z_development_bdc5fcbd,analysis/v3_select/SELECT_V3_UZ.md,development crops (seen),development only; nested scaling crops cluster by source,UNSUPPORTED
+M-M5b,M5b speeds up v3 FAST (leave-one-out S_T 1.127),raw (dev),results/20261106T131304Z_development_2238806f + results/20261106T141028Z_development_bdc5fcbd,analysis/v3_select/SELECT_V3_UZ.md,development crops (seen),development only; nested scaling crops cluster by source,CONDITIONAL

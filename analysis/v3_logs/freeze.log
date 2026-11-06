@@ -1,2 +1,9 @@
 
 === 2026-11-06T18:41:11+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\scripts\freeze_v3.py
+confirm_snemi3d_v3_scale.jsonl: 5 rows ['snemi3d_v3_full_1024x1024x100', 'snemi3d_v3_q_x0_y0_512x512x100', 'snemi3d_v3_q_x512_y0_512x512x100', 'snemi3d_v3_q_x0_y512_512x512x100', 'snemi3d_v3_q_x512_y512_512x512x100']
+{
+ "expected_source_hash": "d07368c771ee3d31b8fd89b802e049b3396a7241fc0e79c7ca9964ca9a2ef294",
+ "freeze_commit": "b395b9a40568440180fc7f0e3a4eca2b50dc9bc0",
+ "primary_methods": 25,
+ "scale_methods": 6
+}

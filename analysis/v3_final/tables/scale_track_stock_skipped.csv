@@ -1,0 +1,2 @@
+sample_id,voxels,method,status,reason
+snemi3d_v3_full_1024x1024x100,104857600,"crackle_pins_opt_corrected_m0, safe_stock_m0_zstd9",SKIPPED_BUDGET,stock Crackle pin optimizer not run above 33554432 voxels (v2.1 rule; 269 s per encode already at 512x512x256 = 2^26)

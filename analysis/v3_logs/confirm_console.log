@@ -4,3 +4,29 @@
 [develop] DONE (resume)
 [select] DONE (resume)
 [freeze] running ...
+[freeze] DONE analysis/v3_freeze/freeze.json
+[confirm] running ...
+[confirm] DONE {'primary': 'results/20261106T184116Z_all_d6786080', 'scale': 'results/20261106T213428Z_all_080b15b8', 'scale_stock': 'results/20261106T213921Z_all_751ff9ac'}
+[analyze] running ...
+[analyze] DONE analysis/v3_final/V3_YAKUNIY_TAHLIL_UZ.md
+[package] running ...
+[package] DONE results/v3_<id>/
+  audit    DONE      analysis/v3_audit/AUDIT_V3_UZ.md
+  build    DONE      build/native_build.json
+  tests    DONE      not acceptance: 2144 passed, 12 deselected in 53.97s; acceptance: 12 passed, 2144 deselected in 120.39s (0:02:00)
+  develop  DONE      
+  select   DONE      analysis/v3_select/selected_methods.json
+  freeze   DONE      analysis/v3_freeze/freeze.json
+  confirm  DONE      
+  analyze  DONE      analysis/v3_final/V3_YAKUNIY_TAHLIL_UZ.md
+  package  DONE      results/v3_<id>/
+    panel core             DONE      results/20261106T131304Z_development_2238806f
+    panel scale            DONE      results/20261106T141028Z_development_bdc5fcbd
+    panel quality          DONE      results/20261106T151919Z_development_31cbc70e
+    panel tracks           DONE      results/20261106T161236Z_development_12de6862
+    panel rerun_core       DONE      results/20261106T171509Z_development_b46d5233
+    panel rerun_scale      DONE      results/20261106T173737Z_development_c90d5032
+    panel quality_check    DONE      results/20261106T182833Z_development_32f658eb
+    panel confirm_primary  DONE      results/20261106T184116Z_all_d6786080
+    panel confirm_scale    DONE      results/20261106T213428Z_all_080b15b8
+    panel confirm_scale_stock DONE      results/20261106T213921Z_all_751ff9ac
