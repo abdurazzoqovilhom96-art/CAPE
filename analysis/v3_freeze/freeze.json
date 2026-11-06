@@ -1,0 +1,755 @@
+{
+  "frozen_at": "2026-11-06T18:41:15+00:00",
+  "expected_source_hash": "d07368c771ee3d31b8fd89b802e049b3396a7241fc0e79c7ca9964ca9a2ef294",
+  "parent_commit": "26958b59ffc9bf94c5b68aeac0aaddb239f6848e",
+  "branch": "v3",
+  "frozen_v21": {
+    "sha256": "39dca94b1eeb1c59c98b1dcb117e2f46c3b4ddf6b3539dd067c2a4f40a4ff2cb",
+    "file": "snapshots/v21/_cape_native.cp312-win_amd64.pyd"
+  },
+  "selection": {
+    "fast_impl_mask": 575,
+    "memory_impl_mask": null,
+    "quality_selected": false,
+    "quality_composite_options": {
+      "rc_fixing": true,
+      "regime_gate": true,
+      "repair": true,
+      "repair_max_r": 30,
+      "repair_max_pool": 128,
+      "repair_attempts": 4
+    }
+  },
+  "methods": {
+    "blosc2_bshuffle_zstd5": {
+      "adapter": "blosc2",
+      "options": {
+        "codec": "zstd",
+        "clevel": 5,
+        "filter": "bitshuffle",
+        "chunk_bytes": 1048576,
+        "block_bytes": 262144
+      },
+      "family": "blosc2",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4",
+        "K7"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "comparator",
+      "description": "",
+      "citation": "S13",
+      "experimental": false
+    },
+    "cape_v21_fast_m0": {
+      "adapter": "cape_frozen_v21",
+      "options": {
+        "markov_model_order": 0,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off"
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "baseline",
+      "description": "FROZEN v2.1 CAPE-FAST binary (snapshots/v21, sha256 39dca94b...) - the v3 primary internal baseline",
+      "citation": "",
+      "experimental": false
+    },
+    "cape_v21_fast_m5": {
+      "adapter": "cape_frozen_v21",
+      "options": {
+        "markov_model_order": 5,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off"
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "baseline",
+      "description": "FROZEN v2.1 CAPE-FAST binary, Markov order 5 crack codes (secondary)",
+      "citation": "",
+      "experimental": false
+    },
+    "cape_v3_certified_m0": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 0,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "all_regimes",
+        "impl_mask": 575
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K6"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "new",
+      "description": "v3 CERTIFIED - the v3 FAST stream (byte-identical) + LB over all depth regimes",
+      "citation": "",
+      "experimental": false
+    },
+    "cape_v3_fast_m0": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 0,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off",
+        "impl_mask": 575
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "new",
+      "description": "v3 FAST (selected impl_mask 575) - the v3 primary method",
+      "citation": "",
+      "experimental": false
+    },
+    "cape_v3_fast_m5": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 5,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off",
+        "impl_mask": 575
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "new",
+      "description": "v3 FAST, Markov order 5 (secondary)",
+      "citation": "",
+      "experimental": false
+    },
+    "compresso_native": {
+      "adapter": "compresso",
+      "options": {
+        "steps": [
+          8,
+          8,
+          1
+        ]
+      },
+      "family": "compresso",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "comparator",
+      "description": "",
+      "citation": "S2",
+      "experimental": false
+    },
+    "crackle_flat_m0": {
+      "adapter": "crackle_stock",
+      "options": {
+        "allow_pins": 0,
+        "markov_model_order": 0
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4",
+        "K6"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "baseline",
+      "description": "",
+      "citation": "S1",
+      "experimental": false
+    },
+    "crackle_flat_m5": {
+      "adapter": "crackle_stock",
+      "options": {
+        "allow_pins": 0,
+        "markov_model_order": 5
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "baseline",
+      "description": "",
+      "citation": "S1",
+      "experimental": false
+    },
+    "crackle_pins_fast_m0": {
+      "adapter": "crackle_stock",
+      "options": {
+        "allow_pins": 1,
+        "markov_model_order": 0
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4",
+        "K6"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "baseline",
+      "description": "",
+      "citation": "S1",
+      "experimental": false
+    },
+    "crackle_pins_opt_corrected_m0": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 0,
+        "format_policy": "same_as_stock",
+        "selector": "stock_greedy_corrected"
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "baseline",
+      "description": "Corrected stock - upstream pins_opt selection, background and serializer; only the F2 count width fixed",
+      "citation": "",
+      "experimental": false
+    },
+    "crackle_pins_opt_corrected_m5": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 5,
+        "format_policy": "same_as_stock",
+        "selector": "stock_greedy_corrected"
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "baseline",
+      "description": "Corrected stock with Markov order 5 crack codes",
+      "citation": "",
+      "experimental": false
+    },
+    "crackle_pins_opt_m0": {
+      "adapter": "crackle_stock",
+      "options": {
+        "allow_pins": 2,
+        "markov_model_order": 0
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4",
+        "K6"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": true,
+      "role": "baseline",
+      "description": "Primary baseline (allow_pins=2); the name is not an optimality claim",
+      "citation": "S1",
+      "experimental": false
+    },
+    "crackle_vendor_pins_opt_m0": {
+      "adapter": "crackle_vendor",
+      "options": {
+        "allow_pins": true,
+        "optimize_pins": true,
+        "markov_model_order": 0
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "reference",
+      "description": "Pinned-SHA stock build with the same compiler/flags as CAPE (fair timing reference)",
+      "citation": "S1",
+      "experimental": false
+    },
+    "lzma6_raw": {
+      "adapter": "generic",
+      "options": {
+        "codec": "lzma",
+        "level": 6
+      },
+      "family": "generic",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "comparator",
+      "description": "",
+      "citation": "",
+      "experimental": false
+    },
+    "neuroglancer_b8": {
+      "adapter": "neuroglancer",
+      "options": {
+        "block": [
+          8,
+          8,
+          8
+        ]
+      },
+      "family": "neuroglancer",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4",
+        "K7"
+      ],
+      "panels": [
+        "B",
+        "C"
+      ],
+      "wrappable": true,
+      "role": "comparator",
+      "description": "",
+      "citation": "S9",
+      "experimental": false
+    },
+    "raw": {
+      "adapter": "generic",
+      "options": {
+        "codec": "none"
+      },
+      "family": "generic",
+      "categories": [
+        "K1"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "reference",
+      "description": "",
+      "citation": "",
+      "experimental": false
+    },
+    "safe_stock_m0_zstd3": {
+      "adapter": "safe_archive",
+      "options": {
+        "zstd": "zstd3",
+        "markov_model_order": 0,
+        "selector": "stock_greedy_corrected",
+        "depth_policy": "fixed_depth_width"
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "baseline",
+      "description": "SAFE-stock - min(zstd3(flat), zstd3(corrected stock pins)) (secondary)",
+      "citation": "",
+      "experimental": false
+    },
+    "safe_stock_m0_zstd9": {
+      "adapter": "safe_archive",
+      "options": {
+        "zstd": "zstd9",
+        "markov_model_order": 0,
+        "selector": "stock_greedy_corrected",
+        "depth_policy": "fixed_depth_width"
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "baseline",
+      "description": "E7 SAFE-stock - min(zstd9(flat), zstd9(corrected stock pins)); same frame settings as safe_archive",
+      "citation": "",
+      "experimental": false
+    },
+    "safe_v3_fast_m0_zstd3": {
+      "adapter": "safe_archive",
+      "options": {
+        "zstd": "zstd3",
+        "markov_model_order": 0,
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off",
+        "impl_mask": 575
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "internal",
+      "description": "SAFE-CAPE v3: min(zstd3(flat), zstd3(v3 FAST)) (secondary)",
+      "citation": "",
+      "experimental": false
+    },
+    "safe_v3_fast_m0_zstd9": {
+      "adapter": "safe_archive",
+      "options": {
+        "zstd": "zstd9",
+        "markov_model_order": 0,
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off",
+        "impl_mask": 575
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K3"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "internal",
+      "description": "SAFE-CAPE v3: min(zstd9(flat), zstd9(v3 FAST))",
+      "citation": "",
+      "experimental": false
+    },
+    "v3_fast_greedy_local_m0": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 0,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off",
+        "impl_mask": 575,
+        "use_exact": false,
+        "use_local": true
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K5"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "internal",
+      "description": "matched baseline on the v3 FAST infrastructure: weighted greedy + local search",
+      "citation": "",
+      "experimental": false
+    },
+    "v3_fast_weighted_greedy_certified_m0": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 0,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "all_regimes",
+        "impl_mask": 575,
+        "use_exact": false,
+        "use_local": false
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K6"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "internal",
+      "description": "matched certificate: weighted greedy + the same all-regime dual LB",
+      "citation": "",
+      "experimental": false
+    },
+    "v3_fast_weighted_greedy_m0": {
+      "adapter": "cape_native",
+      "options": {
+        "markov_model_order": 0,
+        "format_policy": "same_as_stock",
+        "selector": "cape",
+        "depth_policy": "fixed_depth_width",
+        "certificate": "off",
+        "impl_mask": 575,
+        "use_exact": false,
+        "use_local": false
+      },
+      "family": "crackle_format",
+      "categories": [
+        "K1",
+        "K2",
+        "K5"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "internal",
+      "description": "matched baseline on the v3 FAST infrastructure: optimized weighted greedy",
+      "citation": "",
+      "experimental": false
+    },
+    "zstd9": {
+      "adapter": "generic",
+      "options": {
+        "codec": "zstd",
+        "level": 9
+      },
+      "family": "generic",
+      "categories": [
+        "K1",
+        "K2",
+        "K3",
+        "K4"
+      ],
+      "panels": [
+        "B"
+      ],
+      "wrappable": false,
+      "role": "comparator",
+      "description": "",
+      "citation": "S12",
+      "experimental": false
+    }
+  },
+  "configs": {
+    "configs/v3_confirm_frozen.yaml": "edc8f134ae2c84fe3949d2be358ba3c6911e12bc41009a0e449410daccde9082",
+    "configs/v3_confirm_scale_frozen.yaml": "61997af9affeb08b94acd9ad4e21a1c0b63320a3576a06f57da0327320d49fbb",
+    "configs/v3_confirm_scale_stock_frozen.yaml": "186c61dd78f879cdb2ca55af0f5df3c06ce70646d932ce31c93b0fc1db85e8b5"
+  },
+  "manifests": {
+    "confirm_snemi3d.jsonl": {
+      "sha256": "ff2741d2c3e7dbcee084dc15811104ca346580cd313bee0d118eaba35c80aac3",
+      "rows": 32,
+      "voxel_sha256": {
+        "snemi3d_x0_y0_z0_128x128x64": "5a3e0d2adfdc68d2b09d8016e438b03bbd96e6b3585603cf2fd3d23cdf37fb7b",
+        "snemi3d_x0_y0_z0_256x256x64": "9db2ee3edc1efd4d6bcc05c20def112f4905e4432ae37994b6ce17d485abd0cb",
+        "snemi3d_x0_y256_z0_128x128x64": "135a03a84dbeefda4ebc204d61433794d13fde8856bc53ee8d1d018504937280",
+        "snemi3d_x0_y256_z0_256x256x64": "fa6f5a84082e4d388378a8ee195e48c8f4c097f15afdda2f7524603d3d3a5800",
+        "snemi3d_x0_y512_z0_128x128x64": "27a74257acbe56bcabc56a55fcab44a843055248d7112720df0a9e5639a69cea",
+        "snemi3d_x0_y512_z0_256x256x64": "5d510c1361626f659fe1930c232772392ca8474f2f64b877f2b621fd5eeeaa77",
+        "snemi3d_x0_y768_z0_128x128x64": "4895228a722f1c1e8ee1691cdd8b474abdaedbffce1b9e0518c92ba21f74f603",
+        "snemi3d_x0_y768_z0_256x256x64": "5daedb0e27409cb615a5ea04d3aa381a78148047563e587d793004393e04b676",
+        "snemi3d_x256_y0_z0_128x128x64": "90c934b448c7c8cd82bdd093b0e3b813d251559e98fcae7598b6974f8d4512a6",
+        "snemi3d_x256_y0_z0_256x256x64": "198f7e124bac11f465fadbc4640f45ae1e8b998b61fa6d00bbd3688194c321cf",
+        "snemi3d_x256_y256_z0_128x128x64": "2bca4f3db2301ef3876c8ebb5113c663911e2fa7f97b75165c3193df6156efad",
+        "snemi3d_x256_y256_z0_256x256x64": "33cb8059ada29602ce1493fd53eb9b526d933b1734014f24a392fc19d3f6eb47",
+        "snemi3d_x256_y512_z0_128x128x64": "94641f72c771ceecb6b82142060de30d8f22d86b17457a4f7141ae98b909da67",
+        "snemi3d_x256_y512_z0_256x256x64": "b03cb469ac4834814e9a43d995cad116f154cb10d53d2fa69b029577672eebea",
+        "snemi3d_x256_y768_z0_128x128x64": "c20cebd78cc305928d073513ddbbb387f6314ccc1afa790cf993ee9f58315eda",
+        "snemi3d_x256_y768_z0_256x256x64": "8a1570614ebba9ec7d73bf05d07d68df49dc98303ded7fbbf87d0e752c5b3392",
+        "snemi3d_x512_y0_z0_128x128x64": "6860be5a86fb1f755d90b0c5ff9084ddb32a3dd01567671b44ed0bb6548b89d6",
+        "snemi3d_x512_y0_z0_256x256x64": "303feb0cba3572d330c83ffc212ee97d72b60cb1e2507428e3278792d8e485dd",
+        "snemi3d_x512_y256_z0_128x128x64": "fa2faf3fe2fe9694d085db0f7e0b7b93df5e915c1a27b9b3e123ea26851bbd43",
+        "snemi3d_x512_y256_z0_256x256x64": "1c18413c45ded57d7d61fab2bdb95c6fe54b8906b9ae296710c24e457039cedd",
+        "snemi3d_x512_y512_z0_128x128x64": "cc20bb1af4392ffd9dfafb42a6905b4124c3081ec6741ef3f9c2b49ac4b654ee",
+        "snemi3d_x512_y512_z0_256x256x64": "5950988f96b946c9533e32734b9e64de627ea119052f64dc6d6110789524949f",
+        "snemi3d_x512_y768_z0_128x128x64": "615f9263e59ed365b0dc71374c484a088687c4f67d37c4a9a363cca8b83fcc5a",
+        "snemi3d_x512_y768_z0_256x256x64": "8fccdc730d9ca55414580f98b39586e13ef366babad11b6d61956073b769a866",
+        "snemi3d_x768_y0_z0_128x128x64": "37f0afb9be61ceaf7c3dedd554d95dc03de29859945e0e64fd7d1dd09941d806",
+        "snemi3d_x768_y0_z0_256x256x64": "1d82c1bb604573972c3d3db16b93c82f39c72a3c95166b21fcea87a5d76c36e9",
+        "snemi3d_x768_y256_z0_128x128x64": "d277af6e783cf301ed50e723a0d673b2fe4476cf9f9f134e3633e44cfebb115b",
+        "snemi3d_x768_y256_z0_256x256x64": "21cc1d3d7945660cfe483ae34d6e119fbea3fa1acf4d01b60ac63e110195d0f5",
+        "snemi3d_x768_y512_z0_128x128x64": "b3b8a603e82e12983fd331b47cf93b95ebedeb261cf5e717ddf711a0a1aab922",
+        "snemi3d_x768_y512_z0_256x256x64": "59b2e94ad3471430239916ca8e904811995dc27f2c812fd54d0e239980a0a683",
+        "snemi3d_x768_y768_z0_128x128x64": "15f9f60f7764bf653064e1015aa5690ff78c9880d90cf12adcfe9c38dd6afd28",
+        "snemi3d_x768_y768_z0_256x256x64": "6298d8e7a220c86270c60cd4383103b9f2c987ca99130ec020b46ddcd5b99fbb"
+      }
+    },
+    "confirm_snemi3d_v3_scale.jsonl": {
+      "sha256": "43f4efe32cf19ac90d374332c7dab24a4073755fd416dd27a67e79b7dfeee78c",
+      "rows": 5,
+      "voxel_sha256": {
+        "snemi3d_v3_full_1024x1024x100": "762e840e1e84b5ed7159ea94562a78a368e84e7b38e1ffd6371ca532e898bdaa",
+        "snemi3d_v3_q_x0_y0_512x512x100": "d2a60387870284478ac9ef2770b6832f6fcce9e3372404c3b16ee3c5b697a850",
+        "snemi3d_v3_q_x0_y512_512x512x100": "4875c42d989d1574e1242147cf3381fed8c98c07dbec9171f1888f95b5488245",
+        "snemi3d_v3_q_x512_y0_512x512x100": "939939e6fc786d2be885b1455d07be9df785e63b5ffdb90d4c4f2f3faff82664",
+        "snemi3d_v3_q_x512_y512_512x512x100": "276f30709418948f34cf18898b1271d2ec9488c37bd84ccf12d88504b9af4940"
+      }
+    },
+    "confirm_snemi3d_v3_scale_stock.jsonl": {
+      "sha256": "337e61eeb9e5f0c73c3e26fb3c50b4910759c7ccfea9295c80385a1e1be7ce5e",
+      "rows": 4,
+      "voxel_sha256": {
+        "snemi3d_v3_q_x0_y0_512x512x100": "d2a60387870284478ac9ef2770b6832f6fcce9e3372404c3b16ee3c5b697a850",
+        "snemi3d_v3_q_x0_y512_512x512x100": "4875c42d989d1574e1242147cf3381fed8c98c07dbec9171f1888f95b5488245",
+        "snemi3d_v3_q_x512_y0_512x512x100": "939939e6fc786d2be885b1455d07be9df785e63b5ffdb90d4c4f2f3faff82664",
+        "snemi3d_v3_q_x512_y512_512x512x100": "276f30709418948f34cf18898b1271d2ec9488c37bd84ccf12d88504b9af4940"
+      }
+    }
+  },
+  "stock_budget": {
+    "max_voxels": 33554432,
+    "skipped": [
+      {
+        "sample_id": "snemi3d_v3_full_1024x1024x100",
+        "voxels": 104857600,
+        "method": "crackle_pins_opt_corrected_m0, safe_stock_m0_zstd9",
+        "status": "SKIPPED_BUDGET",
+        "reason": "stock Crackle pin optimizer not run above 33554432 voxels (v2.1 rule; 269 s per encode already at 512x512x256 = 2^26)"
+      }
+    ]
+  },
+  "confirm_runs": {
+    "primary": {
+      "config": "configs/v3_confirm_frozen.yaml",
+      "manifest": "data/manifests/confirm_snemi3d.jsonl"
+    },
+    "scale": {
+      "config": "configs/v3_confirm_scale_frozen.yaml",
+      "manifest": "data/manifests/confirm_snemi3d_v3_scale.jsonl"
+    },
+    "scale_stock": {
+      "config": "configs/v3_confirm_scale_stock_frozen.yaml",
+      "manifest": "data/manifests/confirm_snemi3d_v3_scale_stock.jsonl"
+    }
+  },
+  "statistics": {
+    "bootstrap_resamples": 10000,
+    "seed": 20261106,
+    "cluster_by": "macroblock_id",
+    "ci": 0.95,
+    "multiplicity": "holm",
+    "sizes_are_deterministic": "repeats never multiply byte samples; repeats only describe timing",
+    "single_volume_note": "SNEMI3D is one acquisition: CIs are conditional on that volume"
+  },
+  "primary_family": [
+    {
+      "id": "H1",
+      "metric": "encode_time",
+      "new": "v3_fast",
+      "base": "cape_v21_fast_m0",
+      "effect": "geo_speedup"
+    },
+    {
+      "id": "H2a",
+      "metric": "total_bytes",
+      "new": "v3_fast",
+      "base": "crackle_pins_opt_corrected_m0",
+      "effect": "G_B"
+    },
+    {
+      "id": "H2b",
+      "metric": "encode_time",
+      "new": "v3_fast",
+      "base": "crackle_pins_opt_corrected_m0",
+      "effect": "geo_speedup"
+    }
+  ],
+  "secondary": [
+    "quality_vs_fast",
+    "archive_zstd9_safe_cape_vs_safe_stock",
+    "archive_vs_flat_zstd9",
+    "m5",
+    "zstd3"
+  ],
+  "rules": [
+    "the holdout is run once as a fixed batch; no budget, baseline or parameter changes after seeing it",
+    "a correctness bug found on the holdout keeps the failed run; the fix is a new commit and the data is no longer called unseen",
+    "timing-noise fixes are protocol amendments and are written down"
+  ]
+}
