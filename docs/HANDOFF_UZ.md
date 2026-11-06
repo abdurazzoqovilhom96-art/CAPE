@@ -116,3 +116,31 @@ nima bloklangan. Raqamlar faqat `results/<run_id>/` dagi tekshirilgan yozuvlarda
 .\run_v21.cmd --only report    # v2.1 hisobotini qayta qurish
 .\watch.cmd                    # jonli holat
 ```
+
+## 7. v3 holati (2026-11-06)
+
+`run_v3.cmd` (holat `analysis/v3_state.json`, loglar `analysis/v3_logs/`), git branch `v3` (lokal repo; `main` = tag `v2.1`).
+Etalon: muzlatilgan v2.1 binari `snapshots/v21/` (sha256 `39dca94b…`), adapter `cape_frozen_v21`, metod `cape_v21_fast_m0`.
+
+| Bosqich | Holat | Natija |
+|---|---|---|
+| audit | DONE | `analysis/v3_audit/` — 7/7 oldingi da'vo xom ma'lumotdan qayta hisoblandi; v2.1 fixed-depth sertifikatida 12 yaroqsiz qator topildi (w_D siqilishi) va tuzatildi |
+| build, tests | DONE | 2144 unit + T1–T12 acceptance; barcha v3 bit kombinatsiyalari v2.1 binari bilan baytma-bayt teng |
+| develop | DONE | core `20261106T131304Z_development_2238806f`, scale `…141028Z…bdc5fcbd`, quality `…151919Z…31cbc70e`, tracks `…161236Z…12de6862` |
+| select | DONE | `analysis/v3_select/SELECT_V3_UZ.md`, `selected_methods.json` |
+| freeze | DONE | `analysis/v3_freeze/freeze.json`, commit `b395b9a`, source `d07368c7…` |
+| confirm / analyze / package | ishga tushirilgan | SNEMI3D: 32 crop (7 repeat) → masshtab treki (butun volume + 4 kvadrant) → stock masshtab treki (4 kvadrant) |
+
+SELECT (oldindan yozilgan gate'lar, faqat development ma'lumoti):
+- FAST `impl_mask = 575` = v2.1 bitlari + **M1a** (qo'shni ustun dedup; LOO S_T 1.261 [1.236, 1.298]) + **M5b** (batched CC; 1.127 [1.085, 1.165]).
+- M1b (CSR) 1.009, M2 (eager greedy) 1.002 — FAIL; M5a (fused scan) 1.030 → 15-repeat rerun 1.026 [1.020, 1.035] — hali ham noaniq → FAST'ga kirmadi. Hammasi kodda switch ortida, experimental.
+- QUALITY kompozit (regimes + M3a + M3b + M4 r30/p128/a4): Z>256 guruhida 0.140% tejash, lekin vaqt 1.74× > 1.5× → **QUALITY default yo'q** (exploratory). M3a: 7 regime tekshirildi, 0 prune (kuchsiz bound).
+- To'g'rilik: 732 byte-preserving katak muzlatilgan v2.1 bilan teng; OK bo'lmagan katak 0.
+- Stock byudjet qoidasi (v2.1 dan): tuzatilgan stock faqat ≤2^25 voksel; SNEMI3D butun hajmi uchun `SKIPPED_BUDGET` (freeze'da, holdoutga qaralmasdan yozilgan).
+
+Yakuniy tahlil: `analysis/v3_final/V3_YAKUNIY_TAHLIL_UZ.md`; paket: `results/LATEST_V3_PACKAGE.txt` (confirm tugagach).
+
+```powershell
+.\run_v3.cmd --stage report-status   # bosqichlar jadvali
+.\run_v3.cmd --stage all --resume    # to'xtagan joydan davom
+```

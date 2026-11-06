@@ -45,3 +45,13 @@
 - v2.1 fixed-depth Regime certificate could report `lb_bytes > ub_bytes` when the written depth width compacts
   (12 rows of the `cape_fixed_depth_width` ablation on Z=512 crops in v1/v2 width runs; they were already flagged
   `certificate_valid = False`, now explained and fixed).
+
+## Selection and freeze (2026-11-06, development data only)
+- FAST = `impl_mask 575` (v2.1 bits + M1a + M5b). M1b, M2 failed the FAST gate; M5a stayed inconclusive after the
+  one 15-repeat rerun the protocol allows and is not in FAST. QUALITY composite did not pass (1.74x > 1.5x): no
+  QUALITY default. Details: `analysis/v3_select/SELECT_V3_UZ.md`.
+- `scripts/pilot_select_v3.py` writes its development configs idempotently (an unchanged definition keeps its file
+  and the source hash, so an interrupted run resumes).
+- Freeze applies the v2.1 stock budget rule (corrected stock only on volumes <= 2^25 voxels): the SNEMI3D scale track
+  runs stock in a separate frozen run on the four quadrants with v3 FAST repeated as the matched reference; the whole
+  volume is `SKIPPED_BUDGET` for stock (`data/manifests/confirm_snemi3d_v3_scale_skipped.json`).
