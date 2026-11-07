@@ -1,0 +1,90 @@
+# CAPE Q1 method registry (merged into configs/methods.yaml by cape.config.load_methods, after v3_methods.yaml).
+# Q1 impl bits (cpp/include/cape/types.hpp): O1 lean CC = 1024, O2 exact runs = 2048, O3 compact uint16 chain = 4096,
+# on top of the v3 FAST mask 575. Every mask writes the bytes of the frozen v3 binary (tests/test_q1_invariants.py).
+schema_version: 1
+methods:
+  # ---------------------------------------------------------------- reference E0 (comparison C1)
+  cape_v3frozen_fast_m0:
+    adapter: cape_frozen_v3
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 575}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    wrappable: true
+    role: baseline
+    description: FROZEN original v3 FAST binary (snapshots/v3, sha256 f1029e19...) - E0, the Q1 primary baseline
+  cape_q1_base_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 575}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: live binary, Q1 bits off (impl_mask 575) - build-drift control against E0
+  # ---------------------------------------------------------------- one Q1 bit at a time (on top of v3 FAST)
+  cape_q1_O1_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 1599}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: Q1 O1 only - lean CC
+  cape_q1_O2_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 2623}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: Q1 O2 only - exact run allocation
+  cape_q1_O3_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 4671}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: Q1 O3 only - compact uint16 chain buffer
+  # ---------------------------------------------------------------- all Q1 bits and leave-one-out
+  cape_q1_all_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 7743}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: v3 FAST + O1 + O2 + O3
+  cape_q1_noO1_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 6719}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all Q1 bits minus O1
+  cape_q1_noO2_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 5695}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all Q1 bits minus O2
+  cape_q1_noO3_m0:
+    adapter: cape_native
+    options: {markov_model_order: 0, format_policy: same_as_stock, selector: cape, depth_policy: fixed_depth_width,
+              certificate: "off", impl_mask: 3647}
+    family: crackle_format
+    categories: [K1, K2, K3]
+    panels: [B]
+    role: internal
+    description: all Q1 bits minus O3

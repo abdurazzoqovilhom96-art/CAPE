@@ -215,6 +215,10 @@ def load_methods(path: Path | None = None) -> dict:
     v3 = ROOT / "configs" / "v3_methods.yaml"
     if Path(path).resolve() == (ROOT / "configs" / "methods.yaml").resolve() and v3.exists():
         files.append(v3)
+    # CAPE Q1: configs/q1_methods.yaml likewise (frozen v3 reference E0 and the output-preserving encoder variants)
+    q1 = ROOT / "configs" / "q1_methods.yaml"
+    if Path(path).resolve() == (ROOT / "configs" / "methods.yaml").resolve() and q1.exists():
+        files.append(q1)
     methods = {}
     for f in files:
         raw = _load_yaml(f)

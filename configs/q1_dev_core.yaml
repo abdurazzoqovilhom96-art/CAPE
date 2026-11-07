@@ -1,0 +1,24 @@
+# CAPE Q1 development panel CORE (configs/q1_development.yaml): output-preserving encoder bits O1/O2/O3, one at a
+# time and leave-one-out, against the FROZEN original v3 binary E0. Development data only (all crops seen before).
+schema_version: 1
+project: CAPE-Pins
+seed: 20261107
+mode: development
+description: Q1 development CORE - O1/O2/O3 timing and encode-inclusive peak memory vs frozen v3 (36 CREMI crops)
+input:
+  manifest: data/manifests/v3_dev_core.jsonl
+  splits: [development]
+  require_real_data: true
+benchmark:
+  warmups: 2
+  repeats: 7
+  external_wrappers: [none]
+  task_timeout_s: 3600
+methods: [cape_v3frozen_fast_m0, cape_q1_base_m0, cape_q1_O1_m0, cape_q1_O2_m0, cape_q1_O3_m0, cape_q1_all_m0,
+          cape_q1_noO1_m0, cape_q1_noO2_m0, cape_q1_noO3_m0]
+panels: [B]
+primary:
+  new: cape_q1_all_m0
+  baseline: cape_v3frozen_fast_m0
+oracle:
+  enabled: false

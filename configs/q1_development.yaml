@@ -1,0 +1,52 @@
+# CAPE Q1 (task v3) development protocol for the output-preserving encoder Eθ. WRITTEN BEFORE THE FIRST Q1
+# DEVELOPMENT MEASUREMENT (the git commit that adds this file precedes every results/ run of the Q1 panels).
+# Read by scripts/q1_develop.py. Not a run config (no RUN_SCHEMA).
+schema: cape_q1_protocol/1
+written: 2026-11-07
+reference_E0: {method: cape_v3frozen_fast_m0, binary: snapshots/v3/_cape_native.cp312-win_amd64.pyd,
+               sha256: f1029e19992af218a73437050abf750da811f318d36c4993834262785b01e98c, impl_mask: 575}
+build_control: {method: cape_q1_base_m0, note: "live binary, Q1 bits off (impl_mask 575): isolates build drift"}
+
+# ---------------------------------------------------------------- development panels (all data already seen)
+panels:
+  core:  {config: configs/q1_dev_core.yaml,  manifest: data/manifests/v3_dev_core.jsonl,
+          role: "36 CREMI crops (A pilot + B/C), 7 repeats, warmup 2"}
+  scale: {config: configs/q1_dev_scale.yaml, manifest: data/manifests/scaling_v21.jsonl,
+          role: "25 nested scaling crops (CREMI A up to 1250x1250x125, Crackle samples up to 512^3), 3 repeats"}
+# SNEMI3D, j0126 and hemibrain are NOT used here (SNEMI3D results were seen; j0126/hemibrain are the new test).
+
+# module -> implementation bit (cpp/include/cape/types.hpp ImplBit) and the variants that isolate it
+modules:
+  O1: {bit: 1024, name: "lean CC (upstream labeling at start 0; no local copy, no per-voxel value scatter)",
+       single: cape_q1_O1_m0, leave_one_out: cape_q1_noO1_m0}
+  O2: {bit: 2048, name: "exact run allocation (count V - z_pairs, no growth copies)",
+       single: cape_q1_O2_m0, leave_one_out: cape_q1_noO2_m0}
+  O3: {bit: 4096, name: "compact uint16 slice-local chain buffer (2V instead of 4V bytes)",
+       single: cape_q1_O3_m0, leave_one_out: cape_q1_noO3_m0}
+all_bits: cape_q1_all_m0
+
+# ---------------------------------------------------------------- acceptance rule (fixed before any result)
+metrics:
+  time: "T = median over repeats of encode_ns per (sample, method); S_T = exp(mean log(T_without / T_with))"
+  memory: "M = peak_after_encode (Windows PeakWorkingSetSize of a fresh worker process, read after encode and before
+           decode; includes the Python process and the input array); ratio R_M = exp(mean log(M_with / M_without))"
+  bootstrap: "95% paired cluster bootstrap, 10000 resamples, seed 20261107; clusters = macroblock_id (CREMI) and
+              source family for the nested scaling crops (they overlap)"
+gates:
+  correctness:
+    byte_equal_to: cape_v3frozen_fast_m0   # every module variant, every development sample, total_bytes and sha256
+    every_row_lossless: true
+  module:                                  # decided on the LEAVE-ONE-OUT contrast: all bits vs all bits minus module
+    panels: [core, scale]                  # pooled
+    accept_if_any:
+      - "speed: S_T 95% CI lower bound > 1.0"
+      - "memory: R_M 95% CI upper bound < 1.0"
+    and_other_axis_not_worse_than: 0.02    # point estimate: S_T >= 0.98 and R_M <= 1.02
+    per_sample_flag: 0.10                  # every sample >10% slower or >10% larger peak is listed by name
+    single_bit_contrast: reported          # E0 bits + one Q1 bit vs E0 bits on the live binary
+  budget: "first implementation + one fix round per module; no re-tuning after the selection"
+  none_accepted: "Eθ = E0 (impl_mask 575); the paper then validates v3 and reports that no new optimization passed"
+
+# ---------------------------------------------------------------- what the selection writes
+selection_output: analysis/q1_select/selected.json
+final_success_criteria: analysis/q1_freeze/success_criteria.json   # written after selection, before the final run
