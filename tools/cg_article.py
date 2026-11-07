@@ -226,7 +226,7 @@ def short(sid: str) -> str:
         "_256x256x60", "").replace("_256x256x512", "").replace("connectomics", "conn"))
 
 
-def fig_f01(fdir, pdir, h_example):
+def fig_f01(fdir, pdir, h_example, actual_h=None):
     """Run / window dominance on one real column (first dev crop): every interval <= h fits one length-h window."""
     plt = _plt()
     man = [json.loads(x) for x in (ROOT / "data" / "manifests" / "q1b_dev.jsonl").read_text(
@@ -245,6 +245,7 @@ def fig_f01(fdir, pdir, h_example):
                 best = (y, x, int(st_[i]), int(ln[i]), col)
     y, x, z0, R, col = best
     h = int(min(h_example, max(2, R - 2)))
+    actual_h = (actual_h or {}).get(man[0]["sample_id"]) if isinstance(actual_h, dict) else actual_h
     fig, ax = plt.subplots(figsize=(6.2, 2.6))
     ax.barh(0, R, left=z0, height=0.6, color=BLUE, alpha=0.85)
     ax.text(z0 + R / 2, 0, f"run: label {int(col[z0])}, R = {R}", ha="center", va="center", color="white",
@@ -260,32 +261,36 @@ def fig_f01(fdir, pdir, h_example):
     ax.set_yticks([-1, 0, 1 + 0.45 * (len(show) - 1) / 2])
     ax.set_yticklabels(["interval", "run", f"length-{h} windows"])
     ax.set_xlabel("slice z")
-    ax.set_title(f"{man[0]['sample_id']}, column (x={x}, y={y}): CompleteWindows dominate every shorter interval",
-                 fontsize=7.5)
+    ax.set_title(f"{man[0]['sample_id']}, column (x={x}, y={y}); illustrative h = {h} "
+                 f"(in the Eθ stream regime h = {actual_h} = Z, so the whole run is the only window)", fontsize=7)
     data = pd.DataFrame({"z": np.arange(Z), "label": col.astype(np.int64)})
     save_fig(fig, fdir, "F01_dominance_example", data, pdir)
     return {"status": "OK", "caption_en": f"One real column of {man[0]['sample_id']}: a run of length R = {R} and "
-            f"its length-{h} windows (CompleteWindows, h shown for illustration). Every interval of length <= h lies in "
-            "one window with the same pin cost, so the wider family cannot lower the set-cover optimum (theorem).",
+            f"its length-{h} windows for an ILLUSTRATIVE h = {h}. Every interval of length <= h lies in one window with the "
+            f"same pin cost, so the wider family cannot lower the set-cover optimum (theorem). In the regime that Eθ "
+            f"actually writes, h = {actual_h} = Z: every run is a single window.",
             "note_uz": "Haqiqiy ustun: run va uning h-oynalari; qisqa oraliq bitta oynaga to'liq tushadi."}
 
 
 def fig_f02(fdir, pdir):
     plt = _plt()
-    fig, ax = plt.subplots(figsize=(6.4, 2.4))
+    fig, ax = plt.subplots(figsize=(7.6, 2.3))
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
     ax.axis("off")
-    boxes = [("labels", 0.02), ("CC per slice\n(native)", 0.15), ("runs + chain\n(native, kept)", 0.30),
-             ("LP: singletons +\nt=0 windows", 0.47), ("exact pricing\n(prefix sums, O(R)/run)", 0.64),
-             ("integer greedy +\ninteger certificate", 0.83)]
-    for txt, x0 in boxes:
-        ax.add_patch(plt.Rectangle((x0, 0.35), 0.13, 0.32, fc="#e8f0fe", ec=BLUE, lw=0.8))
-        ax.text(x0 + 0.065, 0.51, txt, ha="center", va="center", fontsize=6.5, color=INK)
-    for (_, a), (_, b) in zip(boxes[:-1], boxes[1:]):
-        ax.annotate("", xy=(b, 0.51), xytext=(a + 0.13, 0.51), arrowprops=dict(arrowstyle="->", color=INK, lw=0.7))
-    ax.annotate("", xy=(0.47 + 0.065, 0.35), xytext=(0.64 + 0.065, 0.35),
-                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=0.8, connectionstyle="arc3,rad=0.5"))
-    ax.text(0.595, 0.12, "add violated windows (W > c); stop when none or budget", ha="center", fontsize=6.3,
-            color=ORANGE)
+    W, G = 0.135, 0.032
+    boxes = ["labels", "CC per slice\n(native)", "runs + chain\n(native, kept)", "LP over\nsingletons +\nt=0 windows",
+             "exact pricing\n(prefix sums,\nO(R) per run)", "integer greedy\n+ integer\ncertificate"]
+    xs = [0.005 + i * (W + G) for i in range(len(boxes))]
+    for txt, x0 in zip(boxes, xs):
+        ax.add_patch(plt.Rectangle((x0, 0.38), W, 0.42, fc="#e8f0fe", ec=BLUE, lw=0.8))
+        ax.text(x0 + W / 2, 0.59, txt, ha="center", va="center", fontsize=6.3, color=INK, linespacing=1.15)
+    for a, b in zip(xs[:-1], xs[1:]):
+        ax.annotate("", xy=(b, 0.59), xytext=(a + W, 0.59), arrowprops=dict(arrowstyle="->", color=INK, lw=0.7))
+    ax.annotate("", xy=(xs[3] + W / 2, 0.38), xytext=(xs[4] + W / 2, 0.38),
+                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=0.8, connectionstyle="arc3,rad=-0.6"))
+    ax.text((xs[3] + xs[4] + W) / 2, 0.06, "add violated windows (W > c); stop when none or at the budget",
+            ha="center", fontsize=6.3, color=ORANGE)
     save_fig(fig, fdir, "F02_algorithm_flow", None, pdir)
     return {"status": "OK", "caption_en": "Bounded column generation evaluated in this study (prototype). Runs and the "
             "column-major chain stay native and resident; candidate and incidence lists are replaced by exact pricing.",
@@ -296,7 +301,8 @@ def build_figures(fdir, pdir, g, nat, pro):
     plt = _plt()
     figs = {}
     rows = g["rows"]
-    figs["F01"] = fig_f01(fdir, pdir, h_example=8)
+    hmap = {sid: pro[sid]["instance"]["h"] for sid in pro if pro[sid].get("status") == "SUCCESS"}
+    figs["F01"] = fig_f01(fdir, pdir, h_example=8, actual_h=hmap)  # h of the sample the figure draws
     figs["F02"] = fig_f02(fdir, pdir)
     if not rows:
         for fid in ("F03", "F04", "F05", "F06"):
@@ -326,7 +332,7 @@ def build_figures(fdir, pdir, g, nat, pro):
                label="projected CG peak")
     ax.set_ylabel("MiB (fresh process)")
     ax.tick_params(axis="x", rotation=60, labelsize=6.5)
-    ax.legend(fontsize=6.2, frameon=False, ncol=3, loc="upper left")
+    ax.legend(fontsize=6.2, frameon=False, ncol=1, loc="upper left", bbox_to_anchor=(1.01, 1.0))
     save_fig(fig, fdir, "F03_memory_breakdown", df, pdir)
     figs["F03"] = {"status": "OK", "caption_en": "Native Eθ encode-inclusive memory by structure (profile build, one "
                    "fresh process per sample) and the projected CG peak (black dash). The CG can only remove the "
@@ -357,44 +363,56 @@ def build_figures(fdir, pdir, g, nat, pro):
     ax.set_yscale("log")
     ax.set_ylabel("ms (median of 7)")
     ax.tick_params(axis="x", rotation=60, labelsize=6.5)
-    ax.legend(fontsize=6.2, frameon=False, ncol=3, loc="upper left")
+    ax.legend(fontsize=6.2, frameon=False, ncol=1, loc="upper left", bbox_to_anchor=(1.01, 1.0))
     save_fig(fig, fdir, "F04_time_breakdown", df, pdir)
     figs["F04"] = {"status": "OK", "caption_en": "Native Eθ encode time by phase (profile build, median of 7 repeats) "
                    "and the projected CG time (black dash; pricing passes x native candidate-pass time + measured "
                    "HiGHS LP time + native greedy time). Log scale.",
                    "note_uz": "Native vaqt taqsimoti va CG proyeksiyasi (log)."}
-    # F05 convergence
-    hist = []
+    # F05 family sizes (every sample converged at the first LP, so a convergence plot is degenerate; see T04)
+    fam = []
     for sid in sids:
-        for hrow in pro[sid]["cg"]["history"]:
-            hist.append({"sample": short(sid), **hrow})
-    df = pd.DataFrame(hist)
-    fig, axs = plt.subplots(1, 2, figsize=(6.6, 2.6))
-    for i, (smp, gdf) in enumerate(df.groupby("sample", sort=False)):
-        colr = plt.cm.tab20(i % 20)
-        axs[0].plot(gdf["iter"], np.maximum(gdf["violating_runs"], 0.8), marker="o", ms=2, lw=0.8, color=colr,
-                    label=smp)
-        axs[1].plot(gdf["iter"], gdf["columns"], marker="o", ms=2, lw=0.8, color=colr)
-    axs[0].set_yscale("log")
-    axs[0].set_xlabel("CG iteration")
-    axs[0].set_ylabel("runs with a violated window")
-    axs[1].set_xlabel("CG iteration")
-    axs[1].set_ylabel("generated columns")
-    axs[1].set_yscale("log")
-    axs[0].legend(fontsize=5, frameon=False, ncol=2)
-    fig.tight_layout()
-    save_fig(fig, fdir, "F05_cg_convergence", df, pdir)
-    figs["F05"] = {"status": "OK", "caption_en": "Column-generation convergence per development sample: runs that "
-                   "still contain a violated window (W > c) and the number of generated columns per iteration.",
-                   "note_uz": "CG yaqinlashuvi: buzilishlar soni va ustunlar soni."}
+        nv, cg = pro[sid]["native"], pro[sid]["cg"]
+        fam.append({"sample": short(sid), "windows (= runs)": nv.get("candidate_count_before"),
+                    "after singleton rule": nv.get("candidates_after_singleton"),
+                    "after M1a (stored)": nv.get("candidates_after_adjacency"),
+                    "after equal coverage": nv.get("candidates_after_equal"),
+                    "after subset (final)": nv.get("candidate_count_after"), "CG columns (dedup)": cg["columns"],
+                    "CG iterations": cg["iterations"], "converged": cg["converged"]})
+    df = pd.DataFrame(fam)
+    keys = ["windows (= runs)", "after singleton rule", "after M1a (stored)", "after equal coverage",
+            "after subset (final)", "CG columns (dedup)"]
+    cols_ = [GRAY, "#bdc1c6", ORANGE, AQUA, BLUE, RED]
+    fig, ax = plt.subplots(figsize=(7.4, 3.0))
+    x = np.arange(len(df))
+    wbar = 0.13
+    for k, (key, colr) in enumerate(zip(keys, cols_)):
+        ax.bar(x + (k - 2.5) * wbar, df[key].astype(float), width=wbar, color=colr, label=key, edgecolor="white",
+               linewidth=0.3)
+    ax.set_yscale("log")
+    ax.set_xticks(x)
+    ax.set_xticklabels(df["sample"], rotation=60, fontsize=6.5)
+    ax.set_ylabel("count (log)")
+    ax.legend(fontsize=6.2, frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
+    save_fig(fig, fdir, "F05_family_sizes", df, pdir)
+    nconv1 = int(sum(1 for f_ in fam if f_["CG iterations"] == 1 and f_["converged"]))
+    figs["F05"] = {"status": "OK", "caption_en": "Candidate family sizes per development sample: native windows (equal "
+                   "to the runs, since h = Z), what the native reductions keep, and the deduplicated columns of the CG "
+                   f"prototype. CG converged at the first LP on {nconv1}/{len(fam)} samples, so its pricing never added "
+                   "a column (the protocol's convergence plot would be a single point; see T04).",
+                   "note_uz": "Oila hajmlari: native reduksiyalar va CG ustunlari; CG birinchi LP'da yaqinlashdi."}
     # F06 ratios
     df = pd.DataFrame([{"sample": short(r["sample_id"]), "R_M_proj": r["R_M"], "R_T_proj": r["R_T"],
-                        "R_cert": r["R_cert"], "best_case_R_M": r["best_case_R_M"]} for r in rows])
+                        "R_cert": r["R_cert"], "best_case_R_M": r["best_case_R_M"],
+                        "R_T_warm_posthoc": r.get("R_T_warm")} for r in rows])
     fig, ax = plt.subplots(figsize=(6.6, 2.8))
     x = np.arange(len(df))
     ax.scatter(x - 0.15, df["R_M_proj"], color=BLUE, s=16, label="memory ratio (projected)")
     ax.scatter(x + 0.15, df["R_T_proj"], color=ORANGE, s=16, label="time ratio (projected)")
     ax.scatter(x, df["best_case_R_M"], color=GRAY, s=10, marker="x", label="memory ratio if CG structures cost 0")
+    if "R_T_warm_posthoc" in df and df["R_T_warm_posthoc"].notna().any():
+        ax.scatter(x + 0.15, df["R_T_warm_posthoc"], facecolors="none", edgecolors=ORANGE, s=22,
+                   label="time ratio, warm HiGHS (post hoc)")
     ax.axhline(1.0, color=INK, lw=0.6)
     ax.axhline(0.95, color=INK, lw=0.6, ls="--")
     ax.text(len(df) - 0.5, 0.95, "gate 0.95", fontsize=6, va="bottom", ha="right")
@@ -402,11 +420,13 @@ def build_figures(fdir, pdir, g, nat, pro):
     ax.set_xticklabels(df["sample"], rotation=60, fontsize=6.5)
     ax.set_yscale("log")
     ax.set_ylabel("CG / native Eθ")
-    ax.legend(fontsize=6.2, frameon=False)
+    ax.legend(fontsize=6.2, frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
     save_fig(fig, fdir, "F06_projected_ratios", df, pdir)
     figs["F06"] = {"status": "OK", "caption_en": "Projected CG-implicit / native Eθ ratios per sample (memory, time) and "
                    "the memory ratio of the most favourable case where the CG structures cost nothing (runs and chain "
-                   "kept). Dashed line: the pre-registered 0.95 gate. Log scale.",
+                   "kept). Hollow markers: post-hoc time ratio with the warm HiGHS solve time (the run's LP time "
+                   "included the first-call scipy import); not part of the gate. Dashed line: the pre-registered 0.95 "
+                   "gate. Log scale.",
                    "note_uz": "Har namuna bo'yicha proyeksiya nisbatlari va gate chizig'i."}
     return figs
 
@@ -491,6 +511,11 @@ The native solver already computes such a bound (dual ascent, same scale); the p
   feasible full-family dual no certificate is claimed; column generation may need many iterations and is not
   guaranteed to be faster.
 - If CG-implicit is converged, the LP optimum value does not depend on the initial columns, so CG-cert reuses its L.
+
+**Structural observation (fixed_depth_width, the regime Eθ writes).** The stream regime takes the narrowest depth width
+that fits Z: 2^(8 w_D) >= Z, so h = min(Z, 2^(8 w_D)) = Z. Every run then has R <= Z = h and CompleteWindows is exactly
+one window per run: the "implicit" family IS the run list, and window pricing cannot add any column. Window pricing
+matters only in narrower regimes (h < Z), which the native solver bounds dual-only for the certificate.
 """,
     "complexity.md": """# Complexity and measured cost model
 
@@ -501,6 +526,39 @@ priced as one native candidate pass), the measured HiGHS LP time and the native 
 resident in memory. It is favourable to CG on purpose; failing it is a robust negative result.
 """,
 }
+
+
+def posthoc_warm(run_dir: Path, g: dict) -> dict:
+    """Post-hoc diagnostic (results/<run>/posthoc_lp_split.json): the run's LP time included the first-call import of
+    scipy.optimize; recompute R_T / R_cert with the warm assembly + HiGHS solve time. Never changes the gate."""
+    p = run_dir / "posthoc_lp_split.json"
+    if not p.exists():
+        return {"rows": [["not measured", None, None, None, None, None, None, None]], "note": "no post-hoc file"}
+    sp = json.loads(p.read_text(encoding="utf-8"))["samples"]
+    rows, rt, rc = [], [], []
+    for r in g["rows"]:
+        s = sp.get(r["sample_id"])
+        if not s:
+            continue
+        warm = (s["assembly_s"] + s["linprog_s"]) * 1e9
+        r["R_T_warm"] = (r["T_proj_ns"] - r["T_lp_ns"] + warm) / r["T_E_ns"]
+        r["R_cert_warm"] = ((r["T_cert_ns"] - r["T_lp_ns"] + warm) / r["T_cert_native_ns"]
+                            if r["T_cert_native_ns"] else None)
+        rt.append(r["R_T_warm"])
+        rc.append(r["R_cert_warm"])
+        rows.append([r["sample_id"], round(r["T_lp_ns"] / 1e9, 4), round(warm / 1e9, 4), round(r["R_T"], 4),
+                     round(r["R_T_warm"], 4), None if r["R_cert"] is None else round(r["R_cert"], 4),
+                     None if r["R_cert_warm"] is None else round(r["R_cert_warm"], 4), round(r["best_case_R_M"], 4)])
+    g["posthoc"] = {"R_T_warm": gm(rt), "R_cert_warm": gm(rc), "n": len(rows)}
+    rows.append(["geo-mean", None, None,
+                 None if g["pooled"].get("R_T_proj") is None else round(g["pooled"]["R_T_proj"], 4),
+                 None if gm(rt) is None else round(gm(rt), 4),
+                 None if g["pooled"].get("R_cert") is None else round(g["pooled"]["R_cert"], 4),
+                 None if gm(rc) is None else round(gm(rc), 4),
+                 None if g.get("best_case_R_M") is None else round(g["best_case_R_M"], 4)])
+    return {"rows": rows, "note": "Post hoc (after the run, same machine, pinned core, nothing else running): LP matrix "
+            "assembly + HiGHS solve measured warm on the converged LP of each sample. The pre-registered gate uses the "
+            "run's measured LP time and is not changed by this table."}
 
 
 def build(run_dir: Path, state: dict, out_name: str) -> dict:
@@ -575,12 +633,15 @@ def build(run_dir: Path, state: dict, out_name: str) -> dict:
                                "R_M if CG structures cost 0", "Eθ ms", "CG projected ms", "R_T proj",
                                "pricing passes k", "CG-cert projected ms", "native certified ms", "R_cert"], t5, note))
     t6 = [[r["sample_id"], r["U_E"], r["L_asc"], r["L_CG"], r["U_E"] - r["L_asc"],
-           None if r["L_CG"] is None else r["U_E"] - r["L_CG"], r["U_CG"], r["U_CG"] <= r["U_E"], r["cert_feasible"],
-           r["converged"], r["stop"]] for r in g["rows"]]
-    t6.append(["pooled", None, None, None, po.get("gap_ascent"), po.get("gap_CG"), None, None, None, None, None])
+           None if r["L_CG"] is None else r["U_E"] - r["L_CG"], round(100 * (r["U_E"] - r["L_asc"]) / r["U_E"], 4),
+           None if r["L_CG"] is None else round(100 * (r["U_E"] - r["L_CG"]) / r["U_E"], 4), r["U_CG"],
+           r["U_CG"] <= r["U_E"], r["cert_feasible"], r["converged"], r["stop"]] for r in g["rows"]]
+    t6.append(["pooled", None, None, None, po.get("gap_ascent"), po.get("gap_CG"), None, None, None, None, None, None,
+               None])
     tables.append(write_table(tdir, "T06_certificate", "payload bounds (same regime, same background; cost units = "
                               "bytes of the labels payload)", ["sample_id", "U (Eθ)", "L ascent (native)", "L CG",
-                                                               "gap ascent", "gap CG", "U CG-implicit",
+                                                               "gap ascent", "gap CG", "gap ascent % of U",
+                                                               "gap CG % of U", "U CG-implicit",
                                                                "U_CG <= U_Eθ", "certificate feasible", "CG converged",
                                                                "CG stop"], t6))
     t7 = [[sid, p.get("task_status"), (p.get("error") or "")[:160]] for sid, p in sorted(pro.items())
@@ -592,6 +653,11 @@ def build(run_dir: Path, state: dict, out_name: str) -> dict:
         t7.append(["gate", "PROBLEM", p[:160]])
     tables.append(write_table(tdir, "T07_failures_and_exclusions", "failures, timeouts, not-run stages",
                               ["item", "status", "reason"], t7 or [["none", "-", "no failures, timeouts or exclusions"]]))
+    ph = posthoc_warm(run_dir, g)
+    tables.append(write_table(tdir, "T08_posthoc_sensitivity", "POST-HOC sensitivity (not part of the gate): warm "
+                              "HiGHS time instead of the run's first-call LP time", ["sample_id", "LP s (run)",
+                              "LP s (warm, post hoc)", "R_T (gate)", "R_T (warm LP)", "R_cert (gate)",
+                              "R_cert (warm LP)", "R_M if CG structures cost 0"], ph["rows"], ph["note"]))
     figs = build_figures(out / "figures", out / "plot_data", g, nat, pro)
     # mathematics, methods, report
     for name, txt in MATH.items():
@@ -666,6 +732,12 @@ def texts(out: Path, g: dict, state: dict, nat: dict, pro: dict, figs: dict, tab
                        (nat[r["sample_id"]]["T_profile_ns"] or 1))
     med = lambda x: st.median(x) if x else None  # noqa: E731
     conv = sum(1 for r in rows if r["converged"])
+    hz = sum(1 for sid in pro if pro[sid].get("status") == "SUCCESS" and pro[sid]["instance"]["h"] ==
+             pro[sid]["shape_zyx"][0])
+    it1 = sum(1 for sid in pro if pro[sid].get("status") == "SUCCESS" and pro[sid]["cg"]["iterations"] == 1)
+    rel = [(100 * (r["U_E"] - r["L_asc"]) / r["U_E"], 100 * (r["U_E"] - r["L_CG"]) / r["U_E"]) for r in rows
+           if r["L_CG"] is not None]
+    phc = g.get("posthoc") or {}
     qual = sum(1 for r in rows if r["U_CG"] <= r["U_E"])
     lge = sum(1 for r in rows if r["L_CG"] is not None and r["L_CG"] >= r["L_asc"])
     m = out / "methods"
@@ -707,12 +779,20 @@ recorded in raw_results/ only for information.
             f"the most favourable memory ratio (CG structures cost 0) is a geo-mean {f(g.get('best_case_R_M'), 4)}.",
             f"- Native Eθ time: candidates + reductions + components + solver are a median {100 * med(t_share):.1f}% "
             "of the profiled encode time.",
-            f"- CG-implicit converged on {conv}/{n} crops; its integer cover was never worse than Eθ on {qual}/{n} crops.",
+            f"- Structure: in the regime Eθ writes, h = Z on {hz}/{n} crops, so CompleteWindows is one window per run "
+            f"and CG converged at the first LP on {it1}/{n} crops: pricing never added a column (mathematics/"
+            "column_generation_scope.md).",
+            f"- CG-implicit converged on {conv}/{n} crops; its greedy integer cover was not worse than Eθ on {qual}/{n} "
+            "crops (Eθ also uses exact DP and local search).",
             f"- Projected CG-implicit / Eθ: memory {f(po.get('R_M_proj'), 4)}, time {f(po.get('R_T_proj'), 4)} "
             "(geo-means; table T05).",
             f"- Certificate: L_CG >= L_ascent on {lge}/{n} crops; pooled gap {po.get('gap_ascent')} (ascent) vs "
-            f"{po.get('gap_CG')} (CG) payload bytes; projected CG-cert / native certified time {f(po.get('R_cert'), 4)} "
+            f"{po.get('gap_CG')} (CG) payload bytes; median gap {f(med([a for a, _ in rel]), 3)}% -> "
+            f"{f(med([b for _, b in rel]), 3)}% of U; projected CG-cert / native certified time {f(po.get('R_cert'), 4)} "
             "(table T06).",
+            f"- Post hoc (not part of the gate, table T08): with the warm HiGHS time instead of the run's first-call LP "
+            f"time, the time ratio is {f(phc.get('R_T_warm'), 4)} and the certificate time ratio "
+            f"{f(phc.get('R_cert_warm'), 4)} (geo-means); the conclusion does not change.",
             f"- Gate G2: route M {rt.get('M', {}).get('pass')}, route T {rt.get('T', {}).get('pass')}, route C "
             f"{rt.get('C', {}).get('pass')} -> G2 = {g.get('G2')}."]
     else:
@@ -732,6 +812,12 @@ recorded in raw_results/ only for information.
 - The certificate and the theorem concern the per-regime set-cover model; the serializer-level bound is that of
   certificate_model.md.
 - Column generation and prefix-sum pricing are known techniques; nothing here is claimed as a new algorithm.
+- The LP time of the run includes the sparse-matrix assembly and, on the first call of each process, the import of
+  scipy.optimize; table T08 gives the warm time post hoc. The gate uses the run's measured time as pre-registered.
+- In the Eθ stream regime h = Z, so on these data the window pricing had nothing to price (one window per run); a
+  narrower regime (h < Z) was not tested by the prototype.
+- One development smoke run (one CREMI crop, 300 s budget) checked the pipeline before the formal run; it is not
+  evidence and no threshold was changed.
 """, encoding="utf-8")
     (m / "CONTRIBUTION_AND_PRIOR_ART_EN.md").write_text("""# Contribution and prior art
 
@@ -785,10 +871,10 @@ proven complexity improvement. None of these is claimed.
         w = csv.writer(fh)
         w.writerow(["id", "claim", "status", "evidence"])
         w.writerows(claims)
-    final_report(out, g, state, n, med(cand_share), med(t_share), conv, qual, lge)
+    final_report(out, g, state, n, med(cand_share), med(t_share), conv, qual, lge, hz, it1, rel, phc)
 
 
-def final_report(out, g, state, n, cand_med, t_med, conv, qual, lge):
+def final_report(out, g, state, n, cand_med, t_med, conv, qual, lge, hz=0, it1=0, rel=(), phc=None):
     po, rt = g.get("pooled", {}), g.get("routes", {})
     s0 = state.get("stage0", {})
     term = g["terminal"]
@@ -808,7 +894,15 @@ def final_report(out, g, state, n, cand_med, t_med, conv, qual, lge):
               f"holatdagi xotira nisbati (geo-mean): {f(g.get('best_case_R_M'), 4)}.",
               f"- Candidate + reduksiya + komponent + solver vaqti ulushi (mediana): {100 * t_med:.1f}%.",
               f"- Proyeksiya (geo-mean): xotira {f(po.get('R_M_proj'), 4)}, vaqt {f(po.get('R_T_proj'), 4)}, "
-              f"sertifikat vaqti {f(po.get('R_cert'), 4)}; gap {po.get('gap_ascent')} -> {po.get('gap_CG')} bayt."]
+              f"sertifikat vaqti {f(po.get('R_cert'), 4)}; gap {po.get('gap_ascent')} -> {po.get('gap_CG')} bayt.",
+              f"- Tuzilish: Eθ yozadigan rejimda h = Z ({hz}/{n} crop), ya'ni CompleteWindows = har run'ga bitta oyna; "
+              f"CG {it1}/{n} crop'da birinchi LP'da yaqinlashdi, pricing birorta ustun qo'shmadi.",
+              f"- Sertifikat: gap mediana {f(st.median([a for a, _ in rel]) if rel else None, 3)}% -> "
+              f"{f(st.median([b for _, b in rel]) if rel else None, 3)}% (U ga nisbatan); lekin vaqt "
+              f"{f(po.get('R_cert'), 2)}x.",
+              f"- Post-hoc (gate'ga kirmaydi, T08): iliq HiGHS vaqti bilan vaqt nisbati "
+              f"{f((phc or {}).get('R_T_warm'), 3)}, sertifikat vaqti {f((phc or {}).get('R_cert_warm'), 3)}; "
+              "xulosa o'zgarmaydi."]
     else:
         L += ["- Prototip qatorlari yo'q: " + "; ".join(g.get("problems", [])[:5])]
     L += ["", "## Gate G2",

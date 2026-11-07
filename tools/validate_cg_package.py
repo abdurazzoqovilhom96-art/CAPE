@@ -24,9 +24,9 @@ MATH = ["problem_definition.md", "dominance_completeness_theorem.md", "pricing_e
 METH = ["METHODS_EN.md", "RESULTS_EN.md", "LIMITATIONS_EN.md", "CONTRIBUTION_AND_PRIOR_ART_EN.md",
         "MANUSCRIPT_DRAFT_EN.md", "CAPTIONS_EN.md", "references.bib"]
 TABLES = ["T01_development_crops", "T02_methods", "T03_prechecks", "T04_counts_per_sample", "T05_projection_and_gate",
-          "T06_certificate", "T07_failures_and_exclusions"]
+          "T06_certificate", "T07_failures_and_exclusions", "T08_posthoc_sensitivity"]
 FIGS = ["F01_dominance_example", "F02_algorithm_flow", "F03_memory_breakdown", "F04_time_breakdown",
-        "F05_cg_convergence", "F06_projected_ratios"]
+        "F05_family_sizes", "F06_projected_ratios"]
 SOLVER = ("greedy_ns", "dual_ns", "pass1_ns", "dp_ns", "local_ns", "pass2_ns", "rc_ns", "repair_ns", "regime_gate_ns")
 
 
