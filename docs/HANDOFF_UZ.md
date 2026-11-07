@@ -3,6 +3,29 @@
 Sana: 2026-11-05 (v2/v2.1 holati 6-bo'limda, 2026-11-06). Bu hujjat **haqiqiy holatni** yozadi: nima yaratildi, nima real bajarildi,
 nima bloklangan. Raqamlar faqat `results/<run_id>/` dagi tekshirilgan yozuvlardan olingan.
 
+## 0. Q1 holati (2026-11-07, branch `q1`) — eng so'nggi
+
+- **Topshiriq:** `CAPE_Q1_YAKUNIY_TUZATISH_VA_MAQOLA_AGENT_UZ (1).md` (3-versiya). Eθ = muzlatilgan v3 (E0) bilan
+  baytma-bayt bir xil oqim, tezroq va kam peak xotira. Natijalar: `maqola uchun/` (+ `maqola_uchun.zip`), asosiy
+  hisobot `maqola uchun/YAKUNIY_AUDIT_VA_Q1_XULOSA_UZ.md`.
+- **Tashqi ma'lumot ruxsati (2026-11-07):** j0126 + hemibrain yuklandi; H01/MICrONS hamon ruxsatsiz.
+- **Freeze:** commit `0608c60`, source `f3fa7321f96a`, Eθ impl_mask 6719 (575 + O2 + O3; O1 rad etildi).
+- **Yakuniy run:** `results/q1_20261107T072741Z` (8 ta child run, hammasi COMPLETE; 07:27–15:39 UTC).
+  Validator 10/10 PASS (`maqola uchun/checks/validation_report.json`), vizual ko'rik
+  `results/q1_20261107T072741Z/visual_review.json`.
+- **Freeze'dan keyingi o'zgarishlar faqat tahlil/grafik kodida** (`efbe2d5`, `7802bfd`, `6867a2b`); o'lchov kodi
+  o'zgarmagan (hisobotda git'dan hisoblanadi).
+- **Ochiq masalalar:**
+  1. `neuroglancer_b8_u32` (I13 amended track) uint16 da ishlamadi: `cape/runner.py` dtype'ni adapterdan oldin
+     sinf darajasidagi `supported_dtypes` bo'yicha tekshiradi (704/704 qator UNSUPPORTED_DTYPE). Tuzatish va alohida
+     amendment run foydalanuvchi qaroriga qoldirildi.
+  2. 07:28:50–07:31:35 UTC da agent smoke paketini qayta render qilgan (j0126 vaqt o'lchovi boshlangan edi):
+     79/12672 qator; C1 S_T ga ta'siri 1.0739 → 1.0741 (`results/q1_20261107T072741Z/disclosures.json`).
+  3. Ilmiy cheklovlar: bitta yangi asosiy acquisition (j0126), bitta platforma, hissa engineering darajasida.
+- **Qayta yaratish (o'lchovsiz):**
+  `.venv\Scripts\python tools\q1_pipeline.py --mode render --run-id q1_20261107T072741Z --output "maqola uchun"`.
+  Har render oldingi `maqola uchun/` ni `maqola uchun_archive_*` ga ko'chiradi (o'chirmaydi).
+
 ## 1. Qabul qilingan qarorlar (foydalanuvchi bilan)
 | Masala | Qaror |
 |---|---|
