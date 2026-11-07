@@ -1,0 +1,30 @@
+# B protocol (docs/CAPE_Q1_B_YAGONA_AGENT_PROMPT_UZ.md section 10): native Eθ comparator on the 11 frozen
+# development crops. Same machine/protocol as Q1: one thread, pinned P-core, 2 warmups + 7 timed repeats, one
+# fresh-process memory row per sample and method. Development data only (no test data).
+schema_version: 1
+project: CAPE-Pins
+seed: 20261107
+mode: benchmark
+description: 'Q1b native comparator for the column-generation prototype (development crops only)'
+input:
+  manifest: data/manifests/q1b_dev.jsonl
+  splits:
+  - development
+  require_real_data: true
+benchmark:
+  warmups: 2
+  repeats: 7
+  external_wrappers:
+  - none
+  task_timeout_s: 3600
+methods:
+- cape_q1_fast_m0
+- cape_q1_fast_profile_m0
+- cape_q1_certified_m0
+panels:
+- B
+primary:
+  new: cape_q1_fast_m0
+  baseline: cape_v3frozen_fast_m0
+oracle:
+  enabled: false
