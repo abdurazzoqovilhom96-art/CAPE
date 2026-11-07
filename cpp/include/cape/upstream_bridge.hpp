@@ -19,6 +19,7 @@ struct Labeling {
   std::vector<uint64_t> per_slice;  // Z
   uint64_t N = 0;
   std::vector<uint32_t> cc_crcs;    // Z: crc32c of each slice-local CC image (stream tail)
+  uint64_t z_pairs = 0;             // Q1 O2: voxels equal to the voxel one slice below (cc_label_colmajor)
 };
 
 // Everything the label selection must not change (spec section 19, panel A).
@@ -45,7 +46,13 @@ Labeling cc_label(const LABEL* labels, const Dims& d);
 // cc_values[u] receives the label value of CC u.
 template <typename LABEL>
 Labeling cc_label_colmajor(const LABEL* labels, const Dims& d, std::vector<uint32_t>& colmajor,
-                           std::vector<uint64_t>& cc_values);
+                           std::vector<uint64_t>& cc_values, bool lean_cc = false, bool count_z_pairs = false);
+
+// Q1 O3: the lean-CC labeling written as slice-local uint16 numbers (colmajor16[col * Z + z]). Returns false, with
+// the outputs cleared, if a slice has more than 65536 CCs (the caller then uses cc_label_colmajor).
+template <typename LABEL>
+bool cc_label_colmajor16(const LABEL* labels, const Dims& d, std::vector<uint16_t>& colmajor16,
+                         std::vector<uint64_t>& cc_values, bool count_z_pairs, Labeling& out);
 
 template <typename LABEL>
 Boundary boundaries(const LABEL* labels, const Dims& d, bool impermissible, int markov_order, size_t parallel);

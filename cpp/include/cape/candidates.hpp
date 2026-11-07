@@ -15,12 +15,26 @@ struct ChainAccess {
   const std::vector<Run>* runs = nullptr;
   const uint32_t* colmajor = nullptr;  // optional column-major copy: colmajor[col * Z + z]
   uint64_t Z = 0;
+  // Q1 O3: compact column-major copy of slice-local numbers (uint16) and the per-slice id offsets; the global id
+  // of (col, z) is zoff[z] + colmajor16[col * Z + z]. Set instead of colmajor.
+  const uint16_t* colmajor16 = nullptr;
+  const uint32_t* zoff = nullptr;
   uint64_t z_start(const Candidate& c) const { return static_cast<uint64_t>((*runs)[c.run].z0) + c.off; }
   uint32_t at(const Candidate& c, uint32_t t) const {
     const Run& r = (*runs)[c.run];
     if (colmajor) return colmajor[static_cast<uint64_t>(r.col) * Z + r.z0 + c.off + t];
+    if (colmajor16) {
+      const uint64_t z = static_cast<uint64_t>(r.z0) + c.off + t;
+      return zoff[z] + colmajor16[static_cast<uint64_t>(r.col) * Z + z];
+    }
     return cc[r.col + XY * (static_cast<uint64_t>(r.z0) + c.off + t)];
   }
+  // Q1 O3 (only with colmajor16): chain16(c)[t] + zoff_of(c)[t] == at(c, t)
+  const uint16_t* chain16(const Candidate& c) const {
+    const Run& r = (*runs)[c.run];
+    return colmajor16 + static_cast<uint64_t>(r.col) * Z + r.z0 + c.off;
+  }
+  const uint32_t* zoff_of(const Candidate& c) const { return zoff + z_start(c); }
   // Contiguous chain (only with colmajor): chain(c)[t] == at(c, t).
   const uint32_t* chain(const Candidate& c) const {
     const Run& r = (*runs)[c.run];

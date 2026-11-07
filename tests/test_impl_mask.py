@@ -39,6 +39,7 @@ def test_impl_mask_is_reported_and_validated():
     assert diag["impl_mask"] == 5 and diag["reduction_impl"] == "mixed"
     _, diag = cn.encode(crackle_view(zyx), dict(BASE, depth_policy="fixed_depth_width"))
     assert diag["impl_mask"] == 31 and diag["reduction_impl"] == "fast"
-    # v3 extended the switch set to ten bits (types.hpp kImplMaxMask = 1023); 32..1023 are the v3 bits
+    # v3 extended the switch set to ten bits (32..1023 are the v3 bits); Q1 added O1/O2/O3 (1024, 2048, 4096), so
+    # types.hpp kImplMaxMask = 8191 and the first invalid mask is 8192
     with pytest.raises(ValueError):
-        cn.encode(crackle_view(zyx), dict(BASE, impl_mask=1024))
+        cn.encode(crackle_view(zyx), dict(BASE, impl_mask=8192))

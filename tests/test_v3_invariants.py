@@ -113,10 +113,13 @@ def test_batched_cc_is_skipped_when_the_cc_volume_is_requested():
 
 
 def test_impl_mask_range():
+    # ALL (1023) is every v3 bit; Q1 added three byte-preserving bits (tests/test_q1_invariants.py), so the first
+    # invalid mask moved from 1024 to 8192 (interface extension, documented in docs/q1/Q1_CHANGELOG.md)
     zyx = SYN["blocky_u8"]
     _enc(cn, zyx, dict(BASE, impl_mask=ALL))
+    _enc(cn, zyx, dict(BASE, impl_mask=8191))
     with pytest.raises(ValueError):
-        _enc(cn, zyx, dict(BASE, impl_mask=ALL + 1))
+        _enc(cn, zyx, dict(BASE, impl_mask=8192))
 
 
 # ------------------------------------------------------------------ 2-3. roundtrip, dtypes, edge cases

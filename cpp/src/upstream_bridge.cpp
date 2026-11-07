@@ -40,7 +40,7 @@ Labeling cc_label(const LABEL* labels, const Dims& d) {
 
 template <typename LABEL>
 Labeling cc_label_colmajor(const LABEL* labels, const Dims& d, std::vector<uint32_t>& colmajor,
-                           std::vector<uint64_t>& cc_values) {
+                           std::vector<uint64_t>& cc_values, bool lean_cc, bool count_z_pairs) {
   Labeling out;
   out.d = d;
   const uint64_t V = d.V();
@@ -53,8 +53,53 @@ Labeling cc_label_colmajor(const LABEL* labels, const Dims& d, std::vector<uint3
   if (V == 0) return out;
   constexpr uint64_t B = 16;  // slices per batch: 16 consecutive z of one column = one 64-byte line
   std::vector<uint32_t> batch(std::min<uint64_t>(B, Z) * sxy);
+  uint64_t N = 0, z_pairs = 0;
+  // Q1 O2 (count_z_pairs): number of voxels equal to the voxel one slice below. The column runs are maximal
+  // same-label z-runs, so their exact count is V - z_pairs (the caller allocates the run array once).
+  auto count_pairs = [&](uint64_t z) {
+    if (!count_z_pairs || z == 0) return;
+    const LABEL* a = labels + sxy * z;
+    const LABEL* b = a - sxy;
+    uint64_t c = 0;
+    for (uint64_t i = 0; i < sxy; i++) c += (a[i] == b[i]) ? 1u : 0u;
+    z_pairs += c;
+  };
+  if (lean_cc) {
+    // Q1 O1 (lean CC): the same upstream 2D labeling, started at label 0, so the batch holds the slice-local image
+    // directly (upstream with start_label N writes exactly local + N, cc3d.hpp relabel()). The crc is taken from
+    // the batch (no local copy); the value of CC k is read at its first raster pixel, where the local labels first
+    // reach k (numbering = first-pixel order), instead of a per-voxel scatter; N is added while transposing.
+    std::vector<uint32_t> off(B, 0);
+    for (uint64_t z0 = 0; z0 < Z; z0 += B) {
+      const uint64_t nb = std::min<uint64_t>(B, Z - z0);
+      for (uint64_t j = 0; j < nb; j++) {
+        const LABEL* src = labels + sxy * (z0 + j);
+        uint32_t* dst = batch.data() + sxy * j;
+        uint64_t tmp_N = 0;
+        crackle::cc3d::connected_components2d_4<LABEL, uint32_t>(src, static_cast<int64_t>(d.X),
+                                                                 static_cast<int64_t>(d.Y), 1, dst, 0, tmp_N);
+        out.per_slice[z0 + j] = tmp_N;
+        out.cc_crcs[z0 + j] = crackle::crc::crc32c(dst, sxy);
+        cc_values.resize(N + tmp_N);
+        uint64_t* vals = cc_values.data() + N;
+        uint64_t next = 0;
+        for (uint64_t i = 0; i < sxy && next < tmp_N; i++) {
+          if (dst[i] == next) vals[next++] = static_cast<uint64_t>(src[i]);
+        }
+        off[j] = static_cast<uint32_t>(N);
+        N += tmp_N;
+        count_pairs(z0 + j);
+      }
+      for (uint64_t col = 0; col < sxy; col++) {
+        uint32_t* to = colmajor.data() + col * Z + z0;
+        for (uint64_t j = 0; j < nb; j++) to[j] = batch[sxy * j + col] + off[j];
+      }
+    }
+    out.N = N;
+    out.z_pairs = z_pairs;
+    return out;
+  }
   std::vector<uint32_t> local(sxy);
-  uint64_t N = 0;
   for (uint64_t z0 = 0; z0 < Z; z0 += B) {
     const uint64_t nb = std::min<uint64_t>(B, Z - z0);
     for (uint64_t j = 0; j < nb; j++) {
@@ -71,6 +116,7 @@ Labeling cc_label_colmajor(const LABEL* labels, const Dims& d, std::vector<uint3
       cc_values.resize(N + tmp_N);
       for (uint64_t i = 0; i < sxy; i++) cc_values[dst[i]] = static_cast<uint64_t>(src[i]);
       N += tmp_N;
+      count_pairs(z0 + j);
     }
     for (uint64_t col = 0; col < sxy; col++) {
       uint32_t* to = colmajor.data() + col * Z + z0;
@@ -78,7 +124,64 @@ Labeling cc_label_colmajor(const LABEL* labels, const Dims& d, std::vector<uint3
     }
   }
   out.N = N;
+  out.z_pairs = z_pairs;
   return out;
+}
+
+template <typename LABEL>
+bool cc_label_colmajor16(const LABEL* labels, const Dims& d, std::vector<uint16_t>& colmajor16,
+                         std::vector<uint64_t>& cc_values, bool count_z_pairs, Labeling& out) {
+  out = Labeling{};
+  out.d = d;
+  const uint64_t V = d.V();
+  const uint64_t sxy = d.XY();
+  const uint64_t Z = d.Z;
+  out.per_slice.assign(Z, 0);
+  out.cc_crcs.assign(Z, 0);
+  cc_values.clear();
+  colmajor16.resize(V);
+  if (V == 0) return true;
+  constexpr uint64_t B = 32;  // 32 consecutive z of one column = one 64-byte line of uint16
+  std::vector<uint32_t> batch(std::min<uint64_t>(B, Z) * sxy);
+  uint64_t N = 0, z_pairs = 0;
+  for (uint64_t z0 = 0; z0 < Z; z0 += B) {
+    const uint64_t nb = std::min<uint64_t>(B, Z - z0);
+    for (uint64_t j = 0; j < nb; j++) {
+      const LABEL* src = labels + sxy * (z0 + j);
+      uint32_t* dst = batch.data() + sxy * j;
+      uint64_t tmp_N = 0;
+      crackle::cc3d::connected_components2d_4<LABEL, uint32_t>(src, static_cast<int64_t>(d.X),
+                                                               static_cast<int64_t>(d.Y), 1, dst, 0, tmp_N);
+      if (tmp_N > 65536) {  // local numbers would not fit uint16
+        std::vector<uint16_t>().swap(colmajor16);
+        cc_values.clear();
+        out = Labeling{};
+        return false;
+      }
+      out.per_slice[z0 + j] = tmp_N;
+      out.cc_crcs[z0 + j] = crackle::crc::crc32c(dst, sxy);
+      cc_values.resize(N + tmp_N);
+      uint64_t* vals = cc_values.data() + N;
+      uint64_t next = 0;
+      for (uint64_t i = 0; i < sxy && next < tmp_N; i++) {
+        if (dst[i] == next) vals[next++] = static_cast<uint64_t>(src[i]);
+      }
+      N += tmp_N;
+      if (count_z_pairs && z0 + j > 0) {
+        const LABEL* b = src - sxy;
+        uint64_t c = 0;
+        for (uint64_t i = 0; i < sxy; i++) c += (src[i] == b[i]) ? 1u : 0u;
+        z_pairs += c;
+      }
+    }
+    for (uint64_t col = 0; col < sxy; col++) {
+      uint16_t* to = colmajor16.data() + col * Z + z0;
+      for (uint64_t j = 0; j < nb; j++) to[j] = static_cast<uint16_t>(batch[sxy * j + col]);
+    }
+  }
+  out.N = N;
+  out.z_pairs = z_pairs;
+  return true;
 }
 
 template <typename LABEL>
@@ -375,7 +478,10 @@ uint32_t crc32c(const uint8_t* data, size_t n) { return crackle::crc::crc32c(dat
 
 #define CAPE_INSTANTIATE(T)                                                                                   \
   template Labeling cc_label<T>(const T*, const Dims&);                                                       \
-  template Labeling cc_label_colmajor<T>(const T*, const Dims&, std::vector<uint32_t>&, std::vector<uint64_t>&); \
+  template Labeling cc_label_colmajor<T>(const T*, const Dims&, std::vector<uint32_t>&, std::vector<uint64_t>&, bool, \
+                                         bool);                                                               \
+  template bool cc_label_colmajor16<T>(const T*, const Dims&, std::vector<uint16_t>&, std::vector<uint64_t>&, bool, \
+                                       Labeling&);                                                            \
   template Boundary boundaries<T>(const T*, const Dims&, bool, int, size_t);                                  \
   template std::vector<uint8_t> flat_section<T>(const T*, const Dims&, int, size_t, std::vector<uint32_t>&); \
   template std::vector<uint8_t> stock_pins_section<T>(const T*, const Dims&, bool, int, std::vector<uint32_t>&); \

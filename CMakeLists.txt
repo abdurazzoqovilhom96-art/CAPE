@@ -73,6 +73,7 @@ pybind11_add_module(_cape_native MODULE NO_EXTRAS
   cpp/src/runs.cpp
   cpp/src/candidates.cpp
   cpp/src/candidate_store.cpp
+  cpp/src/memprobe.cpp
   cpp/src/cover_incidence.cpp
   cpp/src/dual_pruning.cpp
   cpp/src/component_repair.cpp
@@ -91,6 +92,9 @@ target_include_directories(_cape_native PRIVATE
   "${CRACKLE_VENDOR_DIR}/src"
   "${CRACKLE_VENDOR_DIR}/third_party/fastcrc")
 cape_configure_module(_cape_native)
+if(WIN32)
+  target_link_libraries(_cape_native PRIVATE psapi)  # Q1 memprobe (GetProcessMemoryInfo)
+endif()
 
 if(SKBUILD)
   install(TARGETS _crackle_vendor _cape_native LIBRARY DESTINATION cape)

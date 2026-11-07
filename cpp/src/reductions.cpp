@@ -25,6 +25,11 @@ inline uint64_t mix64(uint64_t x) {
 bool same_chain(const Candidate& a, const Candidate& b, const ChainAccess& ch) {
   if (a.len != b.len) return false;
   if (ch.colmajor) return std::equal(ch.chain(a), ch.chain(a) + a.len, ch.chain(b));
+  if (ch.colmajor16) {
+    // global ids are slice-specific: equal chains start in the same slice, and then equal local numbers
+    if (ch.z_start(a) != ch.z_start(b)) return false;
+    return std::equal(ch.chain16(a), ch.chain16(a) + a.len, ch.chain16(b));
+  }
   for (uint32_t t = 0; t < a.len; t++) {
     if (ch.at(a, t) != ch.at(b, t)) return false;
   }
@@ -40,6 +45,14 @@ uint64_t chain_hash(const Candidate& c, const ChainAccess& ch) {
     for (uint32_t t = 0; t < c.len; t++) h = mix64(h ^ (static_cast<uint64_t>(p[t]) * 0x632be59bd9b4e019ull));
     return h;
   }
+  if (ch.colmajor16) {
+    const uint16_t* p = ch.chain16(c);
+    const uint32_t* zo = ch.zoff_of(c);
+    for (uint32_t t = 0; t < c.len; t++) {
+      h = mix64(h ^ (static_cast<uint64_t>(zo[t] + p[t]) * 0x632be59bd9b4e019ull));
+    }
+    return h;
+  }
   for (uint32_t t = 0; t < c.len; t++) h = mix64(h ^ (static_cast<uint64_t>(ch.at(c, t)) * 0x632be59bd9b4e019ull));
   return h;
 }
@@ -49,6 +62,10 @@ uint64_t chain_hash_fast(const Candidate& c, const ChainAccess& ch) {
   if (ch.colmajor) {
     const uint32_t* p = ch.chain(c);
     for (uint32_t t = 0; t < c.len; t++) h = (h + p[t]) * 0x9e3779b97f4a7c15ull;
+  } else if (ch.colmajor16) {
+    const uint16_t* p = ch.chain16(c);
+    const uint32_t* zo = ch.zoff_of(c);
+    for (uint32_t t = 0; t < c.len; t++) h = (h + static_cast<uint32_t>(zo[t] + p[t])) * 0x9e3779b97f4a7c15ull;
   } else {
     for (uint32_t t = 0; t < c.len; t++) h = (h + ch.at(c, t)) * 0x9e3779b97f4a7c15ull;
   }
@@ -242,6 +259,8 @@ std::vector<uint32_t> reduce(const std::vector<Candidate>& cands, const ChainAcc
         bool contains = true;
         if (ch.colmajor) {
           contains = std::equal(ch.chain(cp), ch.chain(cp) + cp.len, ch.chain(cq) + off);
+        } else if (ch.colmajor16) {  // aligned slices: equal global ids <=> equal local numbers
+          contains = std::equal(ch.chain16(cp), ch.chain16(cp) + cp.len, ch.chain16(cq) + off);
         } else {
           for (uint32_t t = 0; t < cp.len; t++) {
             if (ch.at(cq, off + t) != ch.at(cp, t)) {

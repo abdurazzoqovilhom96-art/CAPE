@@ -31,6 +31,7 @@ V3_ONLY_KEYS = {
     "repair", "repair_max_r", "repair_max_pool", "repair_attempts", "repair_transitions_total",
     "repair_transitions_per_attempt", "repair_max_states",
 }
+Q1_ONLY_KEYS = {"profile_memory"}  # unknown to both frozen modules
 _MODULES: dict[str, object] = {}
 
 
@@ -69,6 +70,9 @@ class _CapeFrozenAdapter(CapeNativeAdapter):
             if bad:
                 raise ValueError(f"{method_id}: v3-only option(s) {sorted(bad)} are not available in the frozen "
                                  f"v2.1 module")
+        bad = set(self.native_options) & Q1_ONLY_KEYS
+        if bad:
+            raise ValueError(f"{method_id}: option(s) {sorted(bad)} are not available in the frozen {s['label']} module")
         mask = self.native_options.get("impl_mask", -1)
         if mask is not None and int(mask) > s["max_mask"]:
             raise ValueError(f"{method_id}: impl_mask {mask} uses bits the frozen {s['label']} module does not know "

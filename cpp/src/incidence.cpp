@@ -13,6 +13,10 @@ Incidence build_cc_incidence(const std::vector<uint32_t>& alive, const std::vect
     if (ch.colmajor) {
       const uint32_t* q = ch.chain(c);
       for (uint32_t t = 0; t < c.len; t++) inc.off[q[t] + 1]++;
+    } else if (ch.colmajor16) {
+      const uint16_t* q = ch.chain16(c);
+      const uint32_t* zo = ch.zoff_of(c);
+      for (uint32_t t = 0; t < c.len; t++) inc.off[zo[t] + q[t] + 1]++;
     } else {
       for (uint32_t t = 0; t < c.len; t++) inc.off[ch.at(c, t) + 1]++;
     }
@@ -25,6 +29,10 @@ Incidence build_cc_incidence(const std::vector<uint32_t>& alive, const std::vect
     if (ch.colmajor) {
       const uint32_t* q = ch.chain(c);
       for (uint32_t t = 0; t < c.len; t++) inc.idx[pos[q[t]]++] = p;
+    } else if (ch.colmajor16) {
+      const uint16_t* q = ch.chain16(c);
+      const uint32_t* zo = ch.zoff_of(c);
+      for (uint32_t t = 0; t < c.len; t++) inc.idx[pos[zo[t] + q[t]]++] = p;
     } else {
       for (uint32_t t = 0; t < c.len; t++) inc.idx[pos[ch.at(c, t)]++] = p;
     }

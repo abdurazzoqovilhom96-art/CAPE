@@ -74,13 +74,24 @@ enum class CertificateMode : int { Off = 0, Regime = 1, AllRegimes = 2 };
 //   F (fused scan, M5a): max label and pixel pairs in one pass over the input.             [code]
 //   B (batched CC, M5b): 2D CC labeling in 16-slice batches written straight into the column-major
 //                  chain buffer; the z-major CC volume (4V bytes) is never allocated. Needs L and R. [memory]
+// Q1 (task v3, output-preserving encoder): further byte-preserving switches, effective only on the batched path (B).
+//   O1 (lean CC, 1024):   the same upstream 2D labeling started at label 0 (slice-local image in the batch): crc
+//                  from the batch without the local copy, CC values read at each CC's first raster pixel instead
+//                  of a per-voxel scatter, the global offset added while transposing.                   [code]
+//   O2 (exact runs, 2048): the CC pass counts voxels equal to the voxel one slice below (z_pairs); the column
+//                  runs are allocated once with their exact count V - z_pairs (no growth copies). [memory]
+//   O3 (compact chain, 4096): the column-major chain buffer holds slice-local CC numbers as uint16 (2V bytes
+//                  instead of 4V) when every slice has <= 65536 CCs; global id = zoff[z] + local (exact).
+//                  Otherwise the uint32 buffer is used.                                          [memory]
 enum ImplBit : int {
   kImplLayout = 1, kImplRuns = 2, kImplHashFn = 4, kImplTable = 8, kImplSparseDp = 16,
-  kImplAdjDedup = 32, kImplCsr = 64, kImplEagerGreedy = 128, kImplFusedScan = 256, kImplBatchedCC = 512
+  kImplAdjDedup = 32, kImplCsr = 64, kImplEagerGreedy = 128, kImplFusedScan = 256, kImplBatchedCC = 512,
+  kImplLeanCC = 1024, kImplExactRuns = 2048, kImplCompactChain = 4096
 };
 constexpr int kImplAll = kImplLayout | kImplRuns | kImplHashFn | kImplTable | kImplSparseDp;  // v2 / v2.1 "fast"
 constexpr int kImplV3 = kImplAdjDedup | kImplCsr | kImplEagerGreedy | kImplFusedScan | kImplBatchedCC;
-constexpr int kImplMaxMask = kImplAll | kImplV3;
+constexpr int kImplQ1 = kImplLeanCC | kImplExactRuns | kImplCompactChain;
+constexpr int kImplMaxMask = kImplAll | kImplV3 | kImplQ1;
 
 struct Options {
   int markov_model_order = 0;
@@ -115,6 +126,7 @@ struct Options {
   CertificateMode certificate = CertificateMode::Regime;
   bool return_cc = false;         // v2 refinement: also return the CC volume (uint32, z-major)
   bool keep_alternative = false;  // v2 SAFE-ARCHIVE: also return the losing flat/pins stream (one shared boundary pass)
+  bool profile_memory = false;    // Q1 instrumentation: process working set / peak at phase ends (diagnostics only)
   int export_components_max_cc = 0;      // >0: export written components with <= this many CCs (oracle audit)
   uint64_t export_components_limit = 0;  // maximum number of exported components
 

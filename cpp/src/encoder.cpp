@@ -18,6 +18,7 @@
 #include "cape/greedy.hpp"
 #include "cape/incidence.hpp"
 #include "cape/local_search.hpp"
+#include "cape/memprobe.hpp"
 #include "cape/reductions.hpp"
 #include "cape/runs.hpp"
 #include "cape/serializer.hpp"
@@ -31,6 +32,14 @@ using Clock = std::chrono::steady_clock;
 
 int64_t ns_since(Clock::time_point t0) {
   return std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now() - t0).count();
+}
+
+// Q1 instrumentation (Options::profile_memory): working set and peak working set at a phase end
+void mem_mark(Diagnostics& dg, const Options& o, const char* phase) {
+  if (!o.profile_memory) return;
+  const MemSample m = mem_sample();
+  dg.i(std::string("mem_ws_") + phase, static_cast<int64_t>(m.working_set));
+  dg.i(std::string("mem_peak_") + phase, static_cast<int64_t>(m.peak_working_set));
 }
 
 template <typename LABEL>
@@ -116,9 +125,14 @@ struct Budgets {
   uint64_t repair_remaining = 0;  // v3 M4
 };
 
+struct CompactChain {  // Q1 O3
+  const uint16_t* c16 = nullptr;
+  const uint32_t* zoff = nullptr;
+};
+
 RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor, const LabelMap& lm,
                            const std::vector<Run>& runs, const Dims& d, const Widths& base, int w_D, const Options& opt,
-                           Budgets& budgets, bool lb_only = false) {
+                           Budgets& budgets, bool lb_only = false, CompactChain cchain = {}) {
   RegimeOutcome out;
   out.regime_w_D = w_D;
   const uint64_t Z = d.Z;
@@ -141,8 +155,10 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   std::vector<Candidate> cands =
       adj_dedup ? make_candidates_dedup(runs, out.h, opt.candidate_policy, d.X, d.XY(), opt.reduce_singleton, c, s, gen)
                 : make_candidates(runs, out.h, opt.candidate_policy);
-  const ChainAccess ch{colmajor ? nullptr : lab.cc.data(), d.XY(), &runs, colmajor, d.Z};
+  const ChainAccess ch{(colmajor || cchain.c16) ? nullptr : lab.cc.data(), d.XY(), &runs, colmajor, d.Z, cchain.c16,
+                       cchain.zoff};
   dg.i("candidate_ns", ns_since(t0));
+  mem_mark(dg, opt, "candidates");
   dg.i("candidate_count_before", static_cast<int64_t>(adj_dedup ? gen.total : cands.size()));
   dg.i("incidence_count_before", static_cast<int64_t>(fc.incidences));
   if (adj_dedup) {
@@ -164,6 +180,7 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   ReductionStats rs;
   const std::vector<uint32_t> alive = reduce(cands, ch, N, rc, rs, nullptr);
   dg.i("reduction_ns", ns_since(t0));
+  mem_mark(dg, opt, "reduction");
   dg.i("candidates_after_singleton", static_cast<int64_t>(adj_dedup ? gen.after_singleton : rs.after_singleton));
   dg.i("candidates_after_equal", static_cast<int64_t>(rs.after_equal));
   dg.i("candidate_count_after", static_cast<int64_t>(rs.after_subset));
@@ -183,6 +200,7 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   const Components comps = find_components(alive, cands, ch, N);
   dg.i("component_ns", ns_since(t0));
   dg.i("component_count", comps.count);
+  mem_mark(dg, opt, "components");
 
   // ---- v3 M1b: component-ordered CSR (one sequential chain pass) ------------------------------
   std::vector<uint32_t> scratch(N, 0);
@@ -196,6 +214,7 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
     t0 = Clock::now();
     csr = build_component_csr(comps, alive, cands, ch, scratch);
     dg.i("csr_ns", ns_since(t0));
+    mem_mark(dg, opt, "csr");
   }
 
   // ---- pass 1: greedy UB + dual LB for every component -------------------------------------
@@ -564,6 +583,7 @@ RegimeOutcome solve_regime(const bridge::Labeling& lab, const uint32_t* colmajor
   dg.i("payload_ub_bytes", static_cast<int64_t>(written_cost));
   dg.i("payload_lb_bytes_fixed_background", static_cast<int64_t>(sumL - L[bg]));
   dg.i("certificate_dual_feasible", dual_ok ? 1 : 0);
+  mem_mark(dg, opt, "solve");
   return out;
 }
 
@@ -579,6 +599,7 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
     throw UnsupportedInput("volume has >= 2^32 voxels: upstream pin index width wraps (format_audit F4)");
   }
   dg.i("voxels", static_cast<int64_t>(V));
+  mem_mark(dg, opt, "start");
   if (V == 0) {
     res.bytes = bridge::stock_compress(labels, d, false, 0, false, 1);
     dg.t("label_format", "FLAT");
@@ -615,10 +636,12 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
   dg.i("pixel_pairs", static_cast<int64_t>(pairs));
   dg.i("stock_rule_pins", stock_pins ? 1 : 0);
   dg.i("scan_ns", ns_since(t0));
+  mem_mark(dg, opt, "scan");
 
   t0 = Clock::now();
   const bridge::Boundary boundary = bridge::boundaries(labels, d, impermissible, opt.markov_model_order, opt.parallel);
   dg.i("boundary_ns", ns_since(t0));
+  mem_mark(dg, opt, "boundary");
   bridge::HeaderFields hf;
   hf.data_width = static_cast<int>(sizeof(LABEL));
   hf.stored_data_width = stored_width;
@@ -662,10 +685,19 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
     bridge::Labeling lab;
     LabelMap lm;
     std::vector<uint32_t> colmajor;
+    std::vector<uint16_t> colmajor16;  // Q1 O3
+    std::vector<uint32_t> zoff;        // Q1 O3: global id of slice z's first CC
     if (batched) {
       check_memory(4 * V, opt.memory_cap_bytes, "column-major chain buffer");
       std::vector<uint64_t> cc_values;
-      lab = bridge::cc_label_colmajor(labels, d, colmajor, cc_values);
+      const bool compact = (impl & kImplCompactChain) &&
+                           bridge::cc_label_colmajor16(labels, d, colmajor16, cc_values, (impl & kImplExactRuns) != 0,
+                                                       lab);
+      if (!compact) {
+        lab = bridge::cc_label_colmajor(labels, d, colmajor, cc_values, (impl & kImplLeanCC) != 0,
+                                        (impl & kImplExactRuns) != 0);
+      }
+      dg.i("compact_chain", compact ? 1 : 0);
       if (lab.N >= (uint64_t{1} << 32) - 1) throw UnsupportedInput("CC count does not fit uint32 (format_audit F5)");
       lm = build_label_map_from_values(std::move(cc_values));
     } else {
@@ -675,6 +707,7 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
       lm = build_label_map(labels, lab);
     }
     dg.i("cc_ns", ns_since(t0));
+    mem_mark(dg, opt, "cc");
     dg.i("cc_count", static_cast<int64_t>(lab.N));
     dg.i("label_count", static_cast<int64_t>(lm.values.size()));
     dg.i("batched_cc", batched ? 1 : 0);
@@ -686,7 +719,19 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
     if (batched) {
       dg.i("transpose_ns", 0);  // the transpose is part of cc_ns in the batched path
       t0 = Clock::now();
-      runs = column_runs_colmajor(colmajor.data(), lm.cc_label, d);
+      const uint64_t exact = (impl & kImplExactRuns) ? V - lab.z_pairs : 0;
+      if (exact) dg.i("runs_expected", static_cast<int64_t>(exact));  // Q1 O2: tests check == run_count
+      if (!colmajor16.empty()) {
+        zoff.resize(d.Z);
+        uint64_t acc = 0;
+        for (uint64_t z = 0; z < d.Z; z++) {
+          zoff[z] = static_cast<uint32_t>(acc);
+          acc += lab.per_slice[z];
+        }
+        runs = column_runs_colmajor16(colmajor16.data(), zoff.data(), lm.cc_label, d, exact);
+      } else {
+        runs = column_runs_colmajor(colmajor.data(), lm.cc_label, d, exact);
+      }
       dg.i("runs_ns", ns_since(t0));
     } else if (impl & kImplLayout) {
       int64_t runs_before_ns = 0;
@@ -723,6 +768,7 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
       dg.i("runs_ns", ns_since(t0));
     }
     dg.i("run_count", static_cast<int64_t>(runs.size()));
+    mem_mark(dg, opt, "runs");
     {
       const int low = impl & kImplAll;  // the v2.1 attribution bits keep their v2.1 meaning
       dg.t("reduction_impl", low == kImplAll ? "fast" : (low == 0 ? "legacy" : "mixed"));
@@ -782,7 +828,8 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
       }
       RegimeOutcome ro;
       try {
-        ro = solve_regime(lab, colmajor.empty() ? nullptr : colmajor.data(), lm, runs, d, base, wd, opt, budgets);
+        ro = solve_regime(lab, colmajor.empty() ? nullptr : colmajor.data(), lm, runs, d, base, wd, opt, budgets, false,
+                          CompactChain{colmajor16.empty() ? nullptr : colmajor16.data(), zoff.empty() ? nullptr : zoff.data()});
       } catch (const MemoryCapExceeded& e) {
         ro.evaluated = false;
         ro.regime_w_D = wd;
@@ -850,7 +897,9 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
         try {
           Budgets none{0, 0};
           RegimeOutcome lo = solve_regime(lab, colmajor.empty() ? nullptr : colmajor.data(), lm, runs, d, base, wd, opt,
-                                          none, /*lb_only=*/true);
+                                          none, /*lb_only=*/true,
+                                          CompactChain{colmajor16.empty() ? nullptr : colmajor16.data(),
+                                                       zoff.empty() ? nullptr : zoff.data()});
           lb_all = std::min(lb_all, lo.lb_section_bytes);
           for (const auto& kv : lo.diag.ints) {
             if (kv.first == "certificate_dual_feasible" && kv.second != 1) certificate_dual_ok = false;
@@ -884,6 +933,7 @@ EncodeResult encode(const LABEL* labels, const Dims& d, const Options& opt) {
     hf.label_format = 2;
     pins_stream = bridge::assemble(hf, section, boundary, lab.cc_crcs);
     dg.i("serialize_ns", ns_since(t0));
+    mem_mark(dg, opt, "serialize");
     dg.i("pins_total_bytes", static_cast<int64_t>(pins_stream.size()));
     dg.i("label_bytes", static_cast<int64_t>(section.size()));
     const uint64_t rest = pins_stream.size() - section.size();

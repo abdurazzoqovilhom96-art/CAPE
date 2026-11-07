@@ -76,6 +76,7 @@ Options parse_options(const py::dict& d) {
     }
     else if (k == "keep_alternative") o.keep_alternative = v.cast<bool>();
     else if (k == "return_cc") o.return_cc = v.cast<bool>();
+    else if (k == "profile_memory") o.profile_memory = v.cast<bool>();
     else if (k == "certificate")
       o.certificate = parse_enum<CertificateMode>(v, "certificate",
                                                   {{"off", CertificateMode::Off},

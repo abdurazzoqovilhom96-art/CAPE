@@ -45,18 +45,44 @@ std::vector<Run> column_runs(const uint32_t* cc, const std::vector<uint32_t>& cc
   return runs;
 }
 
-std::vector<Run> column_runs_colmajor(const uint32_t* colmajor, const std::vector<uint32_t>& cc_label, const Dims& d) {
+std::vector<Run> column_runs_colmajor(const uint32_t* colmajor, const std::vector<uint32_t>& cc_label, const Dims& d,
+                                      uint64_t exact_count) {
   const uint64_t XY = d.XY();
   const uint64_t Z = d.Z;
   std::vector<Run> runs;
   if (XY == 0 || Z == 0) return runs;
-  runs.reserve(XY * 2);
+  // Q1 O2: with the exact count the array is allocated once (no growth copies, no transient second buffer)
+  runs.reserve(exact_count ? exact_count : XY * 2);
   for (uint64_t col = 0; col < XY; col++) {
     const uint32_t* c = colmajor + col * Z;
     uint32_t cur = cc_label[c[0]];
     uint32_t start = 0;
     for (uint64_t z = 1; z < Z; z++) {
       const uint32_t l = cc_label[c[z]];
+      if (l != cur) {
+        runs.push_back(Run{static_cast<uint32_t>(col), start, static_cast<uint32_t>(z) - start, cur});
+        start = static_cast<uint32_t>(z);
+        cur = l;
+      }
+    }
+    runs.push_back(Run{static_cast<uint32_t>(col), start, static_cast<uint32_t>(Z) - start, cur});
+  }
+  return runs;
+}
+
+std::vector<Run> column_runs_colmajor16(const uint16_t* colmajor16, const uint32_t* zoff,
+                                        const std::vector<uint32_t>& cc_label, const Dims& d, uint64_t exact_count) {
+  const uint64_t XY = d.XY();
+  const uint64_t Z = d.Z;
+  std::vector<Run> runs;
+  if (XY == 0 || Z == 0) return runs;
+  runs.reserve(exact_count ? exact_count : XY * 2);
+  for (uint64_t col = 0; col < XY; col++) {
+    const uint16_t* c = colmajor16 + col * Z;
+    uint32_t cur = cc_label[zoff[0] + c[0]];
+    uint32_t start = 0;
+    for (uint64_t z = 1; z < Z; z++) {
+      const uint32_t l = cc_label[zoff[z] + c[z]];
       if (l != cur) {
         runs.push_back(Run{static_cast<uint32_t>(col), start, static_cast<uint32_t>(z) - start, cur});
         start = static_cast<uint32_t>(z);

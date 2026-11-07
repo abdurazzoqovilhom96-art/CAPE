@@ -20,6 +20,8 @@ NATIVE_KEYS = {
     "regime_gate", "rc_fixing", "rc_max_cc", "rc_transitions_total", "rc_transitions_per_component", "rc_max_states",
     "repair", "repair_max_r", "repair_max_pool", "repair_attempts", "repair_transitions_total",
     "repair_transitions_per_attempt", "repair_max_states",
+    # Q1 instrumentation (diagnostics only; never on timed rows)
+    "profile_memory",
 }
 
 
