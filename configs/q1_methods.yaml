@@ -88,3 +88,16 @@ methods:
     panels: [B]
     role: internal
     description: all Q1 bits minus O3
+  # ---------------------------------------------------------------- amended external comparator (Q1, separate track)
+  neuroglancer_b8_u32:
+    adapter: neuroglancer
+    options: {block: [8, 8, 8], widen_to: uint32}
+    family: neuroglancer
+    categories: [K1, K2, K3, K4, K7]
+    panels: [B]
+    wrappable: true
+    role: comparator
+    citation: S9
+    description: AMENDED Q1 track - neuroglancer compressed_segmentation with explicit lossless uint8/uint16 -> uint32
+      widening inside encode (time counted), narrowing inside decode (time counted), original dtype + 1-byte flag in
+      the container (metadata counted). Never merged into the frozen neuroglancer_b8 rows.

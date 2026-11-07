@@ -25,7 +25,8 @@ def active_test_hooks() -> dict:
 SOURCE_GLOBS = ["cape/**/*.py", "cpp/**/*.hpp", "cpp/**/*.cpp", "scripts/*.py", "configs/*.yaml",
                 "schemas/*.json", "tests/**/*.py", "CMakeLists.txt", "pyproject.toml", "requirements.in",
                 "requirements.lock", "sources.lock.json", "run_all.py", "run_experiment.cmd",
-                "run_experiment.ps1", "run_experiment.sh"]
+                "run_experiment.ps1", "run_experiment.sh",
+                "tools/*.py"]  # tools/: Q1 orchestration and analysis (audit issue I18)
 
 
 def source_files(root: Path = ROOT) -> list[Path]:
