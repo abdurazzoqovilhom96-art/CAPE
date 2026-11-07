@@ -629,7 +629,8 @@ def post_run_findings(run_id: str, st: dict) -> dict:
             files = sorted(set(g("diff", "--name-only", fc, "HEAD").split()))
             out["post_freeze_files"] = files
             out["uncommitted_files"] = sorted(l[3:] for l in g("status", "--porcelain", "--", "tools", "scripts",
-                                                                  "cape", "cpp", "configs").splitlines() if l)
+                                                                  "cape", "cpp", "configs").splitlines()
+                                              if l and not l[3:].startswith("configs/frozen/"))  # run outputs
             out["measurement_code_changed_after_freeze"] = any(
                 f.startswith(MEASUREMENT_CODE) and not f.startswith("configs/frozen/") for f in files)
     except OSError as exc:
@@ -925,7 +926,7 @@ def final_docs(out: Path, res: dict, sel: dict, frz: dict, figs: dict, tables: l
         if x["narrow_rows"]:
             L.append(f"- `neuroglancer_b8_u32` ({key}): uint8/uint16 qatorlar {x['narrow_rows']}, SUCCESS "
                      f"{x['narrow_ok']}, boshqa statuslar {json.dumps(x['narrow_non_ok'])}. Qatordagi sabab: "
-                     f"{'; '.join(pr.get('neuroglancer_u32_reason_examples') or [])[:160]}. C1/C2 ga ta'siri yo'q; bu "
+                     f"{(pr.get('neuroglancer_u32_reason_examples') or ['-'])[0]}. C1/C2 ga ta'siri yo'q; bu "
                      "C3 baseline uint16 ma'lumotda yo'q (uint64 da native yo'l bilan bir xil).")
     for w in pr.get("interference") or []:
         for key, r in w["runs"].items():
