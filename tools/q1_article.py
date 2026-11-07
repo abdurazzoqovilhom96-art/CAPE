@@ -448,7 +448,7 @@ Other codecs, archive and SAFE: tables T03 and T06. Negative results and statuse
   before measurement (slower on fragmented slices).
 - Novelty: the Q1 changes are engineering (buffer layout, allocation, fused passes) with proofs of output equivalence;
   inverted-index / dedup ideas are known (methods/CONTRIBUTION_AND_PRIOR_ART_EN.md).
-""", encoding="utf-8")
+""" + "\n".join(post_run_lines_en(res.get("post_run") or {})) + "\n", encoding="utf-8")
     (m / "CONTRIBUTION_AND_PRIOR_ART_EN.md").write_text("""# Contribution and prior art
 
 | Mechanism | Known before | CAPE / Q1 difference | Evidence | Limitation |
@@ -558,6 +558,105 @@ def decode_checks(samples: list[dict], mask: int) -> dict:
             for s in samples}
 
 
+MEASUREMENT_CODE = ("cape/", "cpp/", "run_all.py", "configs/", "snapshots/", "vendor/", "data/manifests/")
+
+
+def post_run_findings(run_id: str, st: dict) -> dict:
+    """Facts found after the final run, computed from the raw rows and git (never typed in by hand)."""
+    import pandas as pd
+
+    out: dict = {"neuroglancer_u32": {}, "interference": [], "post_freeze_commits": [], "post_freeze_files": []}
+    raws = {}
+    for key, info in st["runs"].items():
+        p = ROOT / info.get("run_dir", "") / "05_raw_metrics" / "results.csv"
+        if p.exists():
+            raws[key] = pd.read_csv(p, low_memory=False)
+    # 1. amended neuroglancer uint32 widening track (I13): did it run on uint8/uint16 inputs?
+    reasons = set()
+    for key, d in raws.items():
+        x = d[d.method_id == "neuroglancer_b8_u32"]
+        if not len(x):
+            continue
+        nar = x[x.original_dtype.isin(["uint8", "uint16"])]
+        bad = nar[nar.status != "OK"]
+        reasons |= {str(r) for r in bad.reason.dropna().unique()[:3]}
+        out["neuroglancer_u32"][key] = {"rows": int(len(x)), "narrow_rows": int(len(nar)),
+                                        "narrow_ok": int((nar.status == "OK").sum()),
+                                        "narrow_non_ok": {str(k): int(v) for k, v in bad.status.value_counts().items()}}
+    ng = out["neuroglancer_u32"]
+    n_nar = sum(v["narrow_rows"] for v in ng.values())
+    n_ok = sum(v["narrow_ok"] for v in ng.values())
+    out["neuroglancer_u32_reason_examples"] = sorted(reasons)[:3]
+    if n_nar:
+        out["I13_status"] = ("FIXED (amended track ran on uint8/uint16)" if n_ok == n_nar else
+                             f"NOT FIXED in the final run ({n_nar - n_ok}/{n_nar} uint8/uint16 rows not SUCCESS: the "
+                             "runner checks the class-level supported_dtypes before the adapter, so the widening path "
+                             "was never reached)")
+    # 2. interference windows recorded in results/<run_id>/disclosures.json (other CPU work during timing)
+    dp = ROOT / "results" / run_id / "disclosures.json"
+    disc = json.loads(dp.read_text(encoding="utf-8")) if dp.exists() else {}
+
+    def s_t(x):
+        med = x.groupby(["sample_id", "method_id"]).encode_ns.median().unstack()
+        if E0 not in med or E_NEW not in med:
+            return None
+        med = med[[E0, E_NEW]].dropna()
+        return float(np.exp(np.mean(np.log(med[E0] / med[E_NEW])))) if len(med) else None
+
+    for w in disc.get("interference_windows", []):
+        a, b = pd.Timestamp(w["start"]), pd.Timestamp(w["end"])
+        rec = {k: w[k] for k in ("start", "end", "what")} | {"runs": {}}
+        for key, d in raws.items():
+            at = pd.to_datetime(d.committed_at, utc=True, format="ISO8601")
+            inwin = (at >= a) & (at <= b)
+            if not inwin.any():
+                continue
+            c1 = d.method_id.isin([E_NEW, E0]) & (d.status == "OK") & (d.wrapper.fillna("none") == "none")
+            timed = c1 & (d.panel != "MEM")
+            rec["runs"][key] = {
+                "rows_in_window": int(inwin.sum()), "rows_total": int(len(d)),
+                "c1_timed_rows_in_window": int((timed & inwin).sum()), "c1_timed_rows": int(timed.sum()),
+                "c1_memory_rows_in_window": int((c1 & (d.panel == "MEM") & inwin).sum()),
+                "S_T_all_rows": s_t(d[timed]), "S_T_without_window_rows": s_t(d[timed & ~inwin])}
+        out["interference"].append(rec)
+    # 3. code changes after the freeze commit (git), and whether any touches measurement code
+    try:
+        g = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True).stdout  # noqa: E731
+        fc = g("log", "--grep", "Q1 FREEZE", "-1", "--format=%h").strip()
+        if fc:
+            out["freeze_commit"] = fc
+            out["post_freeze_commits"] = [l for l in g("log", "--format=%h %cI %s", f"{fc}..HEAD").splitlines() if l]
+            files = sorted(set(g("diff", "--name-only", fc, "HEAD").split()))
+            out["post_freeze_files"] = files
+            out["uncommitted_files"] = sorted(l[3:] for l in g("status", "--porcelain", "--", "tools", "scripts",
+                                                                  "cape", "cpp", "configs").splitlines() if l)
+            out["measurement_code_changed_after_freeze"] = any(
+                f.startswith(MEASUREMENT_CODE) and not f.startswith("configs/frozen/") for f in files)
+    except OSError as exc:
+        out["git_error"] = str(exc)
+    return out
+
+
+def post_run_lines_en(pr: dict) -> list[str]:
+    L = []
+    ng = pr.get("neuroglancer_u32") or {}
+    n_nar = sum(v["narrow_rows"] for v in ng.values())
+    if n_nar:
+        n_ok = sum(v["narrow_ok"] for v in ng.values())
+        L.append(f"- The amended neuroglancer uint32-widening track (neuroglancer_b8_u32) produced {n_ok}/{n_nar} "
+                 "SUCCESS rows on uint8/uint16 inputs (SNEMI3D): "
+                 + ("it ran as planned." if n_ok == n_nar else "the runner rejected the dtype before the adapter, so "
+                    "this baseline is unavailable on uint16 data in the final run (it ran only on uint64 data, where "
+                    "it is the native path)."))
+    for w in pr.get("interference") or []:
+        for key, r in w["runs"].items():
+            L.append(f"- Interference window {w['start']} to {w['end']} ({w['what']}): {key} {r['rows_in_window']}/"
+                     f"{r['rows_total']} rows; C1 timed rows {r['c1_timed_rows_in_window']}/{r['c1_timed_rows']}, "
+                     f"C1 memory rows {r['c1_memory_rows_in_window']}; S_T {f(r['S_T_all_rows'], 4)} with all rows, "
+                     f"{f(r['S_T_without_window_rows'], 4)} without the window rows.")
+    return L
+
+
 def raw_audit(run_id: str) -> int:
     st = json.loads((ROOT / "results" / run_id / "q1_state.json").read_text(encoding="utf-8"))
     rows, summary = [], {"run_id": run_id, "written_at": now(), "runs": {}}
@@ -627,10 +726,12 @@ def build(run_id: str) -> int:
     F.f04_speedups(fw, res)
     peaks = []
     for ds, d in res["datasets"].items():
-        if ds not in ("j0126", "snemi", "hemibrain", "scale"):
+        if ds not in ("j0126", "snemi", "hemibrain", "scale", "scale_stock"):
             continue
+        keep = ("crackle_pins_opt_corrected_m0",) if ds == "scale_stock" else (E_NEW, E0,
+                                                                               "crackle_pins_opt_corrected_m0")
         for (s, k), c in load_cells(d["run_dir"]).items():
-            if k in (E_NEW, E0, "crackle_pins_opt_corrected_m0") and c["peak_enc"]:
+            if k in keep and c["peak_enc"]:
                 peaks.append({"dataset": ds, "sample_id": s, "method": k, "voxels": c["voxels"],
                               "peak_enc_mib": c["peak_enc"] / 2**20,
                               "peak_e2e_mib": (c["peak_e2e"] or 0) / 2**20 or None})
@@ -650,6 +751,7 @@ def build(run_id: str) -> int:
     shutil.copy(out / "figures" / "F01_object_examples.png", out / "object_examples" / "F01_object_examples.png") \
         if (out / "figures" / "F01_object_examples.png").exists() else None
     # ---- tables, claims, texts
+    res["post_run"] = post_run_findings(run_id, st0)
     tables = build_tables(out, res, manifests, sel, ROOT / "audit")
     cl = claims(res, sel)
     with open(out / "claims_ledger.csv", "w", encoding="utf-8", newline="") as fh:
@@ -663,6 +765,8 @@ def build(run_id: str) -> int:
     for p in (ROOT / "audit").glob("*"):
         if p.is_file():
             shutil.copy(p, out / "audit" / p.name)
+    (out / "audit" / "post_run_findings.json").write_text(json.dumps(res["post_run"], indent=1, default=str),
+                                                          encoding="utf-8")
     shutil.copy(ROOT / "analysis" / "q1_select" / "selected.json", out / "audit" / "development_selection.json")
     shutil.copy(ROOT / "analysis" / "q1_select" / "SELECT_Q1_UZ.md", out / "audit" / "SELECT_Q1_UZ.md")
     st = json.loads((ROOT / "results" / run_id / "q1_state.json").read_text(encoding="utf-8"))
@@ -810,7 +914,31 @@ def final_docs(out: Path, res: dict, sel: dict, frz: dict, figs: dict, tables: l
     L += [f"| {k} | {r.get('status')} | `{r.get('run_dir')}` |" for k, r in st["runs"].items()]
     L += ["", "## 2. Muammolar: avval → tuzatish → dalil → qolgan cheklov", "", "| ID | muammo | tuzatish | holat | dalil |",
           "|---|---|---|---|---|"]
-    L += [f"| {r['id']} | {r['issue']} | {r['fix']} | {r['status']} | {r['test_or_check']} |" for r in issues]
+    pr = res.get("post_run") or {}
+    L += [f"| {r['id']} | {r['issue']} | {r['fix']} | "
+          f"{pr['I13_status'] if r['id'] == 'I13' and pr.get('I13_status') else r['status']} | {r['test_or_check']} |"
+          for r in issues]
+    L += ["", "### Yakuniy run'dan keyin topilgan holatlar (xom qatorlar va git'dan hisoblangan; "
+          "`audit/post_run_findings.json`)", ""]
+    ng = pr.get("neuroglancer_u32") or {}
+    for key, x in ng.items():
+        if x["narrow_rows"]:
+            L.append(f"- `neuroglancer_b8_u32` ({key}): uint8/uint16 qatorlar {x['narrow_rows']}, SUCCESS "
+                     f"{x['narrow_ok']}, boshqa statuslar {json.dumps(x['narrow_non_ok'])}. Qatordagi sabab: "
+                     f"{'; '.join(pr.get('neuroglancer_u32_reason_examples') or [])[:160]}. C1/C2 ga ta'siri yo'q; bu "
+                     "C3 baseline uint16 ma'lumotda yo'q (uint64 da native yo'l bilan bir xil).")
+    for w in pr.get("interference") or []:
+        for key, r in w["runs"].items():
+            L.append(f"- Interferensiya oynasi {w['start']} – {w['end']} ({w['what']}): {key} da "
+                     f"{r['rows_in_window']}/{r['rows_total']} qator; C1 vaqt qatorlari {r['c1_timed_rows_in_window']}/"
+                     f"{r['c1_timed_rows']}, C1 xotira qatorlari {r['c1_memory_rows_in_window']}; S_T barcha qatorlar "
+                     f"bilan {f(r['S_T_all_rows'], 4)}, oynadagi qatorlarsiz {f(r['S_T_without_window_rows'], 4)}.")
+    if pr.get("freeze_commit"):
+        L.append(f"- Freeze commit `{pr['freeze_commit']}` dan keyingi commit'lar: "
+                 f"{'; '.join(pr['post_freeze_commits']) or 'yo`q'}. O'zgargan fayllar: "
+                 f"{', '.join(pr['post_freeze_files']) or 'yo`q'}. O'lchov kodi (cape/, cpp/, run_all.py, configs/, "
+                 f"snapshots/, vendor/, manifestlar) o'zgarganmi: {pr.get('measurement_code_changed_after_freeze')}. "
+                 f"Commit qilinmagan kod fayllari: {', '.join(pr.get('uncommitted_files') or []) or 'yo`q'}.")
     L += ["", "## 3. Yangi o'lchovlar (yangi run; eski frozen natijalar ishlatilmagan)", "",
           "| dataset | taqqoslash | n | S_T [95% CI] | R_M [95% CI] | hajm farqi | W/T/L |", "|---|---|---|---|---|---|---|"]
     for ds in ("j0126", "snemi", "hemibrain"):

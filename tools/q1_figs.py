@@ -184,17 +184,25 @@ def f03_pareto(fw: FigWriter, totals: list[dict], dataset: str) -> None:
     for t, b, m in pts:
         if not any((t2 <= t and b2 <= b) and (t2 < t or b2 < b) for t2, b2, _ in pts):
             nondom.add(m)
-    out = []
+    out, top = [], []
+    offs = {"cape_q1_fast_m0": (-16, 26, "right"), "cape_v3frozen_fast_m0": (16, 26, "left"),
+            "crackle_pins_opt_corrected_m0": (6, 26, "left")}
     for t, b, m in sorted(pts):
         lab, col = key.get(m, (m, GRAY))
         wrapped = "+" in m
-        ax.scatter(t, b / 1e6, s=42 if m in key else 22, color=col, marker="s" if wrapped else "o",
-                   edgecolor="#ffffff", linewidth=1.2, zorder=3)
         if m in key:
-            ax.annotate(lab, (t, b / 1e6), textcoords="offset points", xytext=(6, 6 + 9 * list(key).index(m)),
-                        fontsize=6.8, color=INK, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.5))
+            top.append((t, b, m, lab, col, wrapped))
+        else:
+            ax.scatter(t, b / 1e6, s=22, color=col, marker="s" if wrapped else "o", edgecolor="#ffffff",
+                       linewidth=1.2, zorder=3)
         out.append({"dataset": dataset, "method": m, "enc_ms_sum_of_medians": t, "total_bytes": b,
                     "pareto_nondominated": m in nondom, "wrapped": wrapped})
+    for t, b, m, lab, col, wrapped in top:  # the named methods last, so equal-byte variants never hide them
+        ax.scatter(t, b / 1e6, s=46, color=col, marker="s" if wrapped else "o", edgecolor="#ffffff", linewidth=1.2,
+                   zorder=6)
+        dx, dy, ha = offs.get(m, (6, 26, "left"))
+        ax.annotate(lab, (t, b / 1e6), textcoords="offset points", xytext=(dx, dy), ha=ha, fontsize=6.8, color=INK,
+                    arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6), zorder=7)
     log_axis(ax, "x")
     nd = sorted((r for r in out if r["pareto_nondominated"] and r["method"] not in key),
                 key=lambda r: r["total_bytes"])
@@ -209,8 +217,8 @@ def f03_pareto(fw: FigWriter, totals: list[dict], dataset: str) -> None:
     ax.set_title(f"Size vs encode time, {dataset} (circles: raw streams; squares: +zstd wrappers)")
     fw.save(fig, "F03", f"size_time_pareto_{dataset}", out,
             f"Fig. 3. Total stored size against total encode time on {dataset} for every method (raw and "
-            "zstd-wrapped; SAFE counts both candidate encodes). Labeled grey points are Pareto non-dominated. Eθ and "
-            "E0 have identical bytes; they differ only in time. Not a CI plot (totals).",
+            "zstd-wrapped; SAFE counts both candidate encodes). Ringed points are Pareto non-dominated (listed at the "
+            "right). Eθ (blue) and E0 (orange) have identical bytes; they differ only in time. Not a CI plot (totals).",
             f"3-rasm: {dataset} da hajm va encode vaqti; Eθ va E0 baytlari bir xil, faqat vaqt farqli.",
             f"{dataset}, all methods, totals")
 
@@ -241,7 +249,10 @@ def f04_speedups(fw: FigWriter, res: dict) -> None:
                          "time_reduction_pct": p["time_reduction_pct"]})
         ax.axvline(1.0, color=AXIS, lw=1)
         log_axis(ax, "x", [0.25, 0.5, 1, 2, 5, 10, 20, 50, 100])
-        ax.set_title(ds)
+        lo_x, hi_x = ax.get_xlim()
+        ax.set_xlim(lo_x, hi_x * 1.18)
+        ax.set_title({"j0126": "j0126 (primary; 33 volumes)", "snemi": "snemi (seen; 16 macroblocks)",
+                      "hemibrain": "hemibrain (descriptive; 4 cutouts)"}.get(ds, ds))
         ax.set_xlabel("S_T (log; >1 = Eθ faster)")
     axes[0][0].set_yticks(range(len(comps)))
     axes[0][0].set_yticklabels([lab for _, lab in comps], fontsize=7)
@@ -395,8 +406,7 @@ def f08_certificates(fw: FigWriter, res: dict, prop: list[dict]) -> None:
     fig, (a, b) = plt.subplots(1, 2, figsize=(8.4, 3.4), gridspec_kw={"width_ratios": [2, 1]})
     for i, ds in enumerate(sorted({c["dataset"] for c in certs})):
         g = [c["gap_pct"] for c in certs if c["dataset"] == ds]
-        a.scatter([i + t for t in np.linspace(-0.25, 0.25, len(g))], g, s=10, color=[BLUE, ORANGE, AQUA][i % 3],
-                  label=ds)
+        a.scatter([i + t for t in np.linspace(-0.25, 0.25, len(g))], g, s=10, color=BLUE, label=ds)
     a.set_xticks(range(len({c["dataset"] for c in certs})))
     a.set_xticklabels(sorted({c["dataset"] for c in certs}))
     a.set_ylabel("certificate gap (UB − LB)/UB of the whole stream [%]")
@@ -413,7 +423,7 @@ def f08_certificates(fw: FigWriter, res: dict, prop: list[dict]) -> None:
         b.set_xticklabels([r["sample_id"].replace("crackle_", "").split("_")[0] + "\n" +
                            r["sample_id"].rsplit("_", 1)[-1] for r in prop], fontsize=6.3)
         b.set_ylabel("gap [%] (negative = invalid)")
-        b.set_title("(b) the 12 old invalid rows (w_D compaction)")
+        b.set_title("(b) 2 volumes behind the 12 old invalid rows")
         b.legend(fontsize=6.5)
         rows += [dict(r, panel="b") for r in prop]
     fw.save(fig, "F08", "certificates", rows,
