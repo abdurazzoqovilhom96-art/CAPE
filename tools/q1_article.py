@@ -243,6 +243,22 @@ def build_tables(out: Path, res: dict, manifests: dict, sel: dict, audit_dir: Pa
             t08.append({"kind": "trade-off", "dataset": ds, "item": "Eθ vs Crackle flat",
                         "value": f"{f(ab['G_B_pct'], 2)}% smaller, S_T {f(ab['S_T'])}", "note": "CAPE is slower than flat"})
     recs.append(write_table(out, "T08", "negative_results", t08, "Negative results, non-success statuses, trade-offs"))
+    ams = (res.get("post_run") or {}).get("amendments") or []
+    if ams:
+        t09 = []
+        for am in ams:
+            for wr in ("none", "zstd9"):
+                v = am.get(f"vs_Etheta_{wr}") or {}
+                t09.append({"amendment": am.get("id"), "run_dir": am.get("run_dir"), "method": am.get("method"),
+                            "wrapper": wr, "uint16_rows_success": f"{am.get('narrow_ok')}/{am.get('narrow_rows')}",
+                            "lossless_all": am.get("lossless_all"), "n_crops": v.get("n"),
+                            "bytes_method": v.get("bytes_ng"), "bytes_Etheta": v.get("bytes_Etheta"),
+                            "Etheta_smaller_pct": None if v.get("G_B_pct_Etheta_smaller") is None else
+                            round(v["G_B_pct_Etheta_smaller"], 3),
+                            "S_T_Etheta_vs_method": None if v.get("S_T_Etheta_vs_ng") is None else
+                            round(v["S_T_Etheta_vs_ng"], 4), "note": v.get("note") or am.get("reason")})
+        recs.append(write_table(out, "T09", "amendments", t09, "Post-run AMENDMENT runs (separate run ids; never merged "
+                                "into the final rows)"))
     return recs
 
 
@@ -625,6 +641,41 @@ def post_run_findings(run_id: str, st: dict) -> dict:
                              f"NOT FIXED in the final run ({n_nar - n_ok}/{n_nar} uint8/uint16 rows not SUCCESS: the "
                              "runner checks the class-level supported_dtypes before the adapter, so the widening path "
                              "was never reached)")
+    # 1b. post-run AMENDMENT runs (results/<run_id>/amendments.json): separate run ids, never merged into final rows
+    ap = ROOT / "results" / run_id / "amendments.json"
+    out["amendments"] = []
+    for am in (json.loads(ap.read_text(encoding="utf-8")).get("amendments", []) if ap.exists() else []):
+        p = ROOT / am["run_dir"] / "05_raw_metrics" / "results.csv"
+        if not p.exists():
+            out["amendments"].append(dict(am, status="MISSING"))
+            continue
+        d = pd.read_csv(p, low_memory=False)
+        x = d[d.method_id == am["method"]]
+        nar = x[x.original_dtype.isin(["uint8", "uint16"])]
+        okx = x[x.status == "OK"]
+        rec = dict(am, rows=int(len(x)), narrow_rows=int(len(nar)), narrow_ok=int((nar.status == "OK").sum()),
+                   lossless_all=bool(okx.lossless.astype(str).str.lower().eq("true").all()) if len(okx) else False,
+                   source_hash=str(x.source_hash.iloc[0])[:12] if len(x) else None)
+        base = raws.get(am["base_track"])
+        if base is not None and len(okx):
+            def cells(df, mid, wr):
+                y = df[(df.method_id == mid) & (df.status == "OK") & (df.wrapper.fillna("none") == wr) &
+                       (df.panel != "MEM")]
+                return y.groupby("sample_id").agg(b=("total_bytes", "first"), t=("encode_ns", "median"))
+            for wr in ("none", "zstd9"):
+                a, b = cells(d, am["method"], wr), cells(base, E_NEW, wr)
+                j = a.add_suffix("_ng").join(b.add_suffix("_e"), how="inner")
+                if len(j):
+                    rec[f"vs_Etheta_{wr}"] = {
+                        "n": int(len(j)), "bytes_ng": int(j.b_ng.sum()), "bytes_Etheta": int(j.b_e.sum()),
+                        "G_B_pct_Etheta_smaller": float(100 * (j.b_ng.sum() - j.b_e.sum()) / j.b_ng.sum()),
+                        "S_T_Etheta_vs_ng": float(np.exp(np.mean(np.log(j.t_ng / j.t_e)))),
+                        "note": "cross-run comparison (same machine and protocol, different run)"}
+        out["amendments"].append(rec)
+        if am["method"] == "neuroglancer_b8_u32" and rec["narrow_rows"] and rec["narrow_ok"] == rec["narrow_rows"] \
+                and rec["lossless_all"] and out.get("I13_status", "").startswith("NOT FIXED"):
+            out["I13_status"] += (f"; FIXED by the post-run AMENDMENT run {am['run_dir']} after the runner fix: "
+                                  f"{rec['narrow_ok']}/{rec['narrow_rows']} uint16 rows SUCCESS, all lossless")
     # 2. interference windows recorded in results/<run_id>/disclosures.json (other CPU work during timing)
     dp = ROOT / "results" / run_id / "disclosures.json"
     disc = json.loads(dp.read_text(encoding="utf-8")) if dp.exists() else {}
@@ -682,6 +733,13 @@ def post_run_lines_en(pr: dict) -> list[str]:
                  + ("it ran as planned." if n_ok == n_nar else "the runner rejected the dtype before the adapter, so "
                     "this baseline is unavailable on uint16 data in the final run (it ran only on uint64 data, where "
                     "it is the native path)."))
+    for am in pr.get("amendments") or []:
+        v = am.get("vs_Etheta_none") or {}
+        L.append(f"- AMENDMENT {am.get('id')} ({am.get('run_dir')}, source {am.get('source_hash')}): {am.get('method')} "
+                 f"{am.get('narrow_ok')}/{am.get('narrow_rows')} uint8/uint16 rows SUCCESS, lossless "
+                 f"{am.get('lossless_all')}. Against Eθ on the same {v.get('n')} crops (cross-run): Eθ is "
+                 f"{f(v.get('G_B_pct_Etheta_smaller'), 2)}% smaller and S_T {f(v.get('S_T_Etheta_vs_ng'))}. "
+                 "Not merged into the final rows (table T09).")
     for w in pr.get("interference") or []:
         for key, r in w["runs"].items():
             L.append(f"- Interference window {w['start']} to {w['end']} ({w['what']}): {key} {r['rows_in_window']}/"
@@ -960,7 +1018,14 @@ def final_docs(out: Path, res: dict, sel: dict, frz: dict, figs: dict, tables: l
             L.append(f"- `neuroglancer_b8_u32` ({key}): uint8/uint16 qatorlar {x['narrow_rows']}, SUCCESS "
                      f"{x['narrow_ok']}, boshqa statuslar {json.dumps(x['narrow_non_ok'])}. Qatordagi sabab: "
                      f"{(pr.get('neuroglancer_u32_reason_examples') or ['-'])[0]}. C1/C2 ga ta'siri yo'q; bu "
-                     "C3 baseline uint16 ma'lumotda yo'q (uint64 da native yo'l bilan bir xil).")
+                     "C3 baseline final run'da uint16 ma'lumotda yo'q (uint64 da native yo'l bilan bir xil).")
+    for am in pr.get("amendments") or []:
+        av = am.get("vs_Etheta_none") or {}
+        L.append(f"- AMENDMENT `{am.get('id')}` (`{am.get('run_dir')}`, runner tuzatilgandan keyin): `{am.get('method')}` "
+                 f"uint16 qatorlari {am.get('narrow_ok')}/{am.get('narrow_rows')} SUCCESS, lossless "
+                 f"{am.get('lossless_all')}. Eθ bilan bir xil {av.get('n')} crop'da (boshqa run, bir xil protokol): Eθ "
+                 f"{f(av.get('G_B_pct_Etheta_smaller'), 2)}% kichik, S_T {f(av.get('S_T_Etheta_vs_ng'))}. Final qatorlarga "
+                 "qo'shilmagan (T09).")
     for w in pr.get("interference") or []:
         for key, r in w["runs"].items():
             L.append(f"- Interferensiya oynasi {w['start']} – {w['end']} ({w['what']}): {key} da "
@@ -1049,7 +1114,7 @@ Bitta asosiy hisobot: `YAKUNIY_AUDIT_VA_Q1_XULOSA_UZ.md`.
 | papka | mazmun |
 |---|---|
 | figures/, plot_data/ | F01–F08 (PDF, SVG, 300 dpi PNG) va ularning qiymatlari (CSV) |
-| tables/ | T01–T08 (CSV, MD, LaTeX) |
+| tables/ | T01–T08 (CSV, MD, LaTeX); T09 amendment runs (if any) |
 | methods/ | obyekt/ma'lumot (EN/UZ), usul, natijalar, cheklovlar, prior-art, qo'lyozma draft, captionlar, bib |
 | mathematics/ | M1a, O1–O3 ekvivalentligi, sertifikat modeli |
 | reproducibility/ | freeze, reja, muvaffaqiyat mezonlari, config/manifestlar, lock, REPRODUCE.md |

@@ -181,9 +181,10 @@ G1 = T1 ∧ T2 ∧ T3 ∧ T4. Yiqilsa, holat BLOCKED_PRECHECK bo'ladi va 10-bo'l
 Tanlash qoidasi: har CREMI source'idan sample_id bo'yicha saralangan birinchi uchta 256×256 crop, Crackle'dan esa 256×256×512 crop'lar. Hammasi `data/manifests/v3_dev_*.jsonl` da.
 
 **Native comparator** (bir xil mashina, 1 thread, P-core pinning, ketma-ket):
-- `cape_q1_fast_m0` (Eθ): B paneli 2 warmup + 7 takror; alohida jarayonda xotira 3 takror (median).
-- `cape_q1_fast_profile_m0`: faza vaqtlari va `mem_*` belgilari, 3 takror.
-- `cape_q1_certified_m0`: L_ascent va vaqt, 3 takror.
+- `cape_q1_fast_m0` (Eθ): B paneli 2 warmup + 7 takror; alohida jarayonda bitta xotira o'lchovi.
+- `cape_q1_fast_profile_m0`: faza vaqtlari (B paneli, 7 takror mediani) va `mem_*` belgilari (MEM paneli, bitta alohida jarayon).
+- `cape_q1_certified_m0`: L_ascent va vaqt (B paneli, 7 takror).
+- O'lchovdan oldingi tuzatish: runner har namuna va metod uchun bitta MEM vazifa yaratadi (`cape/runner.py`, `memory_profile_separate`). Bu Q1 final protokoli bilan bir xil, shuning uchun "3 takror" bitta alohida jarayon o'lchoviga almashtirildi.
 
 **Prototip o'lchovlari** (har namuna, har rejim):
 - yaratilgan ustunlar va incidence soni (native candidate'lar bilan: generatsiyadan keyin, equal'dan keyin, oxirida);
@@ -201,14 +202,23 @@ Prototip vaqti Python'da o'lchanadi. U native vaqt bilan bevosita solishtirilmay
     Peak_proj,i = max( mem_peak_runs,i ,  mem_ws_runs,i + S_CG,i )
     T_cr,i      = candidate_ns + reduction_ns + component_ns + solver_ns       (native profil)
     T_pass,i    = candidate_ns                     (bitta to'liq run o'tishining native proksisi)
+    T_int,i     = greedy_ns                        (native greedy vaqti, integer bosqich proksisi)
     T_proj,i    = T_Eθ,i − T_cr,i + k_i·T_pass,i + T_LP,i + T_int,i
+    k_i         = CG davomidagi to'liq pricing o'tishlari soni (M/T yo'llari);
+                  C yo'lida integer sertifikat repair o'tishlari ham qo'shiladi
+    T_cert,i    = T_Eθ,i + k_i·T_pass,i + T_LP,i    (C yo'li: greedy saqlanadi, CG qo'shiladi)
     R_M,proj    = geo-mean_i( Peak_proj,i / Peak_Eθ,i )
     R_T,proj    = geo-mean_i( T_proj,i / T_Eθ,i )
 
 Model CG-implicit foydasiga yon bosadi:
-- integer bosqich Python vaqti bilan olinadi, bu yuqori baho;
+- integer bosqich native greedy vaqti bilan olinadi (Python vaqti emas);
+- LP vaqti HiGHS (native kod) bilan o'lchanadi;
 - runs va chain native qoladi;
 - pricing o'tishi bir candidate yaratish o'tishiga teng deb olinadi.
+
+Prototipning o'z Python vaqti va peak'i ham yoziladi, lekin faqat ma'lumot uchun.
+
+**LP optimumi bir xilligi.** CG to'liq yaqinlashsa, LP optimumining qiymati boshlang'ich ustunlarga bog'liq emas. Shuning uchun C yo'lining L_CG qiymati CG-implicit run'idan olinadi; U esa Eθ niki. Byudjet tugasa, oxirgi duallar repair qilinib ishlatiladi: har qanday feasible dual valid L beradi.
 
 Shuning uchun model bo'yicha yiqilish mustahkam salbiy dalil bo'ladi. Model bo'yicha o'tish esa faqat native implementatsiyaga asos, isbot emas.
 
@@ -217,7 +227,7 @@ Shuning uchun model bo'yicha yiqilish mustahkam salbiy dalil bo'ladi. Model bo'y
 - **Kamida bitta yo'l:**
   - **(M) xotira (CG-implicit):** U_CG,i ≤ U_Eθ,i har namunada, R_M,proj ≤ 0.95 va R_T,proj ≤ 1.02.
   - **(T) vaqt (CG-implicit):** U_CG,i ≤ U_Eθ,i har namunada, R_T,proj ≤ 0.95 va R_M,proj ≤ 1.02.
-  - **(C) sertifikat (CG-cert):** L_CG,i ≥ L_ascent,i har namunada; pooled (U−L) kamayishi ≥ 50%; proyeksiya qilingan sertifikat vaqti ≤ native `cape_q1_certified_m0` vaqti.
+  - **(C) sertifikat (CG-cert):** L_CG,i ≥ L_ascent,i har namunada (bir xil regime va background); pooled (U−L) kamayishi ≥ 50%; geo-mean_i(T_cert,i / T_certified,i) ≤ 1.0, bu yerda T_certified — native `cape_q1_certified_m0` vaqti.
 
 Bu chegaralar Q1 standarti emas. Ular ortiqcha ishni to'xtatish uchun amaliy mezon. Natijani ko'rgandan keyin yumshatilmaydi.
 
