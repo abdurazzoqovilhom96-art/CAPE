@@ -143,8 +143,10 @@ def claims() -> list[dict]:
         "report 'statistically positive, practical 5% gate not met'; the frozen gate decision (not in FAST) stays",
         "analysis/v3_select/selected_methods.json")
     sel = json.loads((ROOT / "analysis" / "v3_select" / "selected_methods.json").read_text(encoding="utf-8"))
-    m3a = json.dumps(sel.get("m3a") or sel.get("M3a") or {}, default=str)[:300]
-    add("A09", "M3a regime gate saves time (ledger L8 CONDITIONAL)", f"0 regimes pruned; {m3a}", "WITHDRAWN",
+    m = (sel.get("quality_components") or {}).get("M3a") or {}
+    m3a = (f"regimes checked {m.get('regimes_checked')}, pruned {m.get('regimes_pruned')}, total time ratio "
+           f"{m.get('time_ratio_total')}, n {m.get('n')}, v3 decision '{m.get('decision')}'")
+    add("A09", "M3a regime gate saves time (ledger L8 CONDITIONAL)", m3a, "WITHDRAWN",
         "no mechanism claim: with 0 pruned the 0.994 time ratio is noise; L8 -> UNSUPPORTED", "analysis/v3_select")
     p6 = paired(css, "safe_v3_fast_m0_zstd9", "safe_stock_m0_zstd9")
     add("A10", "scale SAFE vs SAFE-stock", f"saving {fmt(p6['G_B_pct'], 4)}% CI {p6['G_B_ci']}; "
@@ -315,4 +317,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):  # console/redirect encodings on Windows (cp1252)
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.exit(main())

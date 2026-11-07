@@ -600,8 +600,9 @@ def build(run_id: str) -> int:
                                                          encoding="utf-8")
     manifests = {}
     plan = json.loads((ROOT / "analysis" / "q1_freeze" / "experiment_plan.json").read_text(encoding="utf-8"))
-    for key, r in plan["runs"].items():
-        if key.startswith("profile_"):
+    st0 = json.loads((ROOT / "results" / run_id / "q1_state.json").read_text(encoding="utf-8"))
+    for key, r in st0["runs"].items():  # the manifest each child run actually measured (smoke runs use dev data)
+        if key.startswith("profile_") or not r.get("manifest"):
             continue
         manifests[key] = [json.loads(l) for l in (ROOT / r["manifest"]).read_text(encoding="utf-8").splitlines() if l]
     # ---- figures
@@ -673,9 +674,10 @@ def build(run_id: str) -> int:
     for name in ("requirements.lock", "requirements.in", "sources.lock.json", "pyproject.toml"):
         if (ROOT / name).exists():
             shutil.copy(ROOT / name, rep / name)
-    for k, r in plan["runs"].items():
-        shutil.copy(ROOT / r["config"], rep / Path(r["config"]).name)
-        shutil.copy(ROOT / r["manifest"], rep / Path(r["manifest"]).name)
+    for k, r in st0["runs"].items():
+        for kk in ("config", "manifest"):
+            if r.get(kk) and (ROOT / r[kk]).exists():
+                shutil.copy(ROOT / r[kk], rep / Path(r[kk]).name)
     shutil.copy(ROOT / "configs" / "q1_methods.yaml", rep / "q1_methods.yaml")
     shutil.copy(ROOT / "configs" / "q1_development.yaml", rep / "q1_development.yaml")
     shutil.copy(ROOT / "docs" / "q1" / "EXTERNAL_DATA_PLAN.md", rep / "EXTERNAL_DATA_PLAN.md")
@@ -906,4 +908,6 @@ def main(argv=None) -> int:
 
 
 if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):  # console/redirect encodings on Windows (cp1252)
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.exit(main())

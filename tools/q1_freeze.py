@@ -225,7 +225,10 @@ def main() -> int:
         p = OUT / name
         if p.exists() and name == "freeze.json":
             old = json.loads(p.read_text(encoding="utf-8"))
-            if old.get("expected_source_hash") != frz["expected_source_hash"]:
+            used = [s for s in (ROOT / "results").glob("q1_*/q1_state.json")
+                    if json.loads(s.read_text(encoding="utf-8")).get("expected_source_hash") == old.get(
+                        "expected_source_hash") and not json.loads(s.read_text(encoding="utf-8")).get("smoke")]
+            if old.get("expected_source_hash") != frz["expected_source_hash"] and used:
                 amend = OUT / f"freeze_superseded_{old['written_at'].replace(':', '')}.json"
                 amend.write_text(p.read_text(encoding="utf-8"), encoding="utf-8")
                 print(f"previous freeze kept as {amend.name} (protocol amendment)")
@@ -235,4 +238,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):  # console/redirect encodings on Windows (cp1252)
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.exit(main())

@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-11-07T05:38:42+00:00",
+  "panels": {
+    "core": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results/20261107T054303Z_development_ee998362",
+      "run_status": "COMPLETE",
+      "started_at": "2026-11-07T05:43:03+00:00",
+      "ended_at": "2026-11-07T06:21:04+00:00"
+    },
+    "scale": {
+      "status": "DONE",
+      "exit_code": 0,
+      "run_dir": "results/20261107T062104Z_development_93ad9f72",
+      "run_status": "COMPLETE",
+      "started_at": "2026-11-07T06:21:04+00:00",
+      "ended_at": "2026-11-07T07:06:08+00:00"
+    }
+  }
+}

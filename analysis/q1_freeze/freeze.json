@@ -1,0 +1,38 @@
+{
+  "written_at": "2026-11-07T07:07:25+00:00",
+  "selected_impl_mask": 6719,
+  "accepted_bits": [
+    "O2",
+    "O3"
+  ],
+  "hashes": {
+    "source_tree": "f3fa7321f96a57edeb1a2f816ee4031c0ccd14865e930b7263087793ef21897a",
+    "E0_binary": "f1029e19992af218a73437050abf750da811f318d36c4993834262785b01e98c",
+    "v21_binary": "39dca94b1eeb1c59c98b1dcb117e2f46c3b4ddf6b3539dd067c2a4f40a4ff2cb",
+    "Etheta_binary": "4bf56afc7259c275b98c9b41dde7c39f40a5555c4455dabf38bb3f286be536cf",
+    "configs": {
+      "j0126": "4a63510b9dd2409a5f6f3a60639d8a4327208cfd3e7312fdd881dbfdaa857e30",
+      "snemi": "df75eb5b83dea97ac62ba4f8b3ad4cd90c8c4b782565284b11603ceb485e1d94",
+      "hemibrain": "02dc8b4fdb494bf179d18117eb40b11ccc25ccbfdbc27c542e31fb085842216d",
+      "scale": "3a4b07cbf247fa5a643216ad198048736a5e023401912372c8b0ec3e44040d44",
+      "scale_stock": "70ea8c9e7f8a60995c882620691d068a890d003305ce2b30d46c6b4cce145334",
+      "profile_j0126": "f9b0286b1f7150c09125ff82077d97b035ff7298e2770b5303a7f766bb69084b",
+      "profile_hemibrain": "14da353ba3c3623f45db3764cf22e22bc09dcb712cc15f4c888b535e77fb63fb",
+      "profile_scale": "27e897ae4348c43312d3aeb3fda82846e499f94241c3d7ea7a0eccf1825d84e5"
+    },
+    "manifests": {
+      "data/manifests/confirm_snemi3d.jsonl": "ff2741d2c3e7dbcee084dc15811104ca346580cd313bee0d118eaba35c80aac3",
+      "data/manifests/confirm_snemi3d_v3_scale.jsonl": "43f4efe32cf19ac90d374332c7dab24a4073755fd416dd27a67e79b7dfeee78c",
+      "data/manifests/confirm_snemi3d_v3_scale_stock.jsonl": "337e61eeb9e5f0c73c3e26fb3c50b4910759c7ccfea9295c80385a1e1be7ce5e",
+      "data/manifests/q1_external_hemibrain.jsonl": "ba84ddab9f55050b36d155a88897138e9977bf69969b9981fbfc8aeec0f422e8",
+      "data/manifests/q1_external_j0126.jsonl": "c83cfbd22836dff05499ad5868e91ed9d0bbc92fcd4d0f0c20cb9fc3ceda9a0f"
+    },
+    "methods_q1": "0e4a8155990f706175ac1f7e786aac04b8b4028b2543082d9d4b8ffc7ebaec8d",
+    "requirements_lock": "fff2b4d2614d275a7839fae789759d700e6b467960d18b1999fc013c9d7eb83c"
+  },
+  "expected_source_hash": "f3fa7321f96a57edeb1a2f816ee4031c0ccd14865e930b7263087793ef21897a",
+  "git_head_before_freeze_commit": "80d9fa16e963f7690c31bf4abdc0075383b81459",
+  "selection": "analysis/q1_select/selected.json",
+  "plan": "analysis/q1_freeze/experiment_plan.json",
+  "criteria": "analysis/q1_freeze/success_criteria.json"
+}

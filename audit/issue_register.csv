@@ -1,0 +1,20 @@
+id,issue,evidence,impact,fix,rerun_needed,status,test_or_check
+I01,1.343x reported without the time-reduction form,A01,wording,generator prints 100(1-1/S_T),no,FIXED (generator),audit/claims_recheck.csv
+I02,equal bytes could be read as a compression result,A02,wording,byte-equality table; C1 = time and memory only,no,FIXED (generator),audit/claims_recheck.csv
+I03,12.9x vs stock attributed to new modules,A03,interpretation,C1/C2/C3 separated,no,FIXED (generator),audit/claims_recheck.csv
+I04,matched greedy must stay in the main table,A04,fairness,T03 C3 rows include it,yes (re-measured),FIXED,audit/claims_recheck.csv
+I05,12 invalid v2.1 certificate rows (w_D compaction),certificate_propagation.csv,certificate scope,v3 scaled-dual bound; propagation audited (stream bytes unaffected),no (report-only),FIXED in v3; AUDITED,audit/certificate_propagation.csv
+I06,'5 volumes' wording,A06,wording,'1 acquisition: full + 4 subvolumes',no,FIXED (generator),audit/claims_recheck.csv
+I07,stock 53.96x scope,A07,scope,quadrants only; full volume N/A,no,FIXED (generator),audit/claims_recheck.csv
+I08,M5a label,A08,wording,"statistically positive, practical gate unmet",no,FIXED (generator),audit/claims_recheck.csv
+I09,M3a mechanism claim with 0 prunes,A09,claim,claim withdrawn,no,FIXED (ledger),audit/claims_recheck.csv
+I10,SAFE scale CI crosses 0,A10,interpretation,no superiority/equivalence claim,no,FIXED (generator),audit/claims_recheck.csv
+I11,memory = encode+decode peak,A11,measurement validity,encode-inclusive peak is primary; e2e apart,yes (final run),FIXED (protocol),audit/claims_recheck.csv
+I12,'enc ms' aggregation unnamed,A12,wording,aggregates named,no,FIXED (generator),audit/claims_recheck.csv
+I13,neuroglancer uint16 unsupported,A13,coverage,amended explicit uint32 widening track,yes,FIXED (amended track),audit/claims_recheck.csv
+I14,SAFE guarantee scope,A14,claim scope,"checked at stored-file level, same zstd level",no,VERIFIED,audit/claims_recheck.csv A14
+I15,Q8 verdict / status-count bug in report_v3,A15,report generator,Q1 generator separates statuses,no,FIXED (generator),audit/claims_recheck.csv
+I16,M5b memory judged on e2e peak median,A16,measurement validity,"encode-inclusive peak, geo ratio with CI",yes (final run),FIXED (protocol),audit/claims_recheck.csv
+I17,SNEMI3D seen while designing Eθ,A17,independence,j0126 is the primary C1 test,no,DISCLOSED,audit/claims_recheck.csv
+I18,tools/*.py not covered by the source hash,cape/provenance.py SOURCE_GLOBS,provenance,tools/*.py added to SOURCE_GLOBS before the Q1 freeze,no,FIXED,cape/provenance.py
+I19,first Q1 dev attempt stopped in TESTED (frozen v3 module loaded in-process by test_adapters),results/20261107T053842Z_development_8f27e750,test isolation,frozen v3 adapter tested in its own process,yes (dev rerun),FIXED,tests/test_q1_invariants.py

@@ -1,0 +1,9 @@
+method,n,byte_or_sha_mismatch,excluded,non_ok_cells,lossless_false,mismatch_samples
+cape_q1_O1_m0,61,0,0,0,0,[]
+cape_q1_O2_m0,61,0,0,0,0,[]
+cape_q1_O3_m0,61,0,0,0,0,[]
+cape_q1_all_m0,61,0,0,0,0,[]
+cape_q1_base_m0,61,0,0,0,0,[]
+cape_q1_noO1_m0,61,0,0,0,0,[]
+cape_q1_noO2_m0,61,0,0,0,0,[]
+cape_q1_noO3_m0,61,0,0,0,0,[]
