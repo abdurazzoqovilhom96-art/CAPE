@@ -20,7 +20,7 @@ VOLS = {
 }
 # the frozen v2.1 adapter is exercised in a separate process (tests/test_v3_invariants.py): loading two pybind11
 # modules with the same C++ exception names into this process would swap their Python exception classes
-TESTED = [m for m in METHODS if METHODS[m]["adapter"] not in ("csgv", "csgvr", "cape_frozen_v21")]
+TESTED = [m for m in METHODS if METHODS[m]["adapter"] not in ("csgv", "csgvr", "cape_frozen_v21", "cape_frozen_v3")]
 
 
 @pytest.mark.parametrize("vol", sorted(VOLS))
