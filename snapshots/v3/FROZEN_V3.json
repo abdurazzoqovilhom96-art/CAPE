@@ -1,0 +1,19 @@
+{
+  "role": "frozen original v3 FAST reference E0 (Q1 task v3, comparison C1)",
+  "file": "_cape_native.cp312-win_amd64.pyd",
+  "sha256": "f1029e19992af218a73437050abf750da811f318d36c4993834262785b01e98c",
+  "bytes": 2768525,
+  "copied_from": "cape/_cape_native.cp312-win_amd64.pyd",
+  "native_build_record": "build/native_build.json (_cape_native sha256 f1029e19...)",
+  "source_tree_hash_at_snapshot": "d07368c771ee3d31b8fd89b802e049b3396a7241fc0e79c7ca9964ca9a2ef294",
+  "freeze": "analysis/v3_freeze/freeze.json (expected_source_hash d07368c7...)",
+  "used_by_runs": [
+    "results/20261106T184116Z_all_d6786080",
+    "results/20261106T213428Z_all_080b15b8",
+    "results/20261106T213921Z_all_751ff9ac"
+  ],
+  "cpp_unchanged_since_build": "no file under cpp/ or CMakeLists.txt is newer than the .pyd (checked 2026-11-07)",
+  "fast_impl_mask": 575,
+  "snapshot_at": "2026-11-07T05:11:21+00:00",
+  "git_commit": "07362bc (branch v3)"
+}

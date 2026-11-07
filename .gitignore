@@ -3,6 +3,7 @@
 /results/
 /vendor/
 /.venv/
+/.venv-fetch/
 /build/
 /release/
 __pycache__/
@@ -10,3 +11,4 @@ __pycache__/
 *.pyd
 !/snapshots/v21/*.pyd
 *.tmp
+!/snapshots/v3/*.pyd
