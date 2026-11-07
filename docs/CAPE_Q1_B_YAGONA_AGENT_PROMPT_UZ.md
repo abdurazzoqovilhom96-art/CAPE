@@ -61,7 +61,8 @@ Bu bosqich qayta o'lchovsiz bajariladi, faqat 0.3 da bitta amendment run bor. U 
   - Matn "33 volumes; 31 non-overlapping clusters" bo'ladi.
 - **0.3 I13:**
   - `cape/runner.py` dtype gate'i adapter instansiyasining `check_dtype` usulini chaqiradi, class darajasidagi `supported_dtypes` ni emas. Test qo'shiladi: `widen_to: uint32` bilan uint16 qabul qilinadi; oddiy `neuroglancer_b8` uint16 da hamon UNSUPPORTED_DTYPE.
-  - Keyin faqat `neuroglancer_b8_u32` uchun alohida AMENDMENT run (yangi run ID va source hash) o'tkaziladi: SNEMI 32 crop va scale 5 namuna. Protokol Q1 bilan bir xil: 1 thread, warmup 2, takror 7/3, alohida jarayonda xotira.
+  - Keyin faqat `neuroglancer_b8_u32` uchun alohida AMENDMENT run (yangi run ID va source hash) o'tkaziladi: SNEMI 32 crop. Protokol Q1 bilan bir xil: 1 thread, warmup 2, takror 7, wrapper'lar none/zstd3/zstd9, alohida jarayonda xotira (`configs/q1b_amend_ng_snemi.yaml`).
+  - Run'dan oldingi tuzatish: muzlatilgan scale treki neuroglancer'ni umuman o'z ichiga olmagan. I13 faqat SNEMI trekiga tegishli (704 = 32 crop × 22 qator), shuning uchun scale bu amendment'ga kirmaydi.
   - Eski qatorlarga tegilmaydi. Natija Q1 paketiga alohida amendment jadval sifatida qo'shiladi.
 - **0.4 Render va tekshiruv:**
   - `tools/q1_pipeline.py --mode render` ishga tushiriladi. Validator 9-bandi (numbers digest) birinchi renderda o'zgargan raqamlarni ko'rsatadi; bu kutilgan, sababi hujjatlanadi. Ikkinchi render bir xil bo'lishi shart.

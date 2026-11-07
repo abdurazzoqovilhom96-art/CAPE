@@ -1,0 +1,31 @@
+# B protocol Stage 0.3 AMENDMENT (I13). Not part of the frozen Q1 final plan. Same protocol as
+# configs/q1_final_snemi.yaml (manifest, splits, warmups, repeats, wrappers, timeout) but ONLY the method whose rows
+# were all UNSUPPORTED_DTYPE in the final run because of the runner dtype gate (fixed in cape/runner.py). The frozen
+# scale track never contained neuroglancer, so it is not part of this amendment.
+schema_version: 1
+project: CAPE-Pins
+seed: 20261107
+mode: benchmark
+description: 'Q1b AMENDMENT (I13): neuroglancer_b8_u32 on the 32 frozen SNEMI3D crops after the runner dtype-gate fix'
+input:
+  manifest: data/manifests/confirm_snemi3d.jsonl
+  splits:
+  - heldout
+  require_real_data: true
+benchmark:
+  warmups: 2
+  repeats: 7
+  external_wrappers:
+  - none
+  - zstd3
+  - zstd9
+  task_timeout_s: 3600
+methods:
+- neuroglancer_b8_u32
+panels:
+- B
+primary:
+  new: cape_q1_fast_m0
+  baseline: cape_v3frozen_fast_m0
+oracle:
+  enabled: false

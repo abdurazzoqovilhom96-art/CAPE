@@ -157,8 +157,19 @@ def main(argv=None) -> int:
                   "10/10 achieved", "q1 accepted", "new stronger compression"):
             if w in t:
                 bad_words.append(f"{p.name}: '{w}'")
-    res.append(check("7 captions/texts: no wrong scope ('5 independent volumes', acceptance claims)", not bad_words,
-                     {"found": bad_words}))
+    # active modules in the methods pseudocode must match the selected bits (B protocol, Stage 0.1)
+    sel_p = pkg / "audit" / "development_selection.json"
+    meth = pkg / "methods" / "METHODS_EN.md"
+    if sel_p.exists() and meth.exists():
+        bits = set(json.loads(sel_p.read_text(encoding="utf-8")).get("selected_bits") or [])
+        mt = meth.read_text(encoding="utf-8")
+        code = mt.split("```")[1] if mt.count("```") >= 2 else ""
+        if "O1" not in bits and ("start=0" in code or "O1 lean CC: the same" in mt):
+            bad_words.append("METHODS_EN.md: rejected O1 described as active")
+        if "O3" in bits and "O3" not in code:
+            bad_words.append("METHODS_EN.md: accepted O3 missing from the pseudocode")
+    res.append(check("7 captions/texts: no wrong scope ('5 independent volumes', acceptance claims); pseudocode "
+                     "modules == selected bits", not bad_words, {"found": bad_words}))
     # 8. figures rendered (programmatic part; the visual review is recorded in checks/visual_review.json)
     figs = json.loads((pkg / "supplementary" / "figures_index.json").read_text(encoding="utf-8"))
     blank = []

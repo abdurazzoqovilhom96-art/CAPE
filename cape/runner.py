@@ -214,6 +214,21 @@ def plan_tasks(ctx: RunContext) -> list[dict]:
     return tasks
 
 
+CANDIDATE_DTYPES = ("uint8", "uint16", "uint32", "uint64", "int8", "int16", "int32", "int64")
+
+
+def accepted_dtypes(ad) -> list[str]:
+    """dtypes the adapter instance accepts via its own check_dtype (class tuple + option-dependent paths)."""
+    out = []
+    for dt in CANDIDATE_DTYPES:
+        try:
+            ad.check_dtype(dt)
+        except Exception:  # noqa: BLE001  (UnsupportedDtype or an option error: not accepted)
+            continue
+        out.append(dt)
+    return out
+
+
 def availability_table(ctx: RunContext) -> dict:
     from cape.adapters import make_adapter
 
@@ -226,7 +241,9 @@ def availability_table(ctx: RunContext) -> dict:
             try:
                 ad = make_adapter(mid, spec, ctx.cfg, w)
                 av = ad.availability()
-                av["supported_dtypes"] = list(ad.supported_dtypes)
+                # the adapter INSTANCE decides (its options may add an explicit lossless widening path, I13);
+                # the class-level tuple alone rejected neuroglancer_b8_u32 on uint8/uint16 before the adapter ran
+                av["supported_dtypes"] = accepted_dtypes(ad)
             except Exception as exc:  # noqa: BLE001
                 av = {"status": "UNAVAILABLE", "version": None, "reason": f"adapter construction failed: {exc}",
                       "supported_dtypes": []}

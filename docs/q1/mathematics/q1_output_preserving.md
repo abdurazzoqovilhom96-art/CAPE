@@ -95,7 +95,7 @@ identical. The fallback (> 65536 CCs in a slice) is tested with a 300×300 check
 ## Memory model (why the peak drops)
 Encode-inclusive peak working set measured with the `profile_memory` diagnostics:
 
-| Crop | E0 peak | Eθ (O1+O2+O3) peak | E0 peak happens at |
+| Crop | E0 peak | O1+O2+O3 profiling-mask peak (not the final Eθ = O2+O3) | E0 peak happens at |
 |---|---|---|---|
 | SNEMI quadrant 512×512×100 uint16 | 306 MiB | 214 MiB | runs (grow-and-copy) |
 | CREMI 512×512×125 uint64 | 470 MiB | 407 MiB | — |

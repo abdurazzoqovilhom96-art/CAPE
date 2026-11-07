@@ -350,6 +350,22 @@ upstream dekoder ochadi.
 **Qo'llanmagan joylar.** Intensivlik tasvirlari, RGB, tibbiy tasvirlar, qisman dekodlash (kodda yo'q).
 """, encoding="utf-8")
     acc = ", ".join(sel["selected_bits"]) or "none"
+    o1 = (sel.get("modules") or {}).get("O1") or {}
+    o1_loo = o1.get("loo") or {}
+    o1_note = (f"tested and rejected in development (S_T {f(o1_loo.get('S_T'), 3)}, 95% CI lower "
+               f"{f((o1_loo.get('S_T_ci') or [None])[0], 3)}); not part of Eθ" if o1 and not o1.get("accepted") else
+               "accepted")
+    if "O1" in sel["selected_bits"]:
+        cc_step = ("O1 lean CC: the same upstream labeling started at label 0, crc taken\n   from the batch, CC values "
+                   "read at first raster pixels, offset added in the transpose.")
+        cc_pseudo = ("for z-batch of 16 slices: CC2D_4(slice, start=0) -> crc(slice), values at first pixels, "
+                     "transpose(+offset)")
+    else:
+        cc_step = ("Upstream labeling with start_label = N, local copy for\n   the crc and one pass for the CC values, "
+                   f"exactly as in E0 (O1 lean CC was {o1_note}).")
+        cc_pseudo = "for z-batch of 16 slices: CC2D_4(slice, start=N) -> crc(local), cc_values pass, transpose"
+    if "O3" in sel["selected_bits"]:
+        cc_pseudo += " [uint16 if O3]"
     (m / "METHODS_EN.md").write_text(f"""# Methods
 
 ## Problem
@@ -359,8 +375,7 @@ encode time T and peak memory M (Pareto sense; no weighted score).
 
 ## Encoder (Eθ = impl_mask {mask}; accepted Q1 bits: {acc})
 1. scan (max label, pixel pairs) -> upstream crack-code boundaries (unchanged).
-2. 2D 4-connected CC per slice, batched (M5b). O1 lean CC: the same upstream labeling started at label 0, crc taken
-   from the batch, CC values read at first raster pixels, offset added in the transpose. O3 compact chain: the
+2. 2D 4-connected CC per slice, batched (M5b). {cc_step} O3 compact chain: the
    column-major chain buffer stores slice-local uint16 numbers (2V bytes) with a per-slice offset when every slice
    has <= 65536 CCs, else the uint32 buffer.
 3. Same-label z-runs; O2 allocates them once with the exact count V - z_pairs.
@@ -372,7 +387,7 @@ Proofs: mathematics/m1a_proposition.md, mathematics/q1_output_preserving.md; cer
 Pseudocode (one regime, FAST):
 ```
 labels -> boundaries (upstream)
-for z-batch of 16 slices: CC2D_4(slice, start=0) -> crc(slice), values at first pixels, transpose(+offset) [uint16 if O3]
+{cc_pseudo}
 runs <- column runs (reserve V - z_pairs if O2)
 cands <- windows(runs, h) minus neighbour twins (M1a)
 alive <- reduce(cands); comps <- components(alive)
@@ -432,10 +447,28 @@ Other codecs, archive and SAFE: tables T03 and T06. Negative results and statuse
 """
     (m / "RESULTS_EN.md").write_text(results, encoding="utf-8")
     n_acq = sum(1 for ds in ("j0126", "snemi", "hemibrain") if v.get(ds, {}).get("n"))
+    ja = res.get("j0126_cluster_amendment") or {}
+    jv = ja.get("variants") or {}
+    j_cl = (f"{(jv.get('overlap_merged') or {}).get('n_clusters')} non-overlapping clusters: "
+            f"{len(ja.get('overlapping_pairs') or [])} pairs of volumes overlap"
+            if jv.get("overlap_merged") else "clusters of one dataset")
+    if jv:
+        amend = "\n".join(
+            f"  - {k}: {x['n_clusters']} clusters; S_T {f(x['S_T'], 4)} {ci(x['S_T_ci'], 4)}, R_M {f(x['R_M'], 4)} "
+            f"{ci(x['R_M_ci'], 4)}; bootstrap p (S_T) {f(x['p_S_T'], 4)}, p (R_M) {f(x['p_R_M'], 4)}"
+            for k, x in jv.items())
+        results = results.rstrip("\n") + (
+            "\n\n## Amendment: j0126 cluster definition (found after the final run)\n"
+            f"The registered analysis treated the 33 j0126 volumes as 33 clusters, but "
+            f"{len(ja.get('overlapping_pairs') or [])} pairs overlap ("
+            + "; ".join(f"{p['pct_of_a']:.1f}% of {p['a']}" for p in ja.get("overlapping_pairs") or [])
+            + "). The registered result is kept; overlap-merged clusters and a proximity sensitivity (volumes within "
+            "150 voxels in every axis merged) are reported next to it:\n" + amend + "\n")
+        (m / "RESULTS_EN.md").write_text(results, encoding="utf-8")
     (m / "LIMITATIONS_EN.md").write_text(f"""# Limitations
 
 - Acquisitions actually used in the final test: {n_acq} ({', '.join(ds for ds in ('j0126', 'snemi', 'hemibrain') if v.get(ds, {}).get('n'))}).
-  The primary C1 evidence rests on ONE new acquisition (j0126; 33 volumes are clusters of one dataset); SNEMI3D was
+  The primary C1 evidence rests on ONE new acquisition (j0126; 33 volumes, {j_cl}); SNEMI3D was
   seen before (and one SNEMI3D subvolume was used for a diagnostic memory profile while designing O2/O3); hemibrain is
   descriptive (4 cutouts). Generalization beyond these acquisitions is not claimed.
 - Timing: one machine (Windows 11, MinGW g++ 16.2, i7-13700F), one thread. Other platforms may differ.
@@ -457,14 +490,14 @@ Other codecs, archive and SAFE: tables T03 and T06. Negative results and statuse
 | Equal-coverage dedup by hashing | standard (hash grouping) | M1a: neighbour-column twins dropped at generation, proved exact for 4-connected 2D CCs | mathematics/m1a_proposition.md; ablation F06 | M1a is v3, not Q1 |
 | Inverted incidence / eager greedy | Crackle issue #19 (2024-07, closed 2025-01); lazy greedy (Minoux 1978) | v3 M2 rejected (no gain) | v3 selection | not used |
 | Batched CC straight into column-major chains | common blocking/transposition practice | M5b (v3) | v3 | - |
-| O1 lean CC | cc3d relabel numbering (first raster pixel) | removes two per-voxel passes; proof that start_label offsets commute | q1_output_preserving.md | engineering |
+| O1 lean CC | cc3d relabel numbering (first raster pixel) | removes two per-voxel passes; proof that start_label offsets commute | q1_output_preserving.md | {O1_STATUS} |
 | O2 exact run allocation | standard reserve-before-fill | exact count V - z_pairs computed in the CC pass | q1_output_preserving.md | engineering |
 | O3 compact uint16 chains | standard narrow-index storage | slice-local ids + per-slice offset, exact equality/hash/subset on local ids | q1_output_preserving.md | falls back above 65536 CCs per slice |
 | Integer dual lower bound / certificate | LP duality for set cover (classical) | format-coupled bound incl. w_D compaction fix | certificate_model.md | restricted model |
 
 Conclusion: Q1 is an engineering contribution with machine-checked output equivalence (byte identity against the
 frozen binary on every measured sample), not a new compression algorithm.
-""", encoding="utf-8")
+""".replace("{O1_STATUS}", "engineering" if "O1" in sel["selected_bits"] else o1_note), encoding="utf-8")
     caps = ["# Figure captions", ""]
     for fid in sorted(figs):
         r = figs[fid]
@@ -934,6 +967,12 @@ def final_docs(out: Path, res: dict, sel: dict, frz: dict, figs: dict, tables: l
                      f"{r['rows_in_window']}/{r['rows_total']} qator; C1 vaqt qatorlari {r['c1_timed_rows_in_window']}/"
                      f"{r['c1_timed_rows']}, C1 xotira qatorlari {r['c1_memory_rows_in_window']}; S_T barcha qatorlar "
                      f"bilan {f(r['S_T_all_rows'], 4)}, oynadagi qatorlarsiz {f(r['S_T_without_window_rows'], 4)}.")
+    ja = res.get("j0126_cluster_amendment") or {}
+    for k, x in (ja.get("variants") or {}).items():
+        L.append(f"- j0126 klaster amendment'i ({k}): {x['n_clusters']} klaster; S_T {f(x['S_T'], 4)} "
+                 f"{ci(x['S_T_ci'], 4)}, R_M {f(x['R_M'], 4)} {ci(x['R_M_ci'], 4)}. "
+                 + (f"Ustma-ust juftlar: {len(ja.get('overlapping_pairs') or [])}. Ro'yxatdan o'tgan 33 klasterli "
+                    "natija o'zgarmaydi." if k == "registered_33" else ""))
     if pr.get("freeze_commit"):
         L.append(f"- Freeze commit `{pr['freeze_commit']}` dan keyingi commit'lar: "
                  f"{'; '.join(pr['post_freeze_commits']) or 'yo`q'}. O'zgargan fayllar: "

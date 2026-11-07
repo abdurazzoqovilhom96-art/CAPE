@@ -227,6 +227,62 @@ def lossless(cells: dict) -> dict:
     return {"rows_checked": n, "failed": len(bad), "failed_cells": sorted(set(bad))[:50]}
 
 
+def _bbox_clusters(bb: dict, linked) -> dict:
+    """Union-find over sample ids: two volumes share a cluster when `linked(bbox_a, bbox_b)`."""
+    par = {i: i for i in bb}
+
+    def find(i):
+        while par[i] != i:
+            par[i] = par[par[i]]
+            i = par[i]
+        return i
+    ids = sorted(bb)
+    for i, a in enumerate(ids):
+        for b in ids[i + 1:]:
+            if linked(bb[a], bb[b]):
+                par[find(a)] = find(b)
+    return {i: find(i) for i in ids}
+
+
+def j0126_cluster_amendment(cells: dict | None, n_boot: int) -> dict | None:
+    """Amendment (B protocol, Stage 0.2): the 33 j0126 volumes are not 33 independent clusters, 2 pairs overlap.
+    The registered analysis (33 clusters) stays; this adds overlap-merged clusters and a proximity sensitivity.
+    bbox_xyz is half-open [start, end) per axis (extent == shape)."""
+    if not cells:
+        return None
+    man = ROOT / "data" / "manifests" / "q1_external_j0126.jsonl"
+    bb = {r["sample_id"]: r["bbox_xyz"] for r in map(json.loads, man.read_text(encoding="utf-8").splitlines()) if r}
+
+    def overlap_vox(a, b):
+        v = 1
+        for (a0, a1), (b0, b1) in zip(a, b):
+            v *= max(0, min(a1, b1) - max(a0, b0))
+        return v
+
+    def gap(a, b):
+        return max(max(0, max(a0, b0) - min(a1, b1)) for (a0, a1), (b0, b1) in zip(a, b))
+    pairs = []
+    ids = sorted(bb)
+    for i, a in enumerate(ids):
+        for b in ids[i + 1:]:
+            o = overlap_vox(bb[a], bb[b])
+            if o:
+                va = int(np.prod([x1 - x0 for x0, x1 in bb[a]]))
+                pairs.append({"a": a, "b": b, "overlap_voxels": o, "pct_of_a": 100 * o / va})
+    out = {"overlapping_pairs": pairs, "variants": {}}
+    for name, cmap in (("registered_33", None),
+                       ("overlap_merged", _bbox_clusters(bb, lambda a, b: overlap_vox(a, b) > 0)),
+                       ("gap_le_150_merged", _bbox_clusters(bb, lambda a, b: gap(a, b) <= 150))):
+        cl = (lambda c, m=cmap: m.get(c["sample_id"], c["sample_id"])) if cmap else macroblock_cluster
+        p = paired(cells, E_NEW, E0, cluster=cl, n_boot=n_boot)
+        out["variants"][name] = {
+            "n": p["n"], "n_clusters": p.get("n_clusters"), "S_T": p.get("S_T"), "S_T_ci": p.get("S_T_ci"),
+            "R_M": p.get("R_M"), "R_M_ci": p.get("R_M_ci"),
+            "p_S_T": bootstrap_p(cells, E_NEW, E0, "S_T", 1.0, cluster=cl, n_boot=n_boot),
+            "p_R_M": bootstrap_p(cells, E_NEW, E0, "R_M", 1.0, cluster=cl, n_boot=n_boot)}
+    return out
+
+
 def analyze(run_id: str, n_boot: int = 10_000) -> dict:
     state = load_state(run_id)
     runs = {k: v for k, v in state["runs"].items() if v.get("run_dir")}
@@ -265,6 +321,7 @@ def analyze(run_id: str, n_boot: int = 10_000) -> dict:
         fam["H1_C1_speed_j0126"] = bootstrap_p(c, E_NEW, E0, "S_T", 1.0, n_boot=n_boot)
         fam["H2_C1_memory_j0126"] = bootstrap_p(c, E_NEW, E0, "R_M", 1.0, n_boot=n_boot)
     res["primary_family"] = {"p": fam, "p_holm": holm(fam)}
+    res["j0126_cluster_amendment"] = j0126_cluster_amendment(cells_by.get("j0126"), n_boot)
     crit = json.loads((ROOT / "analysis" / "q1_freeze" / "success_criteria.json").read_text(encoding="utf-8"))
     res["criteria"] = crit
     tg = crit["C1"]["practical_targets"]
