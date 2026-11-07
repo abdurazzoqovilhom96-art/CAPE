@@ -9,6 +9,7 @@ ERROR. Missing data is never zero.
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import statistics as st
 from collections import Counter, defaultdict
@@ -16,10 +17,10 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(os.environ.get("CAPE_ROOT") or Path(__file__).resolve().parents[1])  # CAPE_ROOT: run a copy against the repo data
 import sys  # noqa: E402
 
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from q1_common import (bootstrap_p, holm, load_cells, macroblock_cluster, paired)  # noqa: E402
 
 E_NEW, E0, BASE, V21 = "cape_q1_fast_m0", "cape_v3frozen_fast_m0", "cape_q1_base_m0", "cape_v21_fast_m0"
@@ -153,13 +154,15 @@ def profile_phases(cells: dict) -> list[dict]:
     phases = ["start", "scan", "boundary", "cc", "runs", "candidates", "reduction", "components", "solve",
               "serialize"]
     for (s, k), c in sorted(cells.items()):
-        if not k.endswith("_profile_m0") or not c["extra"]:
+        ex = c.get("mem_extra")  # fresh worker process: the stage peaks are not inflated by earlier encodes
+        if not k.endswith("_profile_m0") or not ex:
             continue
-        r = {"sample_id": s, "method": k, "voxels": c["voxels"], "input_mib": (c["input_bytes"] or 0) / 2**20}
+        r = {"sample_id": s, "method": k, "voxels": c["voxels"], "input_mib": (c["input_bytes"] or 0) / 2**20,
+             "source": "fresh-process memory run"}
         for p in phases:
-            v = c["extra"].get(f"mem_peak_{p}")
+            v = ex.get(f"mem_peak_{p}")
             r[f"peak_{p}_mib"] = v / 2**20 if v else None
-            w = c["extra"].get(f"mem_ws_{p}")
+            w = ex.get(f"mem_ws_{p}")
             r[f"ws_{p}_mib"] = w / 2**20 if w else None
         rows.append(r)
     return rows
@@ -228,7 +231,8 @@ def analyze(run_id: str, n_boot: int = 10_000) -> dict:
     state = load_state(run_id)
     runs = {k: v for k, v in state["runs"].items() if v.get("run_dir")}
     res = {"run_id": run_id, "state": {"status": state.get("status"), "created_at": state.get("created_at"),
-                                       "runs": runs}, "datasets": {}, "profile": [], "status_rows": []}
+                                       "runs": runs}, "datasets": {}, "profile": [], "status_rows": [],
+           "n_boot": n_boot, "smoke": bool(state.get("smoke"))}
     cells_by = {}
     for key, info in runs.items():
         cells = load_cells(info["run_dir"])

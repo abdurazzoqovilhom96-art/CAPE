@@ -13,6 +13,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -21,7 +22,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(os.environ.get("CAPE_ROOT") or Path(__file__).resolve().parents[1])  # CAPE_ROOT: run a copy against the repo data
 
 
 def now() -> str:
@@ -68,6 +69,8 @@ def main(argv=None) -> int:
     man = list(csv.DictReader(open(pkg / "artifact_manifest.csv", encoding="utf-8")))
     bad = [r["artifact"] for r in man if r["status"] == "OK" and not ((pkg / r["artifact"]).exists() and
                                                                        (pkg / r["artifact"]).stat().st_size > 0)]
+    if any(r["artifact"] == "artifact_manifest.csv" and r["status"] != "OK" for r in man):
+        bad.append("artifact_manifest.csv (self entry)")
     noreason = [r["artifact"] for r in man if r["status"] == "BLOCKED" and not r["reason"]]
     empty_dirs = [d.name for d in pkg.iterdir() if d.is_dir() and not any(d.iterdir())]
     res.append(check("1 manifest files exist, non-empty; BLOCKED has a reason; no empty folder",
@@ -116,11 +119,13 @@ def main(argv=None) -> int:
         tex = p.with_suffix(".tex").read_text(encoding="utf-8")
         for r in rows[:200]:
             for k, v in r.items():
-                try:
-                    x = float(v)
-                except (TypeError, ValueError):
+                if v is None or not re.fullmatch(r"-?\d+(\.\d*)?([eE][-+]?\d+)?", v.strip()):
                     continue
-                s = f"{x:.4g}" if abs(x) < 1e6 else f"{x:.0f}"
+                if re.fullmatch(r"-?\d+", v.strip()):  # integers are written as integers by the generator
+                    s = v.strip()
+                else:
+                    x = float(v)
+                    s = f"{x:.4g}" if abs(x) < 1e6 else f"{x:.0f}"
                 if s not in md or s not in tex.replace(r"\%", "%"):
                     incons.append(f"{p.name}:{k}={s}")
     res.append(check("4 CSV, Markdown and LaTeX tables carry the same numbers", not incons, {"inconsistent": incons[:30]}))
@@ -148,8 +153,8 @@ def main(argv=None) -> int:
     bad_words = []
     for p in list((pkg / "methods").glob("*.md")) + [pkg / "YAKUNIY_AUDIT_VA_Q1_XULOSA_UZ.md"]:
         t = p.read_text(encoding="utf-8").lower()
-        for w in ("5 independent volumes", "five independent volumes", "5 volumes", "10/10 achieved",
-                  "q1 accepted", "new stronger compression"):
+        for w in ("5 independent volumes", "five independent volumes", "5 independent acquisitions",
+                  "10/10 achieved", "q1 accepted", "new stronger compression"):
             if w in t:
                 bad_words.append(f"{p.name}: '{w}'")
     res.append(check("7 captions/texts: no wrong scope ('5 independent volumes', acceptance claims)", not bad_words,

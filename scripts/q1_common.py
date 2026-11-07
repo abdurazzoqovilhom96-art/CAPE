@@ -16,6 +16,7 @@ Bootstrap: paired cluster bootstrap over the given cluster key (percentile 95% C
 from __future__ import annotations
 
 import json
+import os
 import math
 import sqlite3
 import statistics as st
@@ -24,7 +25,7 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(os.environ.get("CAPE_ROOT") or Path(__file__).resolve().parents[1])  # CAPE_ROOT: run a copy against the repo data
 SEED = 20261107
 N_BOOT = 10_000
 
@@ -52,7 +53,7 @@ def load_cells(run) -> dict:
             mem[(r["sample_id"], r["method_id"])].append({
                 "status": r["status"], "reason": r["reason"], "mode": r["rss_measurement_mode"],
                 "peak_e2e": r["peak_rss_bytes"], "peak_enc": ex.get("peak_after_encode"),
-                "peak_before": ex.get("peak_before_encode"), "measurement_id": r["measurement_id"]})
+                "peak_before": ex.get("peak_before_encode"), "measurement_id": r["measurement_id"], "extra": ex})
             continue
         k = (r["sample_id"], mkey(r["method_id"], r["wrapper"]))
         c = cells.get(k)
@@ -94,7 +95,8 @@ def load_cells(run) -> dict:
         c["dec_med"] = st.median(c["dec"]) if c["dec"] else None
         mm = mem.get((s, c["method"])) if c["wrapper"] == "none" else None
         ok = [x for x in (mm or []) if x["status"] == "OK" and x["peak_enc"]]
-        c["mem_rows"] = mm or []
+        c["mem_rows"] = [{k: v for k, v in x.items() if k != "extra"} for x in (mm or [])]
+        c["mem_extra"] = ok[0]["extra"] if ok else None  # diagnostics of the fresh-process memory run
         c["peak_enc"] = st.median(x["peak_enc"] for x in ok) if ok else None
         c["peak_before"] = st.median(x["peak_before"] for x in ok if x["peak_before"]) if ok else None
         c["peak_e2e"] = st.median(x["peak_e2e"] for x in ok if x["peak_e2e"]) if ok else None

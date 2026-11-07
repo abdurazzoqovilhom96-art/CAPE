@@ -13,6 +13,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -21,9 +22,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "tools"))
-sys.path.insert(0, str(ROOT / "scripts"))
+ROOT = Path(os.environ.get("CAPE_ROOT") or Path(__file__).resolve().parents[1])  # CAPE_ROOT: run a copy against the repo data
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 sys.path.insert(0, str(ROOT))
 
 import q1_figs as F  # noqa: E402
@@ -595,7 +596,7 @@ def build(run_id: str) -> int:
         (out / d).mkdir(parents=True, exist_ok=True)
     frz = json.loads((ROOT / "analysis" / "q1_freeze" / "freeze.json").read_text(encoding="utf-8"))
     sel = json.loads((ROOT / "analysis" / "q1_select" / "selected.json").read_text(encoding="utf-8"))
-    res = analyze(run_id)
+    res = analyze(run_id, n_boot=int(os.environ.get("Q1_NBOOT", "10000")))  # Q1_NBOOT < 10000 only for tests
     (out / "supplementary" / "analysis.json").write_text(json.dumps(to_jsonable(res), indent=1, default=str),
                                                          encoding="utf-8")
     manifests = {}
@@ -718,6 +719,8 @@ Datasets are not redistributed (licences); manifests give source URLs, coordinat
                     w.writerows(p["per_sample"])
     (out / "supplementary" / "figures_index.json").write_text(json.dumps(fw.records, indent=2), encoding="utf-8")
     (out / "supplementary" / "tables_index.json").write_text(json.dumps(tables, indent=2), encoding="utf-8")
+    (out / "checks" / "README.md").write_text("Validator output of tools/validate_article_package.py (written after "
+                                              "the package build).\n", encoding="utf-8")
     final_docs(out, res, sel, frz, fw.records, tables, cl, st)
     print(f"staging package: {out}")
     return 0
@@ -738,6 +741,10 @@ def artifact_manifest(out: Path, figs: dict, tables: list[dict]) -> list[dict]:
     rows = []
     for rel in EXPECTED:
         p = out / rel
+        if rel == "artifact_manifest.csv":  # the manifest lists itself as written by this function
+            rows.append({"artifact": rel, "kind": "file", "status": "OK", "reason": "this file", "bytes": None,
+                         "sha256": None})
+            continue
         rows.append({"artifact": rel, "kind": "file", "status": "OK" if p.exists() and p.stat().st_size > 0 else
                      "BLOCKED", "reason": "" if p.exists() else "not produced", "bytes": p.stat().st_size if p.exists()
                      else None, "sha256": sha_file(p) if p.exists() else None})

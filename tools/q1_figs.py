@@ -11,6 +11,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import matplotlib
@@ -18,8 +19,26 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
+from matplotlib.ticker import FixedLocator, FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[1]
+
+def _compact(v, _pos=None) -> str:
+    if v >= 1e6:
+        return f"{v / 1e6:g}M"
+    if v >= 1e3:
+        return f"{v / 1e3:g}k"
+    return f"{v:g}"
+
+
+def log_axis(ax, which: str, ticks=None) -> None:
+    """Log axis with 1-2-5 (or fixed) major ticks, compact plain labels, no minor labels."""
+    axis = ax.xaxis if which == "x" else ax.yaxis
+    (ax.set_xscale if which == "x" else ax.set_yscale)("log")
+    axis.set_major_locator(FixedLocator(ticks) if ticks is not None else LogLocator(base=10, subs=(1.0, 2.0, 5.0)))
+    axis.set_major_formatter(FuncFormatter(_compact))
+    axis.set_minor_formatter(NullFormatter())
+
+ROOT = Path(os.environ.get("CAPE_ROOT") or Path(__file__).resolve().parents[1])  # CAPE_ROOT: run a copy against the repo data
 BLUE, ORANGE, AQUA = "#2a78d6", "#eb6834", "#1baf7a"
 GRAY, INK, INK2, MUTED, GRID, AXIS = "#9a9893", "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#c3c2b7"
 plt.rcParams.update({
@@ -118,38 +137,39 @@ def f01_objects(fw: FigWriter, samples: list[dict], decode_check: dict) -> None:
 
 # ------------------------------------------------------------------------------------------------ F02
 def f02_pipeline(fw: FigWriter, shares: dict, mask: int) -> None:
-    stages = [("scan", "scan_ns", "max label + pixel pairs"), ("boundary", "boundary_ns", "crack codes (upstream)"),
-              ("2D CC", "cc_ns", "4-connected CC per slice\nM5b batch, O1 lean, O3 uint16"),
-              ("runs", "runs_ns", "same-label z-runs\nO2 exact allocation"),
-              ("candidates", "candidate_ns", "depth windows\nM1a neighbour filter"),
-              ("reductions", "reduction_ns", "singleton / equal / subset"),
-              ("components", "component_ns", "independent CC sets"),
-              ("greedy + dual", "pass1_ns", "UB + integer LB"), ("exact DP / local", "pass2_ns", "small components"),
-              ("serialize", "serialize_ns", "PINS section + stream")]
-    fig, ax = plt.subplots(figsize=(7.2, 2.6))
-    ax.set_xlim(0, len(stages))
-    ax.set_ylim(0, 1)
-    ax.axis("off")
-    rows = []
-    for i, (name, key, note) in enumerate(stages):
-        share = shares.get(key)
-        ax.add_patch(plt.Rectangle((i + 0.06, 0.38), 0.88, 0.42, facecolor="#cde2fb", edgecolor=BLUE, linewidth=1.0))
-        ax.text(i + 0.5, 0.66, name, ha="center", va="center", fontsize=7.2, color=INK, weight="bold")
-        ax.text(i + 0.5, 0.49, "NA" if share is None else f"{100 * share:.1f}%", ha="center", va="center",
-                fontsize=7.2, color=INK2)
-        ax.text(i + 0.5, 0.25, note, ha="center", va="top", fontsize=5.6, color=INK2)
-        if i < len(stages) - 1:
-            ax.annotate("", xy=(i + 1.06, 0.59), xytext=(i + 0.94, 0.59),
-                        arrowprops=dict(arrowstyle="->", color=MUTED, lw=0.8))
-        rows.append({"order": i + 1, "stage": name, "diag_key": key, "share_of_encode_core": share, "note": note})
-    ax.set_title(f"Eθ FAST encoder (impl_mask {mask}) - share of native encode time per stage (j0126, sum over "
-                 "samples)", fontsize=8)
+    cc_note = "4-connected CC per slice; M5b batch" + (", O3 uint16 chains" if mask & 4096 else "") + \
+        (", O1 lean" if mask & 1024 else "")
+    stages = [("1 scan", "scan_ns", "max label + pixel pairs"), ("2 boundary", "boundary_ns", "crack codes (upstream)"),
+              ("3 2D CC", "cc_ns", cc_note),
+              ("4 runs", "runs_ns", "same-label z-runs" + ("; O2 exact allocation" if mask & 2048 else "")),
+              ("5 candidates", "candidate_ns", "depth windows; M1a neighbour filter"),
+              ("6 reductions", "reduction_ns", "singleton / equal / subset"),
+              ("7 components", "component_ns", "independent CC sets"),
+              ("8 greedy + dual", "pass1_ns", "UB + integer LB"),
+              ("9 exact DP / local", "pass2_ns", "small components"),
+              ("10 serialize", "serialize_ns", "PINS section + stream")]
+    fig, ax = plt.subplots(figsize=(7.2, 3.6))
+    ys = np.arange(len(stages))
+    vals = [100 * (shares.get(k) or 0) for _, k, _ in stages]
+    ax.barh(ys, vals, height=0.62, color=BLUE)
+    for y, (name, key, note), v in zip(ys, stages, vals):
+        lab = "NA" if shares.get(key) is None else f"{v:.1f}%"
+        ax.text(v + 0.6, y, f"{lab}  ·  {note}", va="center", fontsize=6.8, color=INK2)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([n for n, _, _ in stages], fontsize=7.5)
+    ax.invert_yaxis()
+    ax.set_xlim(0, max(vals + [1]) * 2.1)
+    ax.set_xlabel("share of the native encode time [%] (j0126, summed over samples)")
+    ax.grid(axis="y", visible=False)
+    ax.set_title(f"Eθ FAST encoder (impl_mask {mask}): stages in execution order")
+    rows = [{"order": i + 1, "stage": n, "diag_key": k, "share_of_encode_core": shares.get(k), "note": t}
+            for i, (n, k, t) in enumerate(stages)]
     fw.save(fig, "F02", "encoder_pipeline", rows,
-            "Fig. 2. Order of the Eθ encoder stages as executed in cpp/src/encoder.cpp (FAST: fixed depth width, "
-            "certificate off). Percentages: share of the native encode time per stage, summed over the j0126 test "
-            "samples (native stage timers; the remainder is bookkeeping). Annotations name where M1a/M5b (v3) and the "
-            "Q1 changes act; every change writes the same bytes as E0.",
-            "2-rasm: Eθ bosqichlari koddagi tartibda; foizlar - j0126 da har bosqichning native vaqt ulushi.",
+            "Fig. 2. Eθ encoder stages in the order executed by cpp/src/encoder.cpp (FAST: fixed depth width, "
+            "certificate off), with the share of the native encode time per stage summed over the j0126 test samples "
+            "(native stage timers; the remainder is bookkeeping). Notes name where M1a/M5b (v3) and the accepted Q1 "
+            "changes act; every change writes the same bytes as E0.",
+            "2-rasm: Eθ bosqichlari koddagi tartibda; foiz - j0126 da har bosqichning native vaqt ulushi.",
             "j0126, Eθ native timers")
 
 
@@ -170,13 +190,21 @@ def f03_pareto(fw: FigWriter, totals: list[dict], dataset: str) -> None:
         wrapped = "+" in m
         ax.scatter(t, b / 1e6, s=42 if m in key else 22, color=col, marker="s" if wrapped else "o",
                    edgecolor="#ffffff", linewidth=1.2, zorder=3)
-        if m in key or m in nondom:
-            ax.annotate(lab if m in key else m, (t, b / 1e6), textcoords="offset points", xytext=(5, 3),
-                        fontsize=6.3, color=INK2)
+        if m in key:
+            ax.annotate(lab, (t, b / 1e6), textcoords="offset points", xytext=(6, 6 + 9 * list(key).index(m)),
+                        fontsize=6.8, color=INK, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.5))
         out.append({"dataset": dataset, "method": m, "enc_ms_sum_of_medians": t, "total_bytes": b,
                     "pareto_nondominated": m in nondom, "wrapped": wrapped})
-    ax.set_xscale("log")
-    ax.set_xlabel("encode time, sum over samples of the median of 7 repeats [ms] (log scale)")
+    log_axis(ax, "x")
+    nd = sorted((r for r in out if r["pareto_nondominated"] and r["method"] not in key),
+                key=lambda r: r["total_bytes"])
+    for i, r in enumerate(nd[:8]):  # non-dominated points listed in a side box instead of crowded labels
+        ax.scatter(r["enc_ms_sum_of_medians"], r["total_bytes"] / 1e6, s=60, facecolor="none", edgecolor=INK2,
+                   linewidth=0.8, zorder=4)
+    if nd:
+        ax.text(1.01, 0.98, "Pareto non-dominated (ringed):\n" + "\n".join(r["method"] for r in nd[:8]),
+                transform=ax.transAxes, va="top", ha="left", fontsize=6.3, color=INK2)
+    ax.set_xlabel("encode time, sum over samples of the per-sample median [ms] (log scale)")
     ax.set_ylabel("total stored size [MB]")
     ax.set_title(f"Size vs encode time, {dataset} (circles: raw streams; squares: +zstd wrappers)")
     fw.save(fig, "F03", f"size_time_pareto_{dataset}", out,
@@ -193,17 +221,15 @@ def f04_speedups(fw: FigWriter, res: dict) -> None:
              ("C3_wgreedy", "vs weighted greedy"), ("C3_stock_corr", "vs corrected stock"),
              ("C3_flat", "vs Crackle flat")]
     dsets = [d for d in ("j0126", "snemi", "hemibrain") if d in res["datasets"]]
-    fig, axes = plt.subplots(1, len(dsets), figsize=(3.0 * len(dsets), 3.6), sharey=False, squeeze=False)
+    fig, axes = plt.subplots(1, len(dsets), figsize=(2.9 * len(dsets) + 1.2, 3.6), sharey=True, squeeze=False)
     rows = []
     for ax, ds in zip(axes[0], dsets):
         cc = res["datasets"][ds]["comparisons"]
-        ys, labels = [], []
         for i, (cid, lab) in enumerate(comps):
             p = cc.get(cid)
             if not p or p.get("empty"):
+                ax.text(1.0, i, "  N/A (not measured)", va="center", fontsize=6.3, color=MUTED)
                 continue
-            ys.append(i)
-            labels.append(lab)
             lo, hi = (p["S_T_ci"] or [p["S_T"], p["S_T"]])
             col = BLUE if cid == "C1" else (ORANGE if cid == "BUILD" else GRAY)
             ax.errorbar(p["S_T"], i, xerr=[[p["S_T"] - lo], [hi - p["S_T"]]], fmt="o", color=col, ms=5, capsize=2,
@@ -214,12 +240,12 @@ def f04_speedups(fw: FigWriter, res: dict) -> None:
                          "n": p["n"], "clusters": p["n_clusters"], "S_T": p["S_T"], "ci_lo": lo, "ci_hi": hi,
                          "time_reduction_pct": p["time_reduction_pct"]})
         ax.axvline(1.0, color=AXIS, lw=1)
-        ax.set_xscale("log")
-        ax.set_yticks(ys)
-        ax.set_yticklabels(labels, fontsize=7)
-        ax.invert_yaxis()
+        log_axis(ax, "x", [0.25, 0.5, 1, 2, 5, 10, 20, 50, 100])
         ax.set_title(ds)
-        ax.set_xlabel("speed-up S_T (geomean, log; >1 = Eθ faster)")
+        ax.set_xlabel("S_T (log; >1 = Eθ faster)")
+    axes[0][0].set_yticks(range(len(comps)))
+    axes[0][0].set_yticklabels([lab for _, lab in comps], fontsize=7)
+    axes[0][0].invert_yaxis()
     fig.suptitle("Encode speed-up with 95% paired cluster-bootstrap CI", fontsize=9)
     fw.save(fig, "F04", "speedup_ci", rows,
             "Fig. 4. Geometric-mean encode speed-up S_T = exp(mean log(T_base/T_Eθ)) with 95% paired cluster-bootstrap "
@@ -243,8 +269,8 @@ def f05_memory(fw: FigWriter, res: dict, cells_peaks: list[dict], profile: list[
         a.scatter([r["voxels"] for r in pts], [r["peak_enc_mib"] for r in pts], s=18, color=col, label=lab,
                   edgecolor="#ffffff", linewidth=0.8, zorder=3)
         rows += [dict(r, panel="a") for r in pts]
-    a.set_xscale("log")
-    a.set_yscale("log")
+    log_axis(a, "x")
+    log_axis(a, "y")
     a.set_xlabel("voxels per volume (log)")
     a.set_ylabel("encode-inclusive peak working set [MiB] (log)")
     a.set_title("(a) peak vs size, all test volumes")
@@ -261,7 +287,7 @@ def f05_memory(fw: FigWriter, res: dict, cells_peaks: list[dict], profile: list[
             b.plot(range(len(phases)), ys, marker="o", ms=4, color=col, label=lab)
             rows.append({"panel": "b", "sample_id": sid, "method": m, **{f"peak_{p}_mib": r.get(f"peak_{p}_mib")
                                                                          for p in phases}})
-        b.set_title(f"(b) peak after each stage: {sid}", fontsize=7.5)
+        b.set_title(f"(b) fresh process, peak after each stage:\n{sid}", fontsize=7.5)
     b.set_xticks(range(len(phases)))
     b.set_xticklabels(phases, rotation=45, ha="right", fontsize=6.5)
     b.set_ylabel("process peak working set [MiB]")
@@ -306,7 +332,8 @@ def f06_ablation(fw: FigWriter, res: dict) -> None:
     for ax, t in ((axes[0], "time: T_variant / T_Eθ (geomean)"), (axes[1], "memory: M_variant / M_Eθ (geomean)")):
         ax.axhline(1, color=AXIS, lw=1)
         ax.set_xticks(range(len(names)))
-        ax.set_xticklabels([n.replace("cape_q1_", "Eθ − ").replace("_m0", "").replace("no", "") for n in names],
+        ax.set_xticklabels(["Eθ − " + n.replace("cape_q1_no", "").replace("f_m0", "").replace("_m0", "")
+                            for n in names],
                            rotation=30, ha="right", fontsize=7)
         ax.set_ylabel(t)
         ax.legend(fontsize=7)
@@ -325,30 +352,30 @@ def f07_size(fw: FigWriter, res: dict) -> None:
              ("C3_flat", "raw: Eθ vs flat"), ("A_z9_flat", "zstd9: Eθ vs flat"),
              ("SAFE9_stock", "SAFE9: Eθ vs stock"), ("SAFE9_flat", "SAFE9 vs flat+zstd9")]
     dsets = [d for d in ("j0126", "snemi", "hemibrain") if d in res["datasets"]]
-    fig, axes = plt.subplots(1, len(dsets), figsize=(3.0 * len(dsets), 3.6), squeeze=False)
+    fig, axes = plt.subplots(1, len(dsets), figsize=(2.9 * len(dsets) + 1.4, 3.8), sharey=True, squeeze=False)
     rows = []
     for ax, ds in zip(axes[0], dsets):
         cc = res["datasets"][ds]["comparisons"]
-        labels = []
         for i, (cid, lab) in enumerate(pairs):
             p = cc.get(cid)
             if not p or p.get("empty"):
+                ax.text(0.98, i, "N/A", transform=ax.get_yaxis_transform(), ha="right", va="center", fontsize=6.3,
+                        color=MUTED)
                 continue
-            labels.append((i, lab))
             g = [x["gain_pct"] for x in p["per_sample"]]
             jitter = np.linspace(-0.25, 0.25, len(g)) if len(g) > 1 else [0]
             col = [BLUE if v > 0 else (GRAY if v == 0 else ORANGE) for v in g]
             ax.scatter(g, [i + t for t in jitter], s=10, c=col, zorder=3)
-            ax.annotate(f"W/T/L {p['smaller']}/{p['equal']}/{p['larger']}", (max(g) if g else 0, i),
-                        textcoords="offset points", xytext=(4, -2), fontsize=6, color=INK2)
+            ax.text(0.98, i - 0.36, f"W/T/L {p['smaller']}/{p['equal']}/{p['larger']}",
+                    transform=ax.get_yaxis_transform(), ha="right", va="center", fontsize=6, color=INK2)
             rows += [{"dataset": ds, "comparison": cid, "sample_id": x["sample_id"], "gain_pct": x["gain_pct"]}
                      for x in p["per_sample"]]
         ax.axvline(0, color=AXIS, lw=1)
-        ax.set_yticks([i for i, _ in labels])
-        ax.set_yticklabels([lab for _, lab in labels], fontsize=6.5)
-        ax.invert_yaxis()
-        ax.set_xlabel("per-sample size gain [%] (>0 = Eθ smaller)")
+        ax.set_xlabel("size gain per sample [%]\n(>0 = Eθ smaller)")
         ax.set_title(ds)
+    axes[0][0].set_yticks(range(len(pairs)))
+    axes[0][0].set_yticklabels([lab for _, lab in pairs], fontsize=6.8)
+    axes[0][0].set_ylim(len(pairs) - 0.5, -0.6)
     fig.suptitle("Size differences per sample (blue: Eθ smaller, gray: equal, orange: Eθ larger)", fontsize=9)
     fw.save(fig, "F07", "size_safe", rows,
             "Fig. 7. Per-sample size gain 100 (B_base - B_Eθ)/B_base for raw streams, zstd9-wrapped streams and SAFE "
@@ -383,8 +410,8 @@ def f08_certificates(fw: FigWriter, res: dict, prop: list[dict]) -> None:
         b.bar(xs + 0.2, new, width=0.38, color=BLUE, label="v3/Eθ (valid)")
         b.axhline(0, color=AXIS, lw=1)
         b.set_xticks(xs)
-        b.set_xticklabels([r["sample_id"].replace("crackle_", "")[:18] for r in prop], rotation=20, ha="right",
-                          fontsize=6)
+        b.set_xticklabels([r["sample_id"].replace("crackle_", "").split("_")[0] + "\n" +
+                           r["sample_id"].rsplit("_", 1)[-1] for r in prop], fontsize=6.3)
         b.set_ylabel("gap [%] (negative = invalid)")
         b.set_title("(b) the 12 old invalid rows (w_D compaction)")
         b.legend(fontsize=6.5)
