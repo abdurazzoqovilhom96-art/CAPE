@@ -46,8 +46,12 @@ Requirements: CPython 3.12, a C++20 compiler (g++), git; CMake and Ninja come fr
 ```
 # Windows (MinGW-w64 g++)                     # Linux (g++)
 py -3.12 scripts\bootstrap.py                  python3.12 scripts/bootstrap.py
+.venv\Scripts\python scripts\generate_fixtures.py       .venv/bin/python scripts/generate_fixtures.py
 .venv\Scripts\python -m pytest tests -m "not acceptance"        .venv/bin/python -m pytest tests -m "not acceptance"
 ```
+
+`generate_fixtures.py` writes the deterministic synthetic test volumes (`data/synthetic/`) and Crackle sample crops
+that the research tests use; `tests/test_public_api.py` needs neither.
 
 `scripts/bootstrap.py` creates `.venv`, installs `requirements.lock` with `--require-hashes`, fetches the pinned
 upstream sources (`sources.lock.json`: Crackle at commit 14b39b1) and builds the native modules
@@ -56,7 +60,7 @@ upstream sources (`sources.lock.json`: Crackle at commit 14b39b1) and builds the
 | Platform | What was checked |
 |---|---|
 | Windows 11, MinGW-w64 g++ 16.2, Python 3.12 | all measurements of the paper; test suite without the acceptance tests: 2,762 passed, 7 skipped |
-| Linux (Debian, g++ 14.2, Python 3.12, clean Docker container `python:3.12`) | `bootstrap.py` builds and passes `doctor`; `tests/test_public_api.py` 10/10; the API wrote the 69 recorded test streams **byte for byte** (SHA-256) and losslessly. Research test suite: 2,269 passed; 132 errors are tests that load the Windows-only frozen snapshot binaries; 36 failures (SAFE-archive/refine and forced-hash-collision debug tests) are **not yet diagnosed**. All measurements were made on Windows. |
+| Linux (Debian, g++ 14.2, Python 3.12, clean Docker container `python:3.12`) | `bootstrap.py` builds and passes `doctor`; `tests/test_public_api.py` 10/10; the API wrote the 69 recorded test streams **byte for byte** (SHA-256) and losslessly. Research test suite (after `generate_fixtures.py`): 2,457 passed, 14 skipped; the remaining 2 failures and 234 errors are all tests that load the frozen v2.1/v3 snapshot binaries, which exist only as Windows `.pyd` files. All measurements were made on Windows. |
 
 ## Results at a glance
 
