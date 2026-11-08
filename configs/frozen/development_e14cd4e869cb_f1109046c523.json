@@ -1,0 +1,42 @@
+{
+  "freeze_id": "development_e14cd4e869cb_f1109046c523",
+  "mode": "development",
+  "config_path": "C:\\Users\\azamat\\AppData\\Local\\Temp\\claude\\59032291d7b33956\\2ec573fb-da6a-4387-9e20-55d3572f2899\\scratchpad\\smoke\\smoke_profile_hemibrain.yaml",
+  "config_hash": "e14cd4e869cbec4b63162ec3665d2ac0174cbe0fdee51d49c9c179cf7c6dfba6",
+  "methods_hash": "d72e06c82b278f1884e47e827872e35243bf47aa793cff92886f5e211b0d5b9c",
+  "split_hash": "f1109046c523a058bf7c62b02167dd948ac77fece67a68fc735f1b6c3b92d069",
+  "source_hash": "f3fa7321f96a57edeb1a2f816ee4031c0ccd14865e930b7263087793ef21897a",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "cape_q1_fast_profile_m0",
+    "cape_q1_base_profile_m0"
+  ],
+  "primary": {
+    "new": "cape_q1_fast_m0",
+    "baseline": "cape_v3frozen_fast_m0"
+  },
+  "splits": [
+    "development"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-07T07:25:42.136+00:00"
+}

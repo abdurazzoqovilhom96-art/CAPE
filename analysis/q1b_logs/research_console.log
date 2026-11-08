@@ -1,0 +1,45 @@
+[2026-11-07T18:52:32+00:00] stage INVENTORY
+[2026-11-07T18:52:32+00:00] stage STAGE0_FIXES
+[2026-11-07T18:52:32+00:00] stage PRECHECKS
+[2026-11-07T18:52:36+00:00] stage NATIVE_BASELINE
+[2026-11-07T18:52:36+00:00] native baseline (timing; nothing else runs)
+[2026-11-07T19:00:04+00:00] stage PROTOTYPE
+[2026-11-07T19:00:05+00:00] prototype cremi_A_x0_y768_z0_256x256x64 (attempt 1)
+[2026-11-07T19:00:09+00:00] prototype cremi_A_x0_y768_z0_256x256x64: SUCCESS
+[2026-11-07T19:00:09+00:00] prototype cremi_A_x256_y0_z0_256x256x64 (attempt 1)
+[2026-11-07T19:00:12+00:00] prototype cremi_A_x256_y0_z0_256x256x64: SUCCESS
+[2026-11-07T19:00:13+00:00] prototype cremi_A_x512_y0_z0_256x256x64 (attempt 1)
+[2026-11-07T19:00:16+00:00] prototype cremi_A_x512_y0_z0_256x256x64: SUCCESS
+[2026-11-07T19:00:16+00:00] prototype cremi_B_x0_y256_z64_256x256x60 (attempt 1)
+[2026-11-07T19:00:22+00:00] prototype cremi_B_x0_y256_z64_256x256x60: SUCCESS
+[2026-11-07T19:00:22+00:00] prototype cremi_B_x256_y0_z64_256x256x60 (attempt 1)
+[2026-11-07T19:00:27+00:00] prototype cremi_B_x256_y0_z64_256x256x60: SUCCESS
+[2026-11-07T19:00:27+00:00] prototype cremi_B_x256_y512_z64_256x256x60 (attempt 1)
+[2026-11-07T19:00:32+00:00] prototype cremi_B_x256_y512_z64_256x256x60: SUCCESS
+[2026-11-07T19:00:32+00:00] prototype cremi_C_x0_y256_z64_256x256x60 (attempt 1)
+[2026-11-07T19:00:38+00:00] prototype cremi_C_x0_y256_z64_256x256x60: SUCCESS
+[2026-11-07T19:00:38+00:00] prototype cremi_C_x0_y768_z64_256x256x60 (attempt 1)
+[2026-11-07T19:00:43+00:00] prototype cremi_C_x0_y768_z64_256x256x60: SUCCESS
+[2026-11-07T19:00:43+00:00] prototype cremi_C_x256_y512_z64_256x256x60 (attempt 1)
+[2026-11-07T19:00:48+00:00] prototype cremi_C_x256_y512_z64_256x256x60: SUCCESS
+[2026-11-07T19:00:48+00:00] prototype crackle_connectomics_x256_y256_z0_256x256x512 (attempt 1)
+[2026-11-07T19:01:31+00:00] prototype crackle_connectomics_x256_y256_z0_256x256x512: SUCCESS
+[2026-11-07T19:01:31+00:00] prototype crackle_ws_x0_y0_z0_256x256x512 (attempt 1)
+[2026-11-07T19:03:11+00:00] prototype crackle_ws_x0_y0_z0_256x256x512: SUCCESS
+[2026-11-07T19:03:11+00:00] stage GATE
+[2026-11-07T19:03:12+00:00] stage ANALYSIS
+[2026-11-07T19:03:12+00:00] stage ARTICLE
+[2026-11-07T19:03:14+00:00] stage VALIDATION
+PASS 1 required files exist and are non-empty (NOT_RUN figures carry a reason)
+PASS 2 every claim traces to a file in the package
+PASS 3 projection ratios recomputed independently from raw_results
+PASS 4 CSV, Markdown and LaTeX tables carry the same rows
+PASS 5 non-success samples carry no numbers (never 0)
+PASS 6 every Eθ stream decoded voxel-equal; every prototype certificate integer-feasible
+PASS 7 no over-claiming; negative results labelled
+WARN 8 figures rendered, non-blank, >= 300 px; visual review recorded
+PASS 9 --mode render reproduces the numbers (table / plot-data digests)
+PASS 10 terminal status consistent (gate.json, README, run state)
+verdict: WARN
+[2026-11-07T19:03:14+00:00] terminal status: STOPPED_GATE_FAILED; package: maqola uchun 2
+exit=0

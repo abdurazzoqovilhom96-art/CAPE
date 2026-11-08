@@ -1,0 +1,10 @@
+{"status": "DONE", "finished_at": "2026-11-07T18:48:27Z",
+ "commit": "5927ee9 + 5876dbf",
+ "fixes": ["0.1 O1 shown as rejected (methods, pseudocode, prior-art, proofs table); validator checks pseudocode bits",
+           "0.2 j0126 cluster amendment: 33 registered, 31 overlap-merged, 26 proximity sensitivity (registered result kept)",
+           "0.3 runner dtype gate asks the adapter instance (tests/test_q1b_runner_dtype.py); amendment run",
+           "0.4 package re-rendered twice, identical numbers digest, validator 10/10"],
+ "amendment_run": "results/20261107T183016Z_all_296f78da",
+ "ng_u32_rows": "704/704 uint16 rows SUCCESS, all lossless",
+ "validation": "10/10 PASS (render 2 digest identical to render 1)",
+ "package": "maqola uchun/ (previous versions archived as maqola uchun_archive_*)"}

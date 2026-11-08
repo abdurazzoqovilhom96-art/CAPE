@@ -1,0 +1,342 @@
+{
+ "run_id": "q1b_20261107T185232Z",
+ "created_at": "2026-11-07T18:52:32+00:00",
+ "stages": {
+  "INVENTORY": {
+   "status": "DONE",
+   "started_at": "2026-11-07T18:52:32+00:00",
+   "finished_at": "2026-11-07T18:52:32+00:00"
+  },
+  "STAGE0_FIXES": {
+   "status": "DONE",
+   "started_at": "2026-11-07T18:52:32+00:00",
+   "finished_at": "2026-11-07T18:52:32+00:00"
+  },
+  "PRECHECKS": {
+   "status": "DONE",
+   "started_at": "2026-11-07T18:52:32+00:00",
+   "finished_at": "2026-11-07T18:52:36+00:00"
+  },
+  "NATIVE_BASELINE": {
+   "status": "DONE",
+   "started_at": "2026-11-07T18:52:36+00:00",
+   "finished_at": "2026-11-07T19:00:04+00:00"
+  },
+  "PROTOTYPE": {
+   "status": "DONE",
+   "started_at": "2026-11-07T19:00:04+00:00",
+   "finished_at": "2026-11-07T19:03:11+00:00"
+  },
+  "GATE": {
+   "status": "DONE",
+   "started_at": "2026-11-07T19:03:11+00:00",
+   "finished_at": "2026-11-07T19:03:12+00:00"
+  },
+  "ANALYSIS": {
+   "status": "DONE",
+   "started_at": "2026-11-07T19:11:32+00:00",
+   "finished_at": "2026-11-07T19:11:32+00:00"
+  },
+  "ARTICLE": {
+   "status": "RUNNING",
+   "started_at": "2026-11-07T19:11:32+00:00"
+  },
+  "VALIDATION": {
+   "status": "DONE",
+   "started_at": "2026-11-07T19:11:31+00:00",
+   "finished_at": "2026-11-07T19:11:32+00:00"
+  }
+ },
+ "inventory": {
+  "source_hash": "62a72a6ae625d5a16c5e8ed5a957b11d626279d0de18c5beb28679d562e3f71a",
+  "git_head": "47d3a71",
+  "git_dirty_code": "?? configs/frozen/benchmark_09080cd32734_fac67075e84c.json\n?? configs/frozen/benchmark_14bea79e7381_c133b372f931.json\n?? configs/frozen/benchmark_1b27895b7d21_c133b372f931.json\n?? configs/frozen/benchmark_3bb16f721306_e8451ba8f09e.json\n?? configs/frozen/benchmark_46acf85da307_e67b56b59d35.json\n?? configs/frozen/benchmark_9e21d916e618_124e208f7676.json\n?? configs/frozen/benchmark_bfee776efcc3_124e208f7676.json\n?? configs/frozen/benchmark_ce9dce8f60ff_e67b56b59d35.json\n?? configs/frozen/benchmark_d20f2821edf4_fac67075e84c.json\n?? configs/frozen/development_2739b44d9b6f_f1109046c523.json\n?? configs/frozen/development_28317a5a2500_f1109046c523.json\n?? configs/frozen/development_3e22d9675327_d7bc7bd3a515.json\n?? configs/frozen/development_4ebd086d273d_c880c712a44f.json\n?? configs/frozen/development_a6fbb546900c_c880c712a44f.json\n?? configs/frozen/development_cc8d4e579a41_28dd2c9d610d.json\n?? configs/frozen/development_da7d95de9688_c880c712a44f.json\n?? configs/frozen/development_e1118a216b56_f1109046c523.json\n?? configs/frozen/development_e14cd4e869cb_f1109046c523.json\n?? configs/frozen/development_fab32a8d9c68_f1109046c523.json",
+  "env_lock_hash": "fff2b4d2614d275a",
+  "protocol_sha256": "9db8aba61d11ccfbf6a31a1e939b17892ba4b754d0bf77ae069e8af87c081db1",
+  "dev_samples": [
+   {
+    "sample_id": "cremi_A_x0_y768_z0_256x256x64",
+    "source_id": "cremi:A",
+    "dtype": "uint64",
+    "shape": [
+     64,
+     256,
+     256
+    ],
+    "voxel_sha256": "7b7146dec2db3a7c633489c521d400bc5a239b5f08a1f0ad43e127fc91f3cb9c"
+   },
+   {
+    "sample_id": "cremi_A_x256_y0_z0_256x256x64",
+    "source_id": "cremi:A",
+    "dtype": "uint64",
+    "shape": [
+     64,
+     256,
+     256
+    ],
+    "voxel_sha256": "d017a0bcbc9f56d0de30b825a944bbbd5293779047476fba764fef40a4fb52f5"
+   },
+   {
+    "sample_id": "cremi_A_x512_y0_z0_256x256x64",
+    "source_id": "cremi:A",
+    "dtype": "uint64",
+    "shape": [
+     64,
+     256,
+     256
+    ],
+    "voxel_sha256": "ee1f8267e09ffeae8962d672f7012d287a8a6d6162a166eb0b7be61f53c043f5"
+   },
+   {
+    "sample_id": "cremi_B_x0_y256_z64_256x256x60",
+    "source_id": "cremi:B",
+    "dtype": "uint64",
+    "shape": [
+     60,
+     256,
+     256
+    ],
+    "voxel_sha256": "2ef6e7234f5dc1a507a18aa550fd0f9ecf30863ba813d05fe9a2bc987bd246c1"
+   },
+   {
+    "sample_id": "cremi_B_x256_y0_z64_256x256x60",
+    "source_id": "cremi:B",
+    "dtype": "uint64",
+    "shape": [
+     60,
+     256,
+     256
+    ],
+    "voxel_sha256": "fbd0f70405ef96cf93b4f779f3b54125396ef5d53c7bbc2d668577bec6151de5"
+   },
+   {
+    "sample_id": "cremi_B_x256_y512_z64_256x256x60",
+    "source_id": "cremi:B",
+    "dtype": "uint64",
+    "shape": [
+     60,
+     256,
+     256
+    ],
+    "voxel_sha256": "d6d8a5dcc4d4313728eb5bd7ed98c7952898f24aa67185f29b33a07f1b8528b1"
+   },
+   {
+    "sample_id": "cremi_C_x0_y256_z64_256x256x60",
+    "source_id": "cremi:C",
+    "dtype": "uint64",
+    "shape": [
+     60,
+     256,
+     256
+    ],
+    "voxel_sha256": "f32f99a412c2bba21ee2bb3de3fc03aa8684c568a02d856619cef2d480105405"
+   },
+   {
+    "sample_id": "cremi_C_x0_y768_z64_256x256x60",
+    "source_id": "cremi:C",
+    "dtype": "uint64",
+    "shape": [
+     60,
+     256,
+     256
+    ],
+    "voxel_sha256": "c18d52c71591f4183ff2279331b7eb7697d799efd084b766f40a2433ffbfe85f"
+   },
+   {
+    "sample_id": "cremi_C_x256_y512_z64_256x256x60",
+    "source_id": "cremi:C",
+    "dtype": "uint64",
+    "shape": [
+     60,
+     256,
+     256
+    ],
+    "voxel_sha256": "8d9aa5ec1debb37116c4cf5f84c7127f4dfe5c5dc37c0c63f5905e8770549400"
+   },
+   {
+    "sample_id": "crackle_connectomics_x256_y256_z0_256x256x512",
+    "source_id": "crackle:connectomics",
+    "dtype": "uint32",
+    "shape": [
+     512,
+     256,
+     256
+    ],
+    "voxel_sha256": "3d4f058c4fd55cd66cb8f83f325f3f23bdc4b0f08e33f1ea2ba4a6f6bbaf3658"
+   },
+   {
+    "sample_id": "crackle_ws_x0_y0_z0_256x256x512",
+    "source_id": "crackle:ws",
+    "dtype": "uint64",
+    "shape": [
+     512,
+     256,
+     256
+    ],
+    "voxel_sha256": "19838fcedb0ed8b916fac4f195481857e4eb5c32929a0b01fe338b3b937baed3"
+   }
+  ],
+  "prototype_config": {
+   "budget_s": 1800.0,
+   "max_iter": 40,
+   "k_add": 50000,
+   "hard_timeout_s": 3600
+  }
+ },
+ "stage0": {
+  "status": "DONE",
+  "finished_at": "2026-11-07T18:48:27Z",
+  "commit": "5927ee9 + 5876dbf",
+  "fixes": [
+   "0.1 O1 shown as rejected (methods, pseudocode, prior-art, proofs table); validator checks pseudocode bits",
+   "0.2 j0126 cluster amendment: 33 registered, 31 overlap-merged, 26 proximity sensitivity (registered result kept)",
+   "0.3 runner dtype gate asks the adapter instance (tests/test_q1b_runner_dtype.py); amendment run",
+   "0.4 package re-rendered twice, identical numbers digest, validator 10/10"
+  ],
+  "amendment_run": "results/20261107T183016Z_all_296f78da",
+  "ng_u32_rows": "704/704 uint16 rows SUCCESS, all lossless",
+  "validation": "10/10 PASS (render 2 digest identical to render 1)",
+  "package": "maqola uchun/ (previous versions archived as maqola uchun_archive_*)"
+ },
+ "prechecks": {
+  "exit_code": 0,
+  "by_check": {
+   "T1": {
+    "passed": 118,
+    "failed": 0,
+    "skipped": 0
+   },
+   "T2": {
+    "passed": 200,
+    "failed": 0,
+    "skipped": 0
+   },
+   "T3": {
+    "passed": 57,
+    "failed": 0,
+    "skipped": 7
+   },
+   "T4": {
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0
+   }
+  },
+  "tests_pass": true
+ },
+ "native": {
+  "run_dir": "results/20261107T185236Z_all_7798cd88",
+  "exit_code": 0,
+  "status": "COMPLETE"
+ },
+ "prototype": {
+  "crackle_connectomics_x256_y256_z0_256x256x512": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/crackle_connectomics_x256_y256_z0_256x256x512.json"
+  },
+  "crackle_ws_x0_y0_z0_256x256x512": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/crackle_ws_x0_y0_z0_256x256x512.json"
+  },
+  "cremi_A_x0_y768_z0_256x256x64": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_A_x0_y768_z0_256x256x64.json"
+  },
+  "cremi_A_x256_y0_z0_256x256x64": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_A_x256_y0_z0_256x256x64.json"
+  },
+  "cremi_A_x512_y0_z0_256x256x64": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_A_x512_y0_z0_256x256x64.json"
+  },
+  "cremi_B_x0_y256_z64_256x256x60": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_B_x0_y256_z64_256x256x60.json"
+  },
+  "cremi_B_x256_y0_z64_256x256x60": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_B_x256_y0_z64_256x256x60.json"
+  },
+  "cremi_B_x256_y512_z64_256x256x60": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_B_x256_y512_z64_256x256x60.json"
+  },
+  "cremi_C_x0_y256_z64_256x256x60": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_C_x0_y256_z64_256x256x60.json"
+  },
+  "cremi_C_x0_y768_z64_256x256x60": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_C_x0_y768_z64_256x256x60.json"
+  },
+  "cremi_C_x256_y512_z64_256x256x60": {
+   "status": "SUCCESS",
+   "attempts": 1,
+   "json": "results/q1b_20261107T185232Z/prototype/cremi_C_x256_y512_z64_256x256x60.json"
+  }
+ },
+ "gate": {
+  "G1": true,
+  "G2": false,
+  "terminal": "STOPPED_GATE_FAILED",
+  "routes": {
+   "M": {
+    "quality_preserved": false,
+    "R_M_proj": 1.53494355161646,
+    "R_T_proj": 6.10735807535831,
+    "pass": false
+   },
+   "T": {
+    "quality_preserved": false,
+    "R_M_proj": 1.53494355161646,
+    "R_T_proj": 6.10735807535831,
+    "pass": false
+   },
+   "C": {
+    "L_CG_ge_L_ascent_all": true,
+    "gap_reduction": 0.9553766857304243,
+    "R_cert": 6.082733668589193,
+    "pass": false
+   }
+  }
+ },
+ "terminal": "STOPPED_GATE_FAILED",
+ "article": {
+  "package": "maqola uchun 2",
+  "zip": "maqola_uchun_2.zip",
+  "terminal": "STOPPED_GATE_FAILED",
+  "figures": {
+   "F01": "OK",
+   "F02": "OK",
+   "F03": "OK",
+   "F04": "OK",
+   "F05": "OK",
+   "F06": "OK"
+  },
+  "tables": [
+   "T01_development_crops",
+   "T02_methods",
+   "T03_prechecks",
+   "T04_counts_per_sample",
+   "T05_projection_and_gate",
+   "T06_certificate",
+   "T07_failures_and_exclusions",
+   "T08_posthoc_sensitivity"
+  ]
+ },
+ "validation": {
+  "exit_code": 0,
+  "summary": "10/10 PASS"
+ }
+}

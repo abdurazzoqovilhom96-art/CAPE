@@ -1,0 +1,10 @@
+\begin{tabular}{lll}
+\hline
+method & what & version / settings \\
+\hline
+cape\_q1\_fast\_m0 & native Eθ encoder (timed comparator) & impl\_mask 6719, FAST, certificate off \\
+cape\_q1\_fast\_profile\_m0 & native Eθ with phase timers and memory marks & profile\_memory on (diagnostics only) \\
+cape\_q1\_certified\_m0 & native Eθ with the integer dual-ascent certificate & certificate all\_regimes \\
+cg\_implicit (prototype) & bounded column generation + exact pricing + integer certificate & Python, numpy 2.5.4, scipy 1.18.1 linprog(HiGHS); budget 1800.0 s, max\_iter 40 \\
+\hline
+\end{tabular}

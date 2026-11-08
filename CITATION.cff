@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below. A manuscript is in preparation and not yet peer reviewed."
+title: "CAPE: Efficient Pin Selection with Optimality Bounds for Crackle Compression of 3D Neuron Segmentations"
+type: software
+authors:
+  - family-names: Abdurazzokov
+    given-names: Ilkhom
+version: 0.3.0.dev0
+date-released: 2026-11-08
+license: BSD-3-Clause
+repository-code: "https://github.com/abdurazzoqovilhom96-art/CAPE"
+keywords:
+  - connectomics
+  - segmentation
+  - lossless compression
+  - Crackle
+  - set cover

@@ -1,0 +1,338 @@
+{
+  "written_at": "2026-11-07T07:06:10+00:00",
+  "protocol": "configs/q1_development.yaml",
+  "runs": {
+    "core": "results/20261107T054303Z_development_ee998362",
+    "scale": "results/20261107T062104Z_development_93ad9f72"
+  },
+  "correctness": {
+    "mismatches": 0,
+    "by_method": [
+      {
+        "method": "cape_q1_O1_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      },
+      {
+        "method": "cape_q1_O2_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      },
+      {
+        "method": "cape_q1_O3_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      },
+      {
+        "method": "cape_q1_all_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      },
+      {
+        "method": "cape_q1_base_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      },
+      {
+        "method": "cape_q1_noO1_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      },
+      {
+        "method": "cape_q1_noO2_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      },
+      {
+        "method": "cape_q1_noO3_m0",
+        "n": 61,
+        "byte_or_sha_mismatch": 0,
+        "excluded": 0,
+        "non_ok_cells": 0,
+        "lossless_false": 0,
+        "mismatch_samples": []
+      }
+    ]
+  },
+  "modules": {
+    "O1": {
+      "bit": 1024,
+      "accepted": false,
+      "reason": [
+        "speed CI lower 0.986 > 1: False",
+        "memory CI upper 1.001 < 1: False",
+        "other axis within 2% (S_T 0.993 >= 0.98, R_M 1.000 <= 1.02): True"
+      ],
+      "loo": {
+        "n": 61,
+        "n_clusters": 21,
+        "n_mem": 61,
+        "S_T": 0.9934500622058356,
+        "S_T_ci": [
+          0.9859849746728118,
+          1.004128878690883
+        ],
+        "R_M": 0.9999148893689881,
+        "R_M_ci": [
+          0.999044276905058,
+          1.0010965128419793
+        ],
+        "time_reduction_pct": -0.6593122335330159,
+        "slower_gt10pct": [
+          "scale_crackle_connectomics_64x64x128",
+          "scale_crackle_connectomics_64x64x256",
+          "scale_cremi_A_128x128x125"
+        ],
+        "peak_gt10pct": [],
+        "worst_speedup": {
+          "sample_id": "scale_crackle_connectomics_64x64x256",
+          "speedup": 0.7772612089595912
+        },
+        "worst_mem_ratio": {
+          "sample_id": "scale_crackle_ws_128x128x128",
+          "mem_ratio": 1.011243573083225
+        },
+        "bytes_identical": true
+      },
+      "single": {
+        "n": 61,
+        "S_T": 0.9944716642152565,
+        "S_T_ci": [
+          0.9793064793478424,
+          1.0055542218637465
+        ],
+        "R_M": 0.9991510289638547,
+        "R_M_ci": [
+          0.998517259058316,
+          0.9995827262071425
+        ]
+      }
+    },
+    "O2": {
+      "bit": 2048,
+      "accepted": true,
+      "reason": [
+        "speed CI lower 0.992 > 1: False",
+        "memory CI upper 0.990 < 1: True",
+        "other axis within 2% (S_T 1.019 >= 0.98, R_M 0.981 <= 1.02): True"
+      ],
+      "loo": {
+        "n": 61,
+        "n_clusters": 21,
+        "n_mem": 61,
+        "S_T": 1.0188225931161565,
+        "S_T_ci": [
+          0.9918507906948419,
+          1.0591881002266779
+        ],
+        "R_M": 0.9812244366738248,
+        "R_M_ci": [
+          0.9680708475920685,
+          0.9900360645602916
+        ],
+        "time_reduction_pct": 1.847484855885062,
+        "slower_gt10pct": [
+          "scale_crackle_connectomics_128x128x128",
+          "scale_crackle_connectomics_64x64x128",
+          "scale_crackle_connectomics_64x64x256",
+          "scale_crackle_connectomics_64x64x64",
+          "scale_cremi_A_128x128x125"
+        ],
+        "peak_gt10pct": [],
+        "worst_speedup": {
+          "sample_id": "scale_crackle_connectomics_64x64x256",
+          "speedup": 0.7630829547774493
+        },
+        "worst_mem_ratio": {
+          "sample_id": "scale_crackle_connectomics_64x64x64",
+          "mem_ratio": 1.003044939101218
+        },
+        "bytes_identical": true
+      },
+      "single": {
+        "n": 61,
+        "S_T": 1.0220280480709805,
+        "S_T_ci": [
+          1.0032549305445972,
+          1.0473487040280849
+        ],
+        "R_M": 0.9813695258194131,
+        "R_M_ci": [
+          0.9686983806071933,
+          0.9900277252437372
+        ]
+      }
+    },
+    "O3": {
+      "bit": 4096,
+      "accepted": true,
+      "reason": [
+        "speed CI lower 1.038 > 1: True",
+        "memory CI upper 0.939 < 1: True",
+        "other axis within 2% (S_T 1.048 >= 0.98, R_M 0.920 <= 1.02): True"
+      ],
+      "loo": {
+        "n": 61,
+        "n_clusters": 21,
+        "n_mem": 61,
+        "S_T": 1.0483918632372813,
+        "S_T_ci": [
+          1.0381269347696789,
+          1.0560986403084296
+        ],
+        "R_M": 0.9202846023127866,
+        "R_M_ci": [
+          0.9069500838872021,
+          0.9392848988967566
+        ],
+        "time_reduction_pct": 4.615818276942196,
+        "slower_gt10pct": [
+          "scale_crackle_connectomics_64x64x256"
+        ],
+        "peak_gt10pct": [],
+        "worst_speedup": {
+          "sample_id": "scale_crackle_connectomics_64x64x256",
+          "speedup": 0.8902888738081725
+        },
+        "worst_mem_ratio": {
+          "sample_id": "scale_crackle_connectomics_64x64x64",
+          "mem_ratio": 0.9952078341493905
+        },
+        "bytes_identical": true
+      },
+      "single": {
+        "n": 61,
+        "S_T": 1.0485884160739003,
+        "S_T_ci": [
+          1.0252950245584673,
+          1.0649800192755405
+        ],
+        "R_M": 0.9196458162780334,
+        "R_M_ci": [
+          0.906219631126929,
+          0.9388442298139211
+        ]
+      }
+    }
+  },
+  "selected_impl_mask": 6719,
+  "selected_bits": [
+    "O2",
+    "O3"
+  ],
+  "summary": {
+    "cape_q1_all_m0__vs__cape_v3frozen_fast_m0": {
+      "n": 61,
+      "n_clusters": 21,
+      "S_T": 1.0725276613045278,
+      "S_T_ci": [
+        1.057653431753135,
+        1.0960733427074696
+      ],
+      "R_M": 0.9028567046069168,
+      "R_M_ci": [
+        0.8946665287738481,
+        0.916015853536768
+      ],
+      "time_reduction_pct": 6.762311492862716,
+      "bytes_identical": true,
+      "slower_gt10pct": [
+        "scale_crackle_connectomics_64x64x256"
+      ],
+      "peak_gt10pct": [],
+      "worst_speedup": {
+        "sample_id": "scale_crackle_connectomics_64x64x256",
+        "speedup": 0.8536195919190139
+      },
+      "worst_mem_ratio": {
+        "sample_id": "scale_crackle_connectomics_64x64x128",
+        "mem_ratio": 0.9811713407987316
+      }
+    },
+    "cape_q1_base_m0__vs__cape_v3frozen_fast_m0": {
+      "n": 61,
+      "n_clusters": 21,
+      "S_T": 1.0016448796302142,
+      "S_T_ci": [
+        0.9977105352570976,
+        1.0073770478899295
+      ],
+      "R_M": 0.999938514181755,
+      "R_M_ci": [
+        0.9994311596785496,
+        1.000639695856164
+      ],
+      "time_reduction_pct": 0.16421784443418908,
+      "bytes_identical": true,
+      "slower_gt10pct": [
+        "scale_crackle_connectomics_64x64x64"
+      ],
+      "peak_gt10pct": [],
+      "worst_speedup": {
+        "sample_id": "scale_crackle_connectomics_64x64x64",
+        "speedup": 0.8678219425292675
+      },
+      "worst_mem_ratio": {
+        "sample_id": "cremi_B_x768_y512_z64_128x128x60",
+        "mem_ratio": 1.0046779141104294
+      }
+    },
+    "cape_q1_all_m0__vs__cape_q1_base_m0": {
+      "n": 61,
+      "n_clusters": 21,
+      "S_T": 1.070766379498173,
+      "S_T_ci": [
+        1.0569250434997886,
+        1.0920275850869474
+      ],
+      "R_M": 0.9029122209036226,
+      "R_M_ci": [
+        0.8948255752725969,
+        0.9158960003416732
+      ],
+      "time_reduction_pct": 6.60894671826907,
+      "bytes_identical": true,
+      "slower_gt10pct": [
+        "scale_crackle_connectomics_64x64x256"
+      ],
+      "peak_gt10pct": [],
+      "worst_speedup": {
+        "sample_id": "scale_crackle_connectomics_64x64x256",
+        "speedup": 0.8544415271505177
+      },
+      "worst_mem_ratio": {
+        "sample_id": "scale_crackle_connectomics_64x64x64",
+        "mem_ratio": 0.9904613789528253
+      }
+    }
+  },
+  "note": "development data only (seen); the final experiment re-measures everything"
+}

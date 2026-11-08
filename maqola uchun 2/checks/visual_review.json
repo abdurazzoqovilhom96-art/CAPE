@@ -1,0 +1,8 @@
+{"status": "PASS", "reviewed_at": "2026-11-07T19:12:00Z", "reviewer": "agent (Read of every PNG)",
+ "figures": {
+  "F01_dominance_example": "PASS after fix: the title stated h = 512 (taken from another sample); now h = 64 = Z of the drawn CREMI crop; illustrative h = 8 is labelled as such",
+  "F02_algorithm_flow": "PASS after fix: boxes and texts overlapped; re-laid out, no overlap",
+  "F03_memory_breakdown": "PASS after fix: legend covered the ws projected-peak marker; legend moved outside",
+  "F04_time_breakdown": "PASS after fix: same legend overlap; legend moved outside",
+  "F05_family_sizes": "PASS after replacement: the convergence plot was degenerate (every sample converged at iteration 1); replaced by family sizes, caption says why",
+  "F06_projected_ratios": "PASS: markers distinct, post-hoc warm-LP markers labelled; the 'gate 0.95' text touches the last x marker (cosmetic)"}}

@@ -1,0 +1,142 @@
+j0126 DONE 20261107T070831Z_all_8515084c
+snemi DONE 20261107T071254Z_all_b4feae52
+hemibrain DONE 20261107T071714Z_all_61667878
+scale DONE 20261107T071944Z_all_e20fca31
+scale_stock DONE 20261107T072142Z_all_dfdb6c1d
+profile_j0126 DONE 20261107T072312Z_all_e6cceef5
+profile_hemibrain DONE 20261107T072436Z_all_12d0bc08
+profile_scale DONE 20261107T072557Z_all_f272ec92
+{
+  "run_id": "q1_smoke_20261107T070831Z",
+  "written_at": "2026-11-07T07:27:19+00:00",
+  "runs": {
+    "j0126": {
+      "run_dir": "results/20261107T070831Z_all_8515084c",
+      "status": "DONE",
+      "cells": 153,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "3/3"
+    },
+    "snemi": {
+      "run_dir": "results/20261107T071254Z_all_b4feae52",
+      "status": "DONE",
+      "cells": 153,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "3/3"
+    },
+    "hemibrain": {
+      "run_dir": "results/20261107T071714Z_all_61667878",
+      "status": "DONE",
+      "cells": 60,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "2/2"
+    },
+    "scale": {
+      "run_dir": "results/20261107T071944Z_all_e20fca31",
+      "status": "DONE",
+      "cells": 32,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "2/2"
+    },
+    "scale_stock": {
+      "run_dir": "results/20261107T072142Z_all_dfdb6c1d",
+      "status": "DONE",
+      "cells": 10,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "2/2"
+    },
+    "profile_j0126": {
+      "run_dir": "results/20261107T072312Z_all_e6cceef5",
+      "status": "DONE",
+      "cells": 6,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "n/a"
+    },
+    "profile_hemibrain": {
+      "run_dir": "results/20261107T072436Z_all_12d0bc08",
+      "status": "DONE",
+      "cells": 4,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "n/a"
+    },
+    "profile_scale": {
+      "run_dir": "results/20261107T072557Z_all_f272ec92",
+      "status": "DONE",
+      "cells": 4,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "n/a"
+    }
+  }
+}
+staging package: D:\CAPE_PINS\results\q1_smoke_20261107T070831Z\article_staging
+tools/q1_article.py 0
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+D:\CAPE_PINS\tools\validate_article_package.py:44: Pandas4Warning: The 'lsuffix' and 'rsuffix' keywords in DataFrame.join are deprecated and will be removed in a future version. Use the 'suffixes' keyword instead.
+  j = a.join(b, how="inner", lsuffix="_n", rsuffix="_b")
+# Validator: FAIL
+
+Run `q1_smoke_20261107T070831Z`, 2026-11-07T07:27:41+00:00.
+
+| tekshiruv | natija |
+|---|---|
+| 1 manifest files exist, non-empty; BLOCKED has a reason; no empty folder | FAIL |
+| 2 every claim traces to an artifact in the package | PASS |
+| 3 formulas recomputed independently from raw CSV (S_T, G_B, n) | PASS |
+| 4 CSV, Markdown and LaTeX tables carry the same numbers | FAIL |
+| 5 missing / skipped / unsupported cells carry no value (never 0) | PASS |
+| 6 original/decoded mismatch = 0 on every SUCCESS row; Eθ bytes == E0 bytes | PASS |
+| 7 captions/texts: no wrong scope ('5 independent volumes', acceptance claims) | FAIL |
+| 8 figures rendered, non-blank, >= 300 px; visual review recorded | WARN |
+| 9 --mode render reproduces the numbers (table/plot-data digests) | PASS |
+| 10 technical status (COMPLETE/PARTIAL) matches the runs | PASS |
+
+Tafsilot: `checks/validation_report.json`.
+tools/validate_article_package.py 1
+q1_smoke_20261107T070831Z

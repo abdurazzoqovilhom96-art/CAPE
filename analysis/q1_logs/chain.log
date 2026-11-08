@@ -1,0 +1,63 @@
+[2026-11-07T06:42:14Z] chain started; waiting for the development panels + selection
+[2026-11-07T07:06:16Z] development finished, exit=0
+[2026-11-07T07:06:16Z] audit
+[2026-11-07T07:06:29Z] STOP: audit failed
+[2026-11-07T07:07:15Z] chain started; waiting for the development panels + selection
+[2026-11-07T07:07:15Z] development finished, exit=0
+[2026-11-07T07:07:15Z] audit
+[2026-11-07T07:07:25Z] freeze
+{
+  "mask": 6719,
+  "source": "f3fa7321f96a",
+  "configs": {
+    "j0126": "configs/q1_final_j0126.yaml",
+    "snemi": "configs/q1_final_snemi.yaml",
+    "hemibrain": "configs/q1_final_hemibrain.yaml",
+    "scale": "configs/q1_final_scale.yaml",
+    "scale_stock": "configs/q1_final_scale_stock.yaml",
+    "profile_j0126": "configs/q1_final_profile_j0126.yaml",
+    "profile_hemibrain": "configs/q1_final_profile_hemibrain.yaml",
+    "profile_scale": "configs/q1_final_profile_scale.yaml"
+  }
+}
+[2026-11-07T07:07:25Z] tests (not acceptance) with the generated methods/configs
+2360 passed, 12 deselected in 62.92s (0:01:02)
+[2026-11-07T07:08:31Z] freeze commit 0608c60; source f3fa7321f96a
+[2026-11-07T07:08:31Z] smoke test on development data (not evidence)
+|---|---|
+| 1 manifest files exist, non-empty; BLOCKED has a reason; no empty folder | FAIL |
+| 2 every claim traces to an artifact in the package | PASS |
+| 3 formulas recomputed independently from raw CSV (S_T, G_B, n) | PASS |
+| 4 CSV, Markdown and LaTeX tables carry the same numbers | FAIL |
+| 5 missing / skipped / unsupported cells carry no value (never 0) | PASS |
+| 6 original/decoded mismatch = 0 on every SUCCESS row; Eθ bytes == E0 bytes | PASS |
+| 7 captions/texts: no wrong scope ('5 independent volumes', acceptance claims) | FAIL |
+| 8 figures rendered, non-blank, >= 300 px; visual review recorded | WARN |
+| 9 --mode render reproduces the numbers (table/plot-data digests) | PASS |
+| 10 technical status (COMPLETE/PARTIAL) matches the runs | PASS |
+
+Tafsilot: `checks/validation_report.json`.
+tools/validate_article_package.py 1
+q1_smoke_20261107T070831Z
+[2026-11-07T07:27:41Z] FINAL fresh run
+[2026-11-07T07:27:41+00:00] run j0126: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_j0126.yaml --manifest data/manifests/q1_external_j0126.jsonl
+[2026-11-07T11:20:30+00:00] run j0126: DONE results/20261107T072741Z_all_881c7eae (exit 0, COMPLETE)
+[2026-11-07T11:20:30+00:00] run snemi: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_snemi.yaml --manifest data/manifests/confirm_snemi3d.jsonl
+[2026-11-07T14:48:08+00:00] run snemi: DONE results/20261107T112030Z_all_a3fe0095 (exit 0, COMPLETE)
+[2026-11-07T14:48:08+00:00] run hemibrain: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_hemibrain.yaml --manifest data/manifests/q1_external_hemibrain.jsonl
+[2026-11-07T15:07:02+00:00] run hemibrain: DONE results/20261107T144808Z_all_dc44db69 (exit 0, COMPLETE)
+[2026-11-07T15:07:02+00:00] run scale: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_scale.yaml --manifest data/manifests/confirm_snemi3d_v3_scale.jsonl
+[2026-11-07T15:15:28+00:00] run scale: DONE results/20261107T150702Z_all_92c1c67b (exit 0, COMPLETE)
+[2026-11-07T15:15:28+00:00] run scale_stock: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_scale_stock.yaml --manifest data/manifests/confirm_snemi3d_v3_scale_stock.jsonl
+[2026-11-07T15:31:42+00:00] run scale_stock: DONE results/20261107T151528Z_all_82795edb (exit 0, COMPLETE)
+[2026-11-07T15:31:42+00:00] run profile_j0126: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_profile_j0126.yaml --manifest data/manifests/q1_external_j0126.jsonl
+[2026-11-07T15:34:44+00:00] run profile_j0126: DONE results/20261107T153143Z_all_f3f993b8 (exit 0, COMPLETE)
+[2026-11-07T15:34:44+00:00] run profile_hemibrain: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_profile_hemibrain.yaml --manifest data/manifests/q1_external_hemibrain.jsonl
+[2026-11-07T15:36:49+00:00] run profile_hemibrain: DONE results/20261107T153444Z_all_f0ef67fb (exit 0, COMPLETE)
+[2026-11-07T15:36:49+00:00] run profile_scale: D:\CAPE_PINS\run_all.py --stage all --config configs/q1_final_profile_scale.yaml --manifest data/manifests/confirm_snemi3d_v3_scale.jsonl
+[2026-11-07T15:38:40+00:00] run profile_scale: DONE results/20261107T153649Z_all_0795b28c (exit 0, COMPLETE)
+[2026-11-07T15:38:41+00:00] stage raw_audit: DONE (exit 0)
+[2026-11-07T15:39:07+00:00] stage article: DONE (exit 0)
+[2026-11-07T15:39:09+00:00] stage validate: FAILED (exit 1)
+[2026-11-07T15:39:10+00:00] Q1 run q1_20261107T072741Z: PARTIAL -> maqola uchun
+[2026-11-07T15:39:10Z] final pipeline exit=1

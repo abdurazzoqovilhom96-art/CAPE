@@ -1,0 +1,106 @@
+{
+ "neuroglancer_u32": {
+  "j0126": {
+   "rows": 726,
+   "narrow_rows": 0,
+   "narrow_ok": 0,
+   "narrow_non_ok": {}
+  },
+  "snemi": {
+   "rows": 704,
+   "narrow_rows": 704,
+   "narrow_ok": 0,
+   "narrow_non_ok": {
+    "UNSUPPORTED_DTYPE": 704
+   }
+  },
+  "hemibrain": {
+   "rows": 28,
+   "narrow_rows": 0,
+   "narrow_ok": 0,
+   "narrow_non_ok": {}
+  }
+ },
+ "interference": [
+  {
+   "start": "2026-11-07T07:28:50Z",
+   "end": "2026-11-07T07:31:35Z",
+   "what": "the agent re-rendered the smoke-test article package (CPU-heavy analysis) after the j0126 timing had started; window = benchmark start to the last file the rebuild wrote (07:31:31Z)",
+   "runs": {
+    "j0126": {
+     "rows_in_window": 79,
+     "rows_total": 12672,
+     "c1_timed_rows_in_window": 3,
+     "c1_timed_rows": 462,
+     "c1_memory_rows_in_window": 0,
+     "S_T_all_rows": 1.0739471390499187,
+     "S_T_without_window_rows": 1.0740515381208926
+    }
+   }
+  }
+ ],
+ "post_freeze_commits": [
+  "5927ee9 2026-11-07T23:30:08+05:00 Q1b Stage 0: O1 shown as rejected in methods/pseudocode/prior-art (validator checks pseudocode bits); j0126 cluster amendment (overlap-merged + proximity sensitivity, registered result kept); runner dtype gate asks the adapter instance (I13) with tests; amendment config for neuroglancer_b8_u32 on SNEMI",
+  "322936d 2026-11-07T23:25:19+05:00 B protocol (pre-registered before any prototype result): dominance-completeness theorem, pricing/certificate prechecks, column-generation prototype with gates G1/G2, Stage 0 fixes of the Q1 package",
+  "bea418c 2026-11-07T20:52:21+05:00 HANDOFF: Q1 final run, package, open issues",
+  "6867a2b 2026-11-07T20:50:56+05:00 Q1 report: runner-written configs/frozen snapshots are not listed as uncommitted code; full first reason text",
+  "7802bfd 2026-11-07T20:49:30+05:00 Q1 analysis-only post-run fixes from the visual review and raw-row audit: F03 labels/z-order, F04 panel roles, F05 stock on the 4 subvolumes, F08 colours; computed post-run findings (amended neuroglancer track coverage, interference window sensitivity, post-freeze commits) in the final report",
+  "efbe2d5 2026-11-07T20:40:49+05:00 Q1 analysis-only post-freeze fixes found by the smoke test (figures layout, fresh-process stage profile, validator integer formatting, manifest self entry); no measurement code changed"
+ ],
+ "post_freeze_files": [
+  "cape/runner.py",
+  "configs/q1b_amend_ng_snemi.yaml",
+  "docs/CAPE_Q1_B_YAGONA_AGENT_PROMPT_UZ.md",
+  "docs/HANDOFF_UZ.md",
+  "docs/q1/mathematics/q1_output_preserving.md",
+  "scripts/q1_common.py",
+  "tests/test_q1b_runner_dtype.py",
+  "tools/q1_analysis.py",
+  "tools/q1_article.py",
+  "tools/q1_figs.py",
+  "tools/validate_article_package.py"
+ ],
+ "neuroglancer_u32_reason_examples": [
+  "neuroglancer_b8_u32 supports ['uint32', 'uint64']; input is uint16 (no silent cast)",
+  "neuroglancer_b8_u32+zstd3 supports ['uint32', 'uint64']; input is uint16 (no silent cast)",
+  "neuroglancer_b8_u32+zstd9 supports ['uint32', 'uint64']; input is uint16 (no silent cast)"
+ ],
+ "I13_status": "NOT FIXED in the final run (704/704 uint8/uint16 rows not SUCCESS: the runner checks the class-level supported_dtypes before the adapter, so the widening path was never reached); FIXED by the post-run AMENDMENT run results/20261107T183016Z_all_296f78da after the runner fix: 704/704 uint16 rows SUCCESS, all lossless",
+ "amendments": [
+  {
+   "id": "I13_neuroglancer_b8_u32_snemi",
+   "run_dir": "results/20261107T183016Z_all_296f78da",
+   "base_track": "snemi",
+   "method": "neuroglancer_b8_u32",
+   "reason": "B protocol Stage 0.3: the runner dtype gate (cape/runner.py) now asks the adapter instance; the frozen final run had 0/704 uint16 rows for this method",
+   "config": "configs/q1b_amend_ng_snemi.yaml",
+   "commit": "5927ee9",
+   "rows": 704,
+   "narrow_rows": 704,
+   "narrow_ok": 704,
+   "lossless_all": true,
+   "source_hash": "3710dd61bb48",
+   "vs_Etheta_none": {
+    "n": 32,
+    "bytes_ng": 14686048,
+    "bytes_Etheta": 1410718,
+    "G_B_pct_Etheta_smaller": 90.39416186029081,
+    "S_T_Etheta_vs_ng": 0.5232506978127859,
+    "note": "cross-run comparison (same machine and protocol, different run)"
+   },
+   "vs_Etheta_zstd9": {
+    "n": 32,
+    "bytes_ng": 2618385,
+    "bytes_Etheta": 876472,
+    "G_B_pct_Etheta_smaller": 66.52623659240334,
+    "S_T_Etheta_vs_ng": 0.7843620650364245,
+    "note": "cross-run comparison (same machine and protocol, different run)"
+   }
+  }
+ ],
+ "freeze_commit": "0608c60",
+ "uncommitted_files": [
+  "tools/q1_article.py"
+ ],
+ "measurement_code_changed_after_freeze": true
+}

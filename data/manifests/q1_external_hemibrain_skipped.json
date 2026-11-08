@@ -1,0 +1,54 @@
+[
+  {
+    "sample_id": "hemibrain_x11328_y24960_z14464_512x512x256",
+    "voxels": 67108864,
+    "status": "SKIPPED_BUDGET",
+    "methods": [
+      "crackle_pins_opt_corrected_m0",
+      "crackle_pins_opt_m0",
+      "crackle_vendor_pins_opt_m0",
+      "safe_stock_m0_zstd9",
+      "safe_stock_m0_zstd3"
+    ],
+    "reason": "v2.1 stock budget rule: stock pins_opt only on volumes <= 2^25 voxels (269 s/encode at 512x512x256 measured in v2.1); each cutout has 2^26 voxels"
+  },
+  {
+    "sample_id": "hemibrain_x20096_y17792_z13312_512x512x256",
+    "voxels": 67108864,
+    "status": "SKIPPED_BUDGET",
+    "methods": [
+      "crackle_pins_opt_corrected_m0",
+      "crackle_pins_opt_m0",
+      "crackle_vendor_pins_opt_m0",
+      "safe_stock_m0_zstd9",
+      "safe_stock_m0_zstd3"
+    ],
+    "reason": "v2.1 stock budget rule: stock pins_opt only on volumes <= 2^25 voxels (269 s/encode at 512x512x256 measured in v2.1); each cutout has 2^26 voxels"
+  },
+  {
+    "sample_id": "hemibrain_x12032_y27328_z20800_512x512x256",
+    "voxels": 67108864,
+    "status": "SKIPPED_BUDGET",
+    "methods": [
+      "crackle_pins_opt_corrected_m0",
+      "crackle_pins_opt_m0",
+      "crackle_vendor_pins_opt_m0",
+      "safe_stock_m0_zstd9",
+      "safe_stock_m0_zstd3"
+    ],
+    "reason": "v2.1 stock budget rule: stock pins_opt only on volumes <= 2^25 voxels (269 s/encode at 512x512x256 measured in v2.1); each cutout has 2^26 voxels"
+  },
+  {
+    "sample_id": "hemibrain_x11008_y25664_z10688_512x512x256",
+    "voxels": 67108864,
+    "status": "SKIPPED_BUDGET",
+    "methods": [
+      "crackle_pins_opt_corrected_m0",
+      "crackle_pins_opt_m0",
+      "crackle_vendor_pins_opt_m0",
+      "safe_stock_m0_zstd9",
+      "safe_stock_m0_zstd3"
+    ],
+    "reason": "v2.1 stock budget rule: stock pins_opt only on volumes <= 2^25 voxels (269 s/encode at 512x512x256 measured in v2.1); each cutout has 2^26 voxels"
+  }
+]

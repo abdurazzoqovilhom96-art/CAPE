@@ -1,0 +1,45 @@
+{
+  "written_at": "2026-11-07T07:07:25+00:00",
+  "written_before": "the first final-run measurement",
+  "selected_impl_mask": 6719,
+  "invariants": {
+    "lossless": "every SUCCESS row decodes voxel-identical with the original decoder",
+    "byte_equal_E0": "cape_q1_fast_m0 sha256 == cape_v3frozen_fast_m0 sha256 on 100% of valid primary cells; one mismatch stops the byte-preserving claim"
+  },
+  "C1": {
+    "new": "cape_q1_fast_m0",
+    "base": "cape_v3frozen_fast_m0",
+    "primary_dataset": "j0126 (33 volumes, cluster = volume)",
+    "practical_targets": {
+      "speed_S_T_geomean_min": 1.05,
+      "memory_R_M_geomean_max": 0.95,
+      "note": "project-chosen 5% targets, not a universal journal requirement"
+    },
+    "metrics": {
+      "S_T": "exp(mean log(T_E0 / T_E\u03b8)), T = median encode_ns over 7 repeats",
+      "R_M": "exp(mean log(M_E\u03b8 / M_E0)), M = peak_after_encode of the fresh-process memory row"
+    },
+    "statistics": {
+      "bootstrap": "paired cluster bootstrap, 10000 resamples, seed 20261107, 95% percentile",
+      "family": [
+        "H1: S_T == 1 (j0126)",
+        "H2: R_M == 1 (j0126)"
+      ],
+      "multiplicity": "Holm",
+      "p": "two-sided bootstrap test inversion"
+    },
+    "reporting": "target reached and statistical evidence in separate columns; worst regression shown"
+  },
+  "secondary": {
+    "C1_snemi_seen": "same metrics on SNEMI3D 32 crops (16 macroblock clusters); previously seen",
+    "C1_hemibrain": "descriptive (4 cutouts, one acquisition; CI = timing variation only)",
+    "C2": "cape_q1_fast_m0 vs cape_v21_fast_m0 (historical; the v3 gain is not re-counted as new)",
+    "C3": "vs q1_fast_weighted_greedy_m0, q1_fast_greedy_local_m0, crackle_pins_opt_corrected_m0, crackle_flat_m0, crackle_pins_fast_m0, compresso_native, neuroglancer_b8(_u32), zstd9: size, time and memory together; streams differ, no byte equality required",
+    "archive": "m0/m5 and zstd3/zstd9 never mixed; SAFE counts all candidate encodes"
+  },
+  "decision_rules": [
+    "speed improves but memory not -> claim speed only",
+    "no C3 advantage beyond stock -> no algorithmic-superiority claim",
+    "novelty not separable from prior art -> engineering contribution"
+  ]
+}

@@ -1,0 +1,38 @@
+
+=== 2026-11-07T05:39:58+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\run_all.py --stage development --config configs/q1_dev_scale.yaml --manifest data/manifests/scaling_v21.jsonl --resume
+[2026-11-07T05:40:00.617+00:00] INFO DATA_VALIDATED: started
+[2026-11-07T05:40:05.324+00:00] INFO DATA_VALIDATED: COMPLETE
+[2026-11-07T05:40:05.508+00:00] INFO TESTED: started
+[2026-11-07T05:41:09.271+00:00] ERROR TESTED: FAILED - tests failed (['1 failed, 2320 passed, 12 deselected in 62.97s (0:01:02)']); see 14_logs/tests.log
+[2026-11-07T05:41:21.419+00:00] INFO partial report written (status FAILED): tests failed (['1 failed, 2320 passed, 12 deselected in 62.97s (0:01:02)']); see 14_logs/tests.log
+
+RUN STATUS: FAILED (exit 3)
+Natijalar indeksi: D:\CAPE_PINS\results\20261107T053958Z_development_d23bfeee\15_reports\RESULTS_INDEX.md
+Yakuniy hisobot:  D:\CAPE_PINS\results\20261107T053958Z_development_d23bfeee\15_reports\final_report_UZ.md
+run: D:\CAPE_PINS\results\20261107T053958Z_development_d23bfeee
+
+=== 2026-11-07T06:21:04+00:00 D:\CAPE_PINS\.venv\Scripts\python.exe D:\CAPE_PINS\run_all.py --stage development --config configs/q1_dev_scale.yaml --manifest data/manifests/scaling_v21.jsonl --resume
+[2026-11-07T06:21:06.533+00:00] INFO DATA_VALIDATED: started
+[2026-11-07T06:21:11.241+00:00] INFO DATA_VALIDATED: COMPLETE
+[2026-11-07T06:21:11.436+00:00] INFO TESTED: started
+[2026-11-07T06:22:18.448+00:00] INFO TESTED: COMPLETE
+[2026-11-07T06:22:18.623+00:00] INFO FROZEN: started
+[2026-11-07T06:22:18.943+00:00] INFO FROZEN: COMPLETE
+[2026-11-07T06:22:19.157+00:00] INFO BENCHMARK: started
+[2026-11-07T06:22:19.375+00:00] INFO task plan: 900 tasks (900 new)
+[2026-11-07T07:05:50.988+00:00] INFO BENCHMARK: COMPLETE
+[2026-11-07T07:05:51.163+00:00] INFO OPTIONAL_AUDIT: started
+[2026-11-07T07:05:51.426+00:00] INFO OPTIONAL_AUDIT: COMPLETE
+[2026-11-07T07:05:51.643+00:00] INFO AGGREGATED: started
+[2026-11-07T07:06:01.510+00:00] INFO AGGREGATED: COMPLETE
+[2026-11-07T07:06:01.701+00:00] INFO RENDERED: started
+[2026-11-07T07:06:04.762+00:00] INFO RENDERED: COMPLETE
+[2026-11-07T07:06:04.938+00:00] INFO VERIFIED: started
+[2026-11-07T07:06:07.093+00:00] INFO VERIFIED: COMPLETE
+[2026-11-07T07:06:07.268+00:00] INFO PACKAGED: started
+[2026-11-07T07:06:08.284+00:00] INFO PACKAGED: COMPLETE
+
+RUN STATUS: COMPLETE (exit 0)
+Natijalar indeksi: D:\CAPE_PINS\results\20261107T062104Z_development_93ad9f72\15_reports\RESULTS_INDEX.md
+Yakuniy hisobot:  D:\CAPE_PINS\results\20261107T062104Z_development_93ad9f72\15_reports\final_report_UZ.md
+run: D:\CAPE_PINS\results\20261107T062104Z_development_93ad9f72

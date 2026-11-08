@@ -1,0 +1,29 @@
+{
+  "v3": {
+    "panels": {
+      "core": "results/20261106T131304Z_development_2238806f",
+      "scale": "results/20261106T141028Z_development_bdc5fcbd",
+      "quality": "results/20261106T151919Z_development_31cbc70e",
+      "tracks": "results/20261106T161236Z_development_12de6862",
+      "rerun_core": "results/20261106T171509Z_development_b46d5233",
+      "rerun_scale": "results/20261106T173737Z_development_c90d5032",
+      "quality_check": "results/20261106T182833Z_development_32f658eb",
+      "confirm_primary": "results/20261106T184116Z_all_d6786080",
+      "confirm_scale": "results/20261106T213428Z_all_080b15b8",
+      "confirm_scale_stock": "results/20261106T213921Z_all_751ff9ac"
+    },
+    "select": "analysis/v3_select/selected_methods.json <- panels core, scale, quality, tracks, reruns",
+    "freeze": {
+      "file": "analysis/v3_freeze/freeze.json",
+      "source": "d07368c771ee3d31b8fd89b802e049b3396a7241fc0e79c7ca9964ca9a2ef294"
+    },
+    "confirm": "confirm_primary/scale/scale_stock <- freeze",
+    "report": "analysis/v3_final <- confirm + select + freeze"
+  },
+  "q1": {
+    "E0": "snapshots/v3 (= binary of the v3 confirm runs)",
+    "development": "analysis/q1_state.json panels -> analysis/q1_select/selected.json",
+    "freeze": "analysis/q1_freeze/freeze.json -> configs/q1_final_*.yaml",
+    "final": "results/q1_<run_id>/q1_state.json -> maqola uchun/"
+  }
+}

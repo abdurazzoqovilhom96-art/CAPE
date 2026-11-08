@@ -1,0 +1,3 @@
+amendment,run_dir,method,wrapper,uint16_rows_success,lossless_all,n_crops,bytes_method,bytes_Etheta,Etheta_smaller_pct,S_T_Etheta_vs_method,note
+I13_neuroglancer_b8_u32_snemi,results/20261107T183016Z_all_296f78da,neuroglancer_b8_u32,none,704/704,True,32,14686048,1410718,90.394,0.5233,"cross-run comparison (same machine and protocol, different run)"
+I13_neuroglancer_b8_u32_snemi,results/20261107T183016Z_all_296f78da,neuroglancer_b8_u32,zstd9,704/704,True,32,2618385,876472,66.526,0.7844,"cross-run comparison (same machine and protocol, different run)"

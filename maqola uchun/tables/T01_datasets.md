@@ -1,0 +1,9 @@
+**T01. Datasets and objects (3D neuron ID segmentation maps)**
+
+| dataset | role | source | acquisition | dtype | shapes_XxYxZ | n_volumes | clusters | voxels_total | ids_per_volume_median | cc_per_volume_median | spacing_xyz_nm | split | licence |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| j0126 | j0126 zebra finch (new external, primary) | Januszewski et al. 2018, Nat. Methods 15:605 (doi:10.1038/s41592-018-0049-4) | j0126:zebrafinch_areaX | uint64 | 150x150x150; 256x256x128 | 33 | 33 | 131429432 | 41 | 2915 | [9, 9, 20] | heldout | not stated in the official README (HF mirror pytc/zebrafinch-j0126 is tagged 'mit'); never redistributed |
+| snemi | SNEMI3D 32 crops (previously seen) | SNEMI3D | snemi3d:kasthuri2015_s1 | uint16 | 128x128x64; 256x256x64 | 32 | 16 | 83886080 | 37.5 | 2777 | NA | heldout | CC-BY-4.0 (Zenodo 10.5281/zenodo.7142003); never redistributed |
+| hemibrain | hemibrain v1.2 cutouts (new external, descriptive) | Scheffer et al. 2020, eLife 9:e57443 (doi:10.7554/eLife.57443) | hemibrain:drosophila_cb | uint64 | 512x512x256 | 4 | 4 | 268435456 | 895.5 | 7.881e+04 | [8, 8, 8] | heldout | unverified primary statement; secondary sources: CC-BY 4.0 (Virtual Fly Brain, hemibrain v1.0.1) or ODC-BY (third-party neuroglancer fork); never redistributed |
+| scale | SNEMI3D full volume + 4 subvolumes (seen, one acquisition) | SNEMI3D | snemi3d:kasthuri2015_s1 | uint16 | 1024x1024x100; 512x512x100 | 5 | 5 | 209715200 | 164 | 2.833e+04 | NA | heldout | CC-BY-4.0 (Zenodo 10.5281/zenodo.7142003); never redistributed |
+| scale_stock | SNEMI3D 4 subvolumes, stock track | SNEMI3D | snemi3d:kasthuri2015_s1 | uint16 | 512x512x100 | 4 | 4 | 104857600 | 158 | 2.551e+04 | NA | heldout | CC-BY-4.0 (Zenodo 10.5281/zenodo.7142003); never redistributed |

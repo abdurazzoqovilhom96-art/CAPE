@@ -1,0 +1,153 @@
+{
+  "written_at": "2026-11-07T07:07:15+00:00",
+  "root": "D:\\CAPE_PINS",
+  "files": {
+    "frozen_v21_binary": {
+      "path": "snapshots/v21/_cape_native.cp312-win_amd64.pyd",
+      "exists": true,
+      "sha256": "39dca94b1eeb1c59c98b1dcb117e2f46c3b4ddf6b3539dd067c2a4f40a4ff2cb",
+      "bytes": 2631806,
+      "status": "OK"
+    },
+    "frozen_v3_binary_E0": {
+      "path": "snapshots/v3/_cape_native.cp312-win_amd64.pyd",
+      "exists": true,
+      "sha256": "f1029e19992af218a73437050abf750da811f318d36c4993834262785b01e98c",
+      "bytes": 2768525,
+      "status": "OK"
+    },
+    "v3_freeze": {
+      "path": "analysis/v3_freeze/freeze.json",
+      "exists": true,
+      "sha256": "541441ede69c952509c544e1b654ff8ac6293f327b505dc704076a2357ba84f7",
+      "bytes": 22901,
+      "status": "OK"
+    },
+    "v3_final_report_uz": {
+      "path": "analysis/v3_final/V3_YAKUNIY_TAHLIL_UZ.md",
+      "exists": true,
+      "sha256": "6c798fbb98bfce2df8d1063ab3bef62842c1467dc6c19669cb29c3d0a9f136ad",
+      "bytes": 18717,
+      "status": "OK"
+    },
+    "v3_select": {
+      "path": "analysis/v3_select/selected_methods.json",
+      "exists": true,
+      "sha256": "63f4293df83092a8e0a48fabd0786047a3b9e95d974377da844208fb55fcd400",
+      "bytes": 46639,
+      "status": "OK"
+    },
+    "handoff": {
+      "path": "docs/HANDOFF_UZ.md",
+      "exists": true,
+      "sha256": "73ea1fb8589e9f3e6b9e3fe80427a9be5b90924c8e1bd6316debd98b37de96a4",
+      "bytes": 13447,
+      "status": "OK"
+    },
+    "requirements_lock": {
+      "path": "requirements.lock",
+      "exists": true,
+      "sha256": "fff2b4d2614d275a7839fae789759d700e6b467960d18b1999fc013c9d7eb83c",
+      "bytes": 158443,
+      "status": "OK"
+    },
+    "sources_lock": {
+      "path": "sources.lock.json",
+      "exists": true,
+      "sha256": "001565cc6561588c1c61f1725fdd2e9843f53d054da5d07995a39c0edceabb69",
+      "bytes": 1670,
+      "status": "OK"
+    },
+    "manifest_snemi3d_32": {
+      "path": "data/manifests/confirm_snemi3d.jsonl",
+      "exists": true,
+      "sha256": "ff2741d2c3e7dbcee084dc15811104ca346580cd313bee0d118eaba35c80aac3",
+      "bytes": 54480,
+      "status": "OK"
+    },
+    "manifest_snemi3d_scale": {
+      "path": "data/manifests/confirm_snemi3d_v3_scale.jsonl",
+      "exists": true,
+      "sha256": "43f4efe32cf19ac90d374332c7dab24a4073755fd416dd27a67e79b7dfeee78c",
+      "bytes": 7705,
+      "status": "OK"
+    },
+    "manifest_j0126": {
+      "path": "data/manifests/q1_external_j0126.jsonl",
+      "exists": true,
+      "sha256": "c83cfbd22836dff05499ad5868e91ed9d0bbc92fcd4d0f0c20cb9fc3ceda9a0f",
+      "bytes": 54573,
+      "status": "OK"
+    },
+    "manifest_hemibrain": {
+      "path": "data/manifests/q1_external_hemibrain.jsonl",
+      "exists": true,
+      "sha256": "ba84ddab9f55050b36d155a88897138e9977bf69969b9981fbfc8aeec0f422e8",
+      "bytes": 7056,
+      "status": "OK"
+    },
+    "external_data_plan": {
+      "path": "docs/q1/EXTERNAL_DATA_PLAN.md",
+      "exists": true,
+      "sha256": "bd81cf3e322d7891bce1b817ad7f32dcf8c97c3cc230a1a232ed6e7778929ea0",
+      "bytes": 4603,
+      "status": "OK"
+    },
+    "raw_confirm_primary": {
+      "path": "results/20261106T184116Z_all_d6786080/05_raw_metrics/run.sqlite",
+      "exists": true,
+      "sha256": "da29a006aeb79127a9c745d5c913a58eac9a9316dcdda5ae4f0e8237959e94c1",
+      "bytes": 30396416,
+      "status": "OK"
+    },
+    "raw_confirm_scale": {
+      "path": "results/20261106T213428Z_all_080b15b8/05_raw_metrics/run.sqlite",
+      "exists": true,
+      "sha256": "4fe4f77f5ad0aa130063a91afb5681f7de2c6889090aa73b781fd199bc31f534",
+      "bytes": 733184,
+      "status": "OK"
+    },
+    "raw_confirm_scale_stock": {
+      "path": "results/20261106T213921Z_all_751ff9ac/05_raw_metrics/run.sqlite",
+      "exists": true,
+      "sha256": "5e6a375fe3979dea3add28d859e2c48e4b60a2094977abb455da0d6cb473ff23",
+      "bytes": 393216,
+      "status": "OK"
+    },
+    "raw_dev_core": {
+      "path": "results/20261106T131304Z_development_2238806f/05_raw_metrics/run.sqlite",
+      "exists": true,
+      "sha256": "f2815753bf3b5af09e7b616305c71fa51ec6a2c83c81cbcfa58db658bb8ed470",
+      "bytes": 18706432,
+      "status": "OK"
+    },
+    "raw_dev_scale": {
+      "path": "results/20261106T141028Z_development_bdc5fcbd/05_raw_metrics/run.sqlite",
+      "exists": true,
+      "sha256": "ca5489426a216d98b7033ef20723398bcd10a47a67e297be8e63478fc6d2dffc",
+      "bytes": 6459392,
+      "status": "OK"
+    },
+    "raw_dev_quality": {
+      "path": "results/20261106T151919Z_development_31cbc70e/05_raw_metrics/run.sqlite",
+      "exists": true,
+      "sha256": "72a690fb1b580259df07f45ac40253760eb6227b668ce2a218b9cdb809037250",
+      "bytes": 4837376,
+      "status": "OK"
+    },
+    "raw_dev_tracks": {
+      "path": "results/20261106T161236Z_development_12de6862/05_raw_metrics/run.sqlite",
+      "exists": true,
+      "sha256": "04da6b9ffb2b04d4d0a69c4bdf169dad51c3e661c94fb4616ed8af0418572c92",
+      "bytes": 13643776,
+      "status": "OK"
+    }
+  },
+  "duplicate_markdown": [
+    {
+      "a": "analysis/pilot_v2_ceiling/ARCHIVE_CEILING_UZ.md",
+      "b": "analysis/v2_ceiling_pilot/ARCHIVE_CEILING_UZ.md"
+    }
+  ],
+  "note": "HANDOFF_UZ(1).md does not exist in this tree; only docs/HANDOFF_UZ.md"
+}

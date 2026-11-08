@@ -1,0 +1,41 @@
+{
+  "freeze_id": "benchmark_14bea79e7381_c133b372f931",
+  "mode": "benchmark",
+  "config_path": "D:\\CAPE_PINS\\configs\\q1b_amend_ng_snemi.yaml",
+  "config_hash": "14bea79e73815460f638319c3734181739ddd10437a148c287058a90522cbbb7",
+  "methods_hash": "ad077fb14ec20ad71d2765a479ce0aa5589864f3f1ab6b0e2cf4affb3bfc97ce",
+  "split_hash": "c133b372f9314b5c08037c555f15330a4cfbecc5f112f771bc1c717332d96719",
+  "source_hash": "3710dd61bb48f14537108196ad90a5a6d3b4e8c8afbe85b3528fd4dcdb32442b",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "neuroglancer_b8_u32"
+  ],
+  "primary": {
+    "new": "cape_q1_fast_m0",
+    "baseline": "cape_v3frozen_fast_m0"
+  },
+  "splits": [
+    "heldout"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-07T18:31:23.190+00:00"
+}

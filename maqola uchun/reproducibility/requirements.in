@@ -1,0 +1,40 @@
+# CAPE-Pins dependencies (spec section 26).
+# Exact versions and hashes are pinned in requirements.lock, generated with:
+#   python -m piptools compile --generate-hashes --output-file requirements.lock requirements.in
+# Native toolchain (MinGW-w64 g++) is a system dependency and is checked by scripts/doctor.py.
+
+# numerics / data
+numpy
+scipy
+pandas
+h5py
+tifffile
+pyyaml
+jsonschema
+psutil
+
+# plotting / reporting
+matplotlib
+
+# tests
+pytest
+hypothesis
+
+# native build
+pybind11
+scikit-build-core
+cmake
+ninja
+
+# codecs and baselines (spec section 17)
+crackle-codec==0.53.0
+compresso
+compressed-segmentation
+zstandard
+blosc2
+
+# offline optimality audit (spec section 12, CP-SAT)
+ortools
+
+# NOTE: cloud-volume (H01 / MICrONS download) is intentionally not installed:
+# those datasets were not authorized for download (decision 2026-11-05).

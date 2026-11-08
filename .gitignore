@@ -1,6 +1,12 @@
 # CAPE-Pins: large or generated content stays out of version control
-/data/
+/data/*
+!/data/manifests/
 /results/
+# re-rendered package archives and ZIPs (the packages themselves are tracked)
+/maqola uchun*_archive_*/
+/maqola_uchun*.zip
+# real 2D label slices from the datasets: never redistributed (the PNG figure is kept)
+/maqola uchun/object_examples/*.npy
 /vendor/
 /.venv/
 /.venv-fetch/

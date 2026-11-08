@@ -1,0 +1,78 @@
+{
+  "run_id": "q1_20261107T072741Z",
+  "written_at": "2026-11-07T18:47:43+00:00",
+  "runs": {
+    "j0126": {
+      "run_dir": "results/20261107T072741Z_all_881c7eae",
+      "status": "DONE",
+      "cells": 1683,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "33/33"
+    },
+    "snemi": {
+      "run_dir": "results/20261107T112030Z_all_a3fe0095",
+      "status": "DONE",
+      "cells": 1632,
+      "non_ok_rows": 1344,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "32/32"
+    },
+    "hemibrain": {
+      "run_dir": "results/20261107T144808Z_all_dc44db69",
+      "status": "DONE",
+      "cells": 120,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "4/4"
+    },
+    "scale": {
+      "run_dir": "results/20261107T150702Z_all_92c1c67b",
+      "status": "DONE",
+      "cells": 80,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "5/5"
+    },
+    "scale_stock": {
+      "run_dir": "results/20261107T151528Z_all_82795edb",
+      "status": "DONE",
+      "cells": 20,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "4/4"
+    },
+    "profile_j0126": {
+      "run_dir": "results/20261107T153143Z_all_f3f993b8",
+      "status": "DONE",
+      "cells": 66,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "n/a"
+    },
+    "profile_hemibrain": {
+      "run_dir": "results/20261107T153444Z_all_f0ef67fb",
+      "status": "DONE",
+      "cells": 8,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "n/a"
+    },
+    "profile_scale": {
+      "run_dir": "results/20261107T153649Z_all_0795b28c",
+      "status": "DONE",
+      "cells": 10,
+      "non_ok_rows": 0,
+      "lossless_false_rows": 0,
+      "bytes_vary_cells": [],
+      "Etheta_vs_E0_sha_equal": "n/a"
+    }
+  }
+}

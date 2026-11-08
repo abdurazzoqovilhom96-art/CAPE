@@ -1,0 +1,11 @@
+order,stage,diag_key,share_of_encode_core,note
+1,1 scan,scan_ns,0.09198694548122123,max label + pixel pairs
+2,2 boundary,boundary_ns,0.20466771427609426,crack codes (upstream)
+3,3 2D CC,cc_ns,0.21556050392548576,"4-connected CC per slice; M5b batch, O3 uint16 chains"
+4,4 runs,runs_ns,0.09500679406807187,same-label z-runs; O2 exact allocation
+5,5 candidates,candidate_ns,0.10898770595131485,depth windows; M1a neighbour filter
+6,6 reductions,reduction_ns,0.24199373239207395,singleton / equal / subset
+7,7 components,component_ns,0.003325866382933754,independent CC sets
+8,8 greedy + dual,pass1_ns,0.00884644734001328,UB + integer LB
+9,9 exact DP / local,pass2_ns,0.01919304781339798,small components
+10,10 serialize,serialize_ns,0.00044474337417325563,PINS section + stream

@@ -1,0 +1,52 @@
+{
+  "freeze_id": "development_28317a5a2500_f1109046c523",
+  "mode": "development",
+  "config_path": "C:\\Users\\azamat\\AppData\\Local\\Temp\\claude\\59032291d7b33956\\2ec573fb-da6a-4387-9e20-55d3572f2899\\scratchpad\\smoke\\smoke_scale.yaml",
+  "config_hash": "28317a5a2500dc40b78628fc9299e03b2d00dd43d5e27a348eb2d15aaea44cee",
+  "methods_hash": "44c89363c21c5f1fe3197e692b2a0ba918e64a5ebdd3de8312038882eac6bbfd",
+  "split_hash": "f1109046c523a058bf7c62b02167dd948ac77fece67a68fc735f1b6c3b92d069",
+  "source_hash": "f3fa7321f96a57edeb1a2f816ee4031c0ccd14865e930b7263087793ef21897a",
+  "algorithm": {
+    "candidate_policy": "depth_bounded_complete_windows",
+    "reductions": [
+      "equal_coverage",
+      "subset",
+      "singleton_dominance"
+    ],
+    "online_dual": "fixed_point_ascent",
+    "dual_scale": 1048576,
+    "exact_max_cc": 20,
+    "exact_max_transitions_per_component": 50000000,
+    "exact_max_transitions_total": 200000000,
+    "exact_memory_mib": 64,
+    "local_checks_per_component": 10000,
+    "local_checks_total": 1000000,
+    "count_policy": "safe_then_compact",
+    "depth_policy": "full_width_first",
+    "background_policy": "min_current_serialized_cost",
+    "deterministic": true
+  },
+  "methods": [
+    "cape_q1_fast_m0",
+    "cape_v3frozen_fast_m0",
+    "cape_q1_base_m0",
+    "cape_v21_fast_m0",
+    "q1_fast_weighted_greedy_m0",
+    "q1_fast_greedy_local_m0",
+    "crackle_flat_m0",
+    "safe_q1_fast_m0_zstd9",
+    "cape_q1_noM1a_m0",
+    "cape_q1_noM5b_m0",
+    "cape_q1_noO2f_m0",
+    "cape_q1_noO3f_m0"
+  ],
+  "primary": {
+    "new": "cape_q1_fast_m0",
+    "baseline": "cape_v3frozen_fast_m0"
+  },
+  "splits": [
+    "development"
+  ],
+  "selection_rule": "deterministic preset: the algorithm section of the run config is used as written; no parameter is tuned on held-out data",
+  "created_at": "2026-11-07T07:20:53.294+00:00"
+}

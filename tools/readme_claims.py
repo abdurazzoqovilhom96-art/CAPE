@@ -95,6 +95,25 @@ def main() -> int:
         print(f"| {ds} | {beyond('crackle_vendor_pins_opt_m0')} | {beyond('crackle_pins_fast_m0')} | {beyond(NEW)} | "
               f"{gmean(rc):.3f} | {100 * lab:.1f}% | {crack} | {pl.median():.2f}% / {pl.max():.2f}% | "
               f"{pf.median():.4f}% / {pf.max():.4f}% |")
+    print()
+    print("CAPE phase profile (separate instrumented run; pooled share of encode_core_ns):")
+    print()
+    groups = {"boundaries (scan + crack codes)": ["scan_ns", "boundary_ns"], "2D connected components": ["cc_ns",
+              "transpose_ns"], "runs": ["runs_ns"], "candidates": ["candidate_ns"], "reductions": ["reduction_ns"],
+              "solver (greedy, exact DP, local search, bound)": ["component_ns", "greedy_ns", "dual_ns", "pass1_ns",
+                                                                  "dp_ns", "local_ns", "pass2_ns"],
+              "serializer": ["serialize_ns"]}
+    print("| data | " + " | ".join(groups) + " |")
+    print("|---|" + "---|" * len(groups))
+    for ds in ["j0126", "hemibrain"]:
+        p = RAW / f"profile_{ds}_results.csv"
+        if not p.exists():
+            continue
+        pr = pd.read_csv(p, low_memory=False)
+        ex = [json.loads(x) for x in pr[pr.status == "OK"].extra_json.dropna()]
+        tot = sum(e.get("encode_core_ns") or 0 for e in ex)
+        cells = [100 * sum(sum(e.get(k) or 0 for k in ks) for e in ex) / tot for ks in groups.values()]
+        print(f"| {ds} | " + " | ".join(f"{c:.1f}%" for c in cells) + " |")
     return 0
 
 

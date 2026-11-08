@@ -6,7 +6,9 @@ build-backend = "scikit_build_core.build"
 name = "cape-pins"
 version = "0.3.0.dev0"
 description = "CAPE-Pins: Crackle-compatible componentwise adaptive pin encoder and benchmark pipeline"
-readme = "README_UZ.md"
+readme = "README.md"
+license = { text = "BSD-3-Clause" }
+authors = [{ name = "Ilkhom Abdurazzokov" }]
 requires-python = ">=3.12,<3.13"
 # Runtime/test dependencies are pinned with hashes in requirements.lock (see requirements.in).
 

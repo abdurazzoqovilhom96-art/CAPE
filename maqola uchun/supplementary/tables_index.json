@@ -1,0 +1,74 @@
+[
+  {
+    "id": "T01",
+    "file": "tables/T01_datasets",
+    "status": "OK",
+    "reason": null,
+    "title": "Datasets and objects (3D neuron ID segmentation maps)",
+    "n_rows": 5
+  },
+  {
+    "id": "T02",
+    "file": "tables/T02_methods",
+    "status": "OK",
+    "reason": null,
+    "title": "Compared methods, versions and parameters (1 thread)",
+    "n_rows": 27
+  },
+  {
+    "id": "T03",
+    "file": "tables/T03_primary_matched",
+    "status": "OK",
+    "reason": null,
+    "title": "Matched comparisons: C1 (E\u03b8 vs frozen v3), build drift, C2 (historical), C3 (competitors)",
+    "n_rows": 40
+  },
+  {
+    "id": "T04",
+    "file": "tables/T04_scale",
+    "status": "OK",
+    "reason": null,
+    "title": "Scale track: SNEMI3D full volume and its 4 subvolumes (ONE acquisition; descriptive, no bootstrap across them)",
+    "n_rows": 81
+  },
+  {
+    "id": "T05",
+    "file": "tables/T05_ablation_gates",
+    "status": "OK",
+    "reason": null,
+    "title": "Ablation and pre-registered development gates (practical threshold and statistical evidence kept apart)",
+    "n_rows": 19
+  },
+  {
+    "id": "T06",
+    "file": "tables/T06_archive_safe",
+    "status": "OK",
+    "reason": null,
+    "title": "Archive track: zstd3 / zstd9 / SAFE / m5, never mixed",
+    "n_rows": 24
+  },
+  {
+    "id": "T07",
+    "file": "tables/T07_certificate_audit",
+    "status": "OK",
+    "reason": null,
+    "title": "Certificate audit (restricted model)",
+    "n_rows": 7
+  },
+  {
+    "id": "T08",
+    "file": "tables/T08_negative_results",
+    "status": "OK",
+    "reason": null,
+    "title": "Negative results, non-success statuses, trade-offs",
+    "n_rows": 17
+  },
+  {
+    "id": "T09",
+    "file": "tables/T09_amendments",
+    "status": "OK",
+    "reason": null,
+    "title": "Post-run AMENDMENT runs (separate run ids; never merged into the final rows)",
+    "n_rows": 2
+  }
+]

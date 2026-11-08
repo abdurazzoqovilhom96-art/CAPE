@@ -1,0 +1,63 @@
+{
+  "written_at": "2026-11-07T07:07:25+00:00",
+  "seed": 20261107,
+  "selected_impl_mask": 6719,
+  "order": [
+    "j0126",
+    "snemi",
+    "hemibrain",
+    "scale",
+    "scale_stock",
+    "profile_j0126",
+    "profile_hemibrain",
+    "profile_scale"
+  ],
+  "runs": {
+    "j0126": {
+      "config": "configs/q1_final_j0126.yaml",
+      "manifest": "data/manifests/q1_external_j0126.jsonl"
+    },
+    "snemi": {
+      "config": "configs/q1_final_snemi.yaml",
+      "manifest": "data/manifests/confirm_snemi3d.jsonl"
+    },
+    "hemibrain": {
+      "config": "configs/q1_final_hemibrain.yaml",
+      "manifest": "data/manifests/q1_external_hemibrain.jsonl"
+    },
+    "scale": {
+      "config": "configs/q1_final_scale.yaml",
+      "manifest": "data/manifests/confirm_snemi3d_v3_scale.jsonl"
+    },
+    "scale_stock": {
+      "config": "configs/q1_final_scale_stock.yaml",
+      "manifest": "data/manifests/confirm_snemi3d_v3_scale_stock.jsonl"
+    },
+    "profile_j0126": {
+      "config": "configs/q1_final_profile_j0126.yaml",
+      "manifest": "data/manifests/q1_external_j0126.jsonl"
+    },
+    "profile_hemibrain": {
+      "config": "configs/q1_final_profile_hemibrain.yaml",
+      "manifest": "data/manifests/q1_external_hemibrain.jsonl"
+    },
+    "profile_scale": {
+      "config": "configs/q1_final_profile_scale.yaml",
+      "manifest": "data/manifests/confirm_snemi3d_v3_scale.jsonl"
+    }
+  },
+  "roles": {
+    "j0126": "primary C1 (new external)",
+    "snemi": "secondary (previously seen)",
+    "hemibrain": "descriptive (new external)",
+    "scale": "seen, 1 acquisition full + 4 subvolumes",
+    "scale_stock": "stock on subvolumes <= 2^25 voxels",
+    "profile_*": "instrumented, not timing"
+  },
+  "skipped": {
+    "hemibrain_stock": "data/manifests/q1_external_hemibrain_skipped.json",
+    "snemi_full_stock": "data/manifests/confirm_snemi3d_v3_scale_skipped.json"
+  },
+  "aggregation": "per cell: median of repeats (time), deterministic bytes; across cells: geomean of ratios (S_T, R_M), pooled bytes (G_B); win/tie/loss on exact bytes",
+  "timing": "1 thread, P-core pinned worker, sequential tasks, randomized block order, warmup 2"
+}

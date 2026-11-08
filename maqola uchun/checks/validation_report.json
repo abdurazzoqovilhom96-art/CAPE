@@ -1,0 +1,283 @@
+{
+  "run_id": "q1_20261107T072741Z",
+  "at": "2026-11-07T18:48:13+00:00",
+  "verdict": "PASS",
+  "checks": [
+    {
+      "check": "1 manifest files exist, non-empty; BLOCKED has a reason; no empty folder",
+      "result": "PASS",
+      "detail": {
+        "missing_or_empty": [],
+        "blocked_without_reason": [],
+        "empty_dirs": [],
+        "blocked": []
+      }
+    },
+    {
+      "check": "2 every claim traces to an artifact in the package",
+      "result": "PASS",
+      "detail": {
+        "untraced": []
+      }
+    },
+    {
+      "check": "3 formulas recomputed independently from raw CSV (S_T, G_B, n)",
+      "result": "PASS",
+      "detail": {
+        "mismatch": [],
+        "recomputed": [
+          {
+            "dataset": "j0126",
+            "comparison": "C1",
+            "table_S_T": 1.0739471390499187,
+            "raw_S_T": 1.0739471390499187,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 33,
+            "ok": true
+          },
+          {
+            "dataset": "j0126",
+            "comparison": "BUILD",
+            "table_S_T": 1.0042887402074743,
+            "raw_S_T": 1.0042887402074743,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 33,
+            "ok": true
+          },
+          {
+            "dataset": "j0126",
+            "comparison": "C2",
+            "table_S_T": 1.3152362267288977,
+            "raw_S_T": 1.3152362267288977,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 33,
+            "ok": true
+          },
+          {
+            "dataset": "j0126",
+            "comparison": "C3_wgreedy",
+            "table_S_T": 0.9877821409955319,
+            "raw_S_T": 0.9877821409955319,
+            "table_G_B": 0.03675167679525378,
+            "raw_G_B": 0.03675167679525378,
+            "n": 33,
+            "ok": true
+          },
+          {
+            "dataset": "j0126",
+            "comparison": "C3_stock_corr",
+            "table_S_T": 7.053804555455797,
+            "raw_S_T": 7.053804555455797,
+            "table_G_B": 0.12157876506523672,
+            "raw_G_B": 0.12157876506523672,
+            "n": 33,
+            "ok": true
+          },
+          {
+            "dataset": "j0126",
+            "comparison": "C3_flat",
+            "table_S_T": 0.5005232409122041,
+            "raw_S_T": 0.5005232409122041,
+            "table_G_B": 3.0911290826612716,
+            "raw_G_B": 3.0911290826612716,
+            "n": 33,
+            "ok": true
+          },
+          {
+            "dataset": "snemi",
+            "comparison": "C1",
+            "table_S_T": 1.0794921575791243,
+            "raw_S_T": 1.0794921575791243,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 32,
+            "ok": true
+          },
+          {
+            "dataset": "snemi",
+            "comparison": "BUILD",
+            "table_S_T": 0.9926748088592676,
+            "raw_S_T": 0.9926748088592676,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 32,
+            "ok": true
+          },
+          {
+            "dataset": "snemi",
+            "comparison": "C2",
+            "table_S_T": 1.4572886663853288,
+            "raw_S_T": 1.4572886663853288,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 32,
+            "ok": true
+          },
+          {
+            "dataset": "snemi",
+            "comparison": "C3_wgreedy",
+            "table_S_T": 0.9982555693064217,
+            "raw_S_T": 0.9982555693064217,
+            "table_G_B": 0.034297003547330576,
+            "raw_G_B": 0.034297003547330576,
+            "n": 32,
+            "ok": true
+          },
+          {
+            "dataset": "snemi",
+            "comparison": "C3_stock_corr",
+            "table_S_T": 14.206532914698764,
+            "raw_S_T": 14.206532914698764,
+            "table_G_B": 0.11993667570085782,
+            "raw_G_B": 0.11993667570085782,
+            "n": 32,
+            "ok": true
+          },
+          {
+            "dataset": "snemi",
+            "comparison": "C3_flat",
+            "table_S_T": 0.5367919838384556,
+            "raw_S_T": 0.5367919838384556,
+            "table_G_B": 5.400111450349942,
+            "raw_G_B": 5.400111450349942,
+            "n": 32,
+            "ok": true
+          },
+          {
+            "dataset": "hemibrain",
+            "comparison": "C1",
+            "table_S_T": 1.0657062103781496,
+            "raw_S_T": 1.0657062103781496,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 4,
+            "ok": true
+          },
+          {
+            "dataset": "hemibrain",
+            "comparison": "BUILD",
+            "table_S_T": 1.0247884402011342,
+            "raw_S_T": 1.0247884402011342,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 4,
+            "ok": true
+          },
+          {
+            "dataset": "hemibrain",
+            "comparison": "C2",
+            "table_S_T": 1.323817736074709,
+            "raw_S_T": 1.323817736074709,
+            "table_G_B": 0.0,
+            "raw_G_B": 0.0,
+            "n": 4,
+            "ok": true
+          },
+          {
+            "dataset": "hemibrain",
+            "comparison": "C3_wgreedy",
+            "table_S_T": 0.8927303620536738,
+            "raw_S_T": 0.8927303620536738,
+            "table_G_B": 0.10622027775973773,
+            "raw_G_B": 0.10622027775973773,
+            "n": 4,
+            "ok": true
+          },
+          {
+            "dataset": "hemibrain",
+            "comparison": "C3_flat",
+            "table_S_T": 0.43110945519994054,
+            "raw_S_T": 0.43110945519994054,
+            "table_G_B": 8.269078082125906,
+            "raw_G_B": 8.269078082125906,
+            "n": 4,
+            "ok": true
+          }
+        ]
+      }
+    },
+    {
+      "check": "4 CSV, Markdown and LaTeX tables carry the same numbers",
+      "result": "PASS",
+      "detail": {
+        "inconsistent": []
+      }
+    },
+    {
+      "check": "5 missing / skipped / unsupported cells carry no value (never 0)",
+      "result": "PASS",
+      "detail": {
+        "violations": []
+      }
+    },
+    {
+      "check": "6 original/decoded mismatch = 0 on every SUCCESS row; E\u03b8 bytes == E0 bytes",
+      "result": "PASS",
+      "detail": {
+        "lossless_false_rows": {
+          "j0126": 0,
+          "snemi": 0,
+          "hemibrain": 0,
+          "scale": 0,
+          "scale_stock": 0,
+          "profile_j0126": 0,
+          "profile_hemibrain": 0,
+          "profile_scale": 0
+        },
+        "byte_equal_pct": {
+          "j0126": 100.0,
+          "snemi": 100.0,
+          "hemibrain": 100.0
+        }
+      }
+    },
+    {
+      "check": "7 captions/texts: no wrong scope ('5 independent volumes', acceptance claims); pseudocode modules == selected bits",
+      "result": "PASS",
+      "detail": {
+        "found": []
+      }
+    },
+    {
+      "check": "8 figures rendered, non-blank, >= 300 px; visual review recorded",
+      "result": "PASS",
+      "detail": {
+        "blank_or_small": [],
+        "visual_review": {
+          "status": "PASS",
+          "reviewed_at": "2026-11-07T15:47:00Z",
+          "reviewer": "Claude (agent), PNG files opened and inspected one by one",
+          "figures": {
+            "F01": "PASS - real label slices for j0126/snemi/hemibrain, decoded = original, mismatch 0",
+            "F02": "PASS - stage shares in execution order, no overlaps",
+            "F03": "PASS after fix - E\u03b8 (blue) and E0 (orange) were mislabeled/hidden by equal-byte variants in the first render; key points now drawn on top with separated labels",
+            "F04": "PASS after fix - panel titles state primary/seen/descriptive role; value labels inside the axes",
+            "F05": "PASS after fix - (a) now includes corrected stock on the 4 SNEMI3D subvolumes from the scale_stock track",
+            "F06": "PASS",
+            "F07": "PASS",
+            "F08": "PASS after fix - single colour in (a); (b) title states the 2 volumes behind the 12 invalid rows"
+          }
+        }
+      }
+    },
+    {
+      "check": "9 --mode render reproduces the numbers (table/plot-data digests)",
+      "result": "PASS",
+      "detail": {
+        "first_render": false,
+        "changed": []
+      }
+    },
+    {
+      "check": "10 technical status (COMPLETE/PARTIAL) matches the runs",
+      "result": "PASS",
+      "detail": {
+        "runs_all_done": true,
+        "readme_says_complete": true
+      }
+    }
+  ]
+}

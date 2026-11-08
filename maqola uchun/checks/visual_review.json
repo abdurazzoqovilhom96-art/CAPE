@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "reviewed_at": "2026-11-07T15:47:00Z",
+  "reviewer": "Claude (agent), PNG files opened and inspected one by one",
+  "figures": {
+    "F01": "PASS - real label slices for j0126/snemi/hemibrain, decoded = original, mismatch 0",
+    "F02": "PASS - stage shares in execution order, no overlaps",
+    "F03": "PASS after fix - E\u03b8 (blue) and E0 (orange) were mislabeled/hidden by equal-byte variants in the first render; key points now drawn on top with separated labels",
+    "F04": "PASS after fix - panel titles state primary/seen/descriptive role; value labels inside the axes",
+    "F05": "PASS after fix - (a) now includes corrected stock on the 4 SNEMI3D subvolumes from the scale_stock track",
+    "F06": "PASS",
+    "F07": "PASS",
+    "F08": "PASS after fix - single colour in (a); (b) title states the 2 volumes behind the 12 invalid rows"
+  }
+}

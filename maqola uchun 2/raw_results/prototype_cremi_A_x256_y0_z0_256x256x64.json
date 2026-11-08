@@ -1,0 +1,128 @@
+{
+ "sample_id": "cremi_A_x256_y0_z0_256x256x64",
+ "status": "SUCCESS",
+ "budget_s": 1800.0,
+ "max_iter": 40,
+ "k_add": 50000,
+ "cpu": 2,
+ "pinned": true,
+ "dtype": "uint64",
+ "shape_zyx": [
+  64,
+  256,
+  256
+ ],
+ "voxels": 4194304,
+ "native_diag_encode_s": 0.05065430000831839,
+ "native": {
+  "P": 56,
+  "Q": 1349,
+  "w_I": 4,
+  "w_D": 1,
+  "w_C": 2,
+  "w_L": 4,
+  "w_N": 1,
+  "w_G": 4,
+  "regime_h": 64,
+  "regime_w_D": 1,
+  "cc_count": 2586,
+  "run_count": 457814,
+  "label_count": 1226,
+  "payload_ub_bytes": 2978,
+  "payload_lb_bytes_fixed_background": 2958,
+  "total_bytes": 55904,
+  "label_bytes": 10597,
+  "candidate_count_before": 457814,
+  "candidates_after_singleton": 255397,
+  "candidates_after_adjacency": 33558,
+  "candidates_after_equal": 7973,
+  "candidate_count_after": 169,
+  "incidence_count_before": 4194304,
+  "incidence_count": 3362,
+  "component_count": 1368,
+  "max_component_cc": 94,
+  "cc_written": 2485,
+  "label_format": "PINS_VARIABLE_WIDTH",
+  "bgcolor": 5918
+ },
+ "native_stream_equal_timed": true,
+ "instance_build_s": 0.11866549999103881,
+ "instance": {
+  "h": 64,
+  "c": 5,
+  "s": 2,
+  "n_runs": 457814,
+  "n_cc": 2586,
+  "n_nonbg_cc": 2485,
+  "n_lp": 1177,
+  "n_fixed_single": 1308,
+  "useful_runs": 245190,
+  "useful_positions": 3832067,
+  "components_lp": 32
+ },
+ "T4": {
+  "cc_count_equal": true,
+  "run_count_equal": true,
+  "pins_valid": true,
+  "selection_covers_all": true,
+  "pq_equal": true,
+  "payload_ub_equal": true,
+  "pass": true,
+  "stream_equal_timed": true
+ },
+ "cg": {
+  "converged": true,
+  "stop": "converged",
+  "iterations": 1,
+  "pricing_passes": 1,
+  "columns": 7643,
+  "nnz": 116528,
+  "lp_time_s": 0.17930799999157898,
+  "pricing_time_s": 0.06116430000110995,
+  "int_time_s": 0.01600299999699928,
+  "lp_rss_bytes": 36978688,
+  "history": [
+   {
+    "iter": 0,
+    "lp_obj": 360.0,
+    "dual_sum": 2976.0,
+    "violating_runs": 0,
+    "columns": 7643,
+    "nnz": 116528,
+    "lp_s": 0.179
+   }
+  ],
+  "wall_s": 2.5905431999999564
+ },
+ "integer": {
+  "P": 56,
+  "Q": 1349,
+  "U": 2978
+ },
+ "certificate": {
+  "feasible": true,
+  "violations": 0,
+  "repair_passes": 1,
+  "repaired_windows": 0,
+  "L": 2976,
+  "n_components": 32,
+  "q": 1048576,
+  "time_s": 0.2033689000090817
+ },
+ "compare": {
+  "U_Etheta": 2978,
+  "L_ascent": 2958,
+  "U_CG": 2978,
+  "L_CG": 2976,
+  "U_CG_le_U_Etheta": true,
+  "L_CG_ge_L_ascent": true,
+  "gap_ascent": 20,
+  "gap_CG": 2
+ },
+ "process_peak": {
+  "rss_bytes": 167751680,
+  "peak_rss_bytes": 343498752,
+  "mode": "win_peak_wset"
+ },
+ "wall_s": 3.2718744999874616
+}

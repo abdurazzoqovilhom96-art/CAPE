@@ -1,0 +1,25 @@
+\begin{table}[t]\centering\scriptsize
+\caption{Negative results, non-success statuses, trade-offs}\label{tab:T08}
+\begin{tabular}{lllll}
+\hline
+kind & dataset & item & value & note \\ \hline
+status & snemi & neuroglancer\_b8 (none, timing) & UNSUPPORTED x224 & neuroglancer\_b8 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+status & snemi & neuroglancer\_b8 (none, memory) & UNSUPPORTED x32 & neuroglancer\_b8 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+status & snemi & neuroglancer\_b8 (zstd3, timing) & UNSUPPORTED x224 & neuroglancer\_b8+zstd3 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+status & snemi & neuroglancer\_b8 (zstd9, timing) & UNSUPPORTED x224 & neuroglancer\_b8+zstd9 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+status & snemi & neuroglancer\_b8\_u32 (none, timing) & UNSUPPORTED x224 & neuroglancer\_b8\_u32 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+status & snemi & neuroglancer\_b8\_u32 (none, memory) & UNSUPPORTED x32 & neuroglancer\_b8\_u32 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+status & snemi & neuroglancer\_b8\_u32 (zstd3, timing) & UNSUPPORTED x224 & neuroglancer\_b8\_u32+zstd3 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+status & snemi & neuroglancer\_b8\_u32 (zstd9, timing) & UNSUPPORTED x224 & neuroglancer\_b8\_u32+zstd9 supports ['uint32', 'uint64']; input is uint16 (no silent cast) \\
+larger & j0126 & A\_z3\_stock & 3/33 samples larger & cape\_q1\_fast\_m0+zstd3 vs crackle\_pins\_opt\_corrected\_m0+zstd3 \\
+larger & j0126 & SAFE3\_stock & 3/33 samples larger & safe\_q1\_fast\_m0\_zstd3 vs safe\_stock\_m0\_zstd3 \\
+larger & snemi & A\_z3\_stock & 1/32 samples larger & cape\_q1\_fast\_m0+zstd3 vs crackle\_pins\_opt\_corrected\_m0+zstd3 \\
+larger & snemi & SAFE3\_stock & 1/32 samples larger & safe\_q1\_fast\_m0\_zstd3 vs safe\_stock\_m0\_zstd3 \\
+larger & scale\_stock & SAFE9\_stock & 1/4 samples larger & safe\_q1\_fast\_m0\_zstd9 vs safe\_stock\_m0\_zstd9 \\
+trade-off & j0126 & Eθ vs Crackle flat & 3.09\% smaller, S\_T 0.501 & CAPE is slower than flat \\
+trade-off & snemi & Eθ vs Crackle flat & 5.40\% smaller, S\_T 0.537 & CAPE is slower than flat \\
+trade-off & hemibrain & Eθ vs Crackle flat & 8.27\% smaller, S\_T 0.431 & CAPE is slower than flat \\
+trade-off & scale & Eθ vs Crackle flat & 7.40\% smaller, S\_T 0.429 & CAPE is slower than flat \\
+\hline
+\end{tabular}
+\end{table}

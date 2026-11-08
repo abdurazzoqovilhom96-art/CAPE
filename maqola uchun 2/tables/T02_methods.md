@@ -1,0 +1,8 @@
+# T02_methods: methods and versions
+
+| method | what | version / settings |
+|---|---|---|
+| cape_q1_fast_m0 | native Eθ encoder (timed comparator) | impl_mask 6719, FAST, certificate off |
+| cape_q1_fast_profile_m0 | native Eθ with phase timers and memory marks | profile_memory on (diagnostics only) |
+| cape_q1_certified_m0 | native Eθ with the integer dual-ascent certificate | certificate all_regimes |
+| cg_implicit (prototype) | bounded column generation + exact pricing + integer certificate | Python, numpy 2.5.4, scipy 1.18.1 linprog(HiGHS); budget 1800.0 s, max_iter 40 |

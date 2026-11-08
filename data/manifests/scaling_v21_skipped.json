@@ -1,0 +1,38 @@
+[
+  {
+    "source": "crackle:connectomics",
+    "sample_id": "scale_crackle_connectomics_512x512x256",
+    "status": "SKIPPED_BUDGET",
+    "reason": "stock Crackle pin optimizer not run above 33554432 voxels (269 s already at 512x512x256 = 2^26)"
+  },
+  {
+    "source": "crackle:connectomics",
+    "sample_id": "scale_crackle_connectomics_512x512x512",
+    "status": "SKIPPED_BUDGET",
+    "reason": "stock Crackle pin optimizer not run above 33554432 voxels (269 s already at 512x512x256 = 2^26)"
+  },
+  {
+    "source": "crackle:ws",
+    "sample_id": "scale_crackle_ws_512x512x256",
+    "status": "SKIPPED_BUDGET",
+    "reason": "stock Crackle pin optimizer not run above 33554432 voxels (269 s already at 512x512x256 = 2^26)"
+  },
+  {
+    "source": "crackle:ws",
+    "sample_id": "scale_crackle_ws_512x512x512",
+    "status": "SKIPPED_BUDGET",
+    "reason": "stock Crackle pin optimizer not run above 33554432 voxels (269 s already at 512x512x256 = 2^26)"
+  },
+  {
+    "source": "cremi:A",
+    "sample_id": "scale_cremi_A_1024x1024x125",
+    "status": "SKIPPED_BUDGET",
+    "reason": "stock Crackle pin optimizer not run above 33554432 voxels (269 s already at 512x512x256 = 2^26)"
+  },
+  {
+    "source": "cremi:A",
+    "sample_id": "scale_cremi_A_1250x1250x125",
+    "status": "SKIPPED_BUDGET",
+    "reason": "stock Crackle pin optimizer not run above 33554432 voxels (269 s already at 512x512x256 = 2^26)"
+  }
+]

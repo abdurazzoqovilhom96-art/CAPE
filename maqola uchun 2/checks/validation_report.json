@@ -1,0 +1,84 @@
+{
+ "at": "2026-11-07T19:11:35+00:00",
+ "verdict": "PASS",
+ "summary": "10/10 PASS",
+ "checks": [
+  {
+   "check": "1 required files exist and are non-empty (NOT_RUN figures carry a reason)",
+   "result": "PASS",
+   "detail": {
+    "missing": []
+   }
+  },
+  {
+   "check": "2 every claim traces to a file in the package",
+   "result": "PASS",
+   "detail": {
+    "untraced": []
+   }
+  },
+  {
+   "check": "3 projection ratios recomputed independently from raw_results",
+   "result": "PASS",
+   "detail": {
+    "recomputed_samples": 11,
+    "mismatch": []
+   }
+  },
+  {
+   "check": "4 CSV, Markdown and LaTeX tables carry the same rows",
+   "result": "PASS",
+   "detail": {
+    "inconsistent": []
+   }
+  },
+  {
+   "check": "5 non-success samples carry no numbers (never 0)",
+   "result": "PASS",
+   "detail": {
+    "zero_filled": []
+   }
+  },
+  {
+   "check": "6 every E\u03b8 stream decoded voxel-equal; every prototype certificate integer-feasible",
+   "result": "PASS",
+   "detail": {
+    "e\u03b8_rows": 88,
+    "lossless_all": "True",
+    "certificates": 11,
+    "all_feasible": true
+   }
+  },
+  {
+   "check": "7 no over-claiming; negative results labelled",
+   "result": "PASS",
+   "detail": {
+    "found": []
+   }
+  },
+  {
+   "check": "8 figures rendered, non-blank, >= 300 px; visual review recorded",
+   "result": "PASS",
+   "detail": {
+    "blank": [],
+    "visual_review": "PASS"
+   }
+  },
+  {
+   "check": "9 --mode render reproduces the numbers (table / plot-data digests)",
+   "result": "PASS",
+   "detail": {
+    "previous": true,
+    "changed": []
+   }
+  },
+  {
+   "check": "10 terminal status consistent (gate.json, README, run state)",
+   "result": "PASS",
+   "detail": {
+    "gate": "STOPPED_GATE_FAILED",
+    "state": "STOPPED_GATE_FAILED"
+   }
+  }
+ ]
+}

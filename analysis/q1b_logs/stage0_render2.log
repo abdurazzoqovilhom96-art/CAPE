@@ -1,0 +1,4 @@
+[2026-11-07T18:47:43+00:00] stage raw_audit: DONE (exit 0)
+[2026-11-07T18:48:12+00:00] stage article: DONE (exit 0)
+[2026-11-07T18:48:13+00:00] stage validate: DONE (exit 0)
+[2026-11-07T18:48:14+00:00] Q1 run q1_20261107T072741Z: COMPLETE -> maqola uchun

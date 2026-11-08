@@ -1,0 +1,128 @@
+{
+ "sample_id": "cremi_B_x256_y512_z64_256x256x60",
+ "status": "SUCCESS",
+ "budget_s": 1800.0,
+ "max_iter": 40,
+ "k_add": 50000,
+ "cpu": 2,
+ "pinned": true,
+ "dtype": "uint64",
+ "shape_zyx": [
+  60,
+  256,
+  256
+ ],
+ "voxels": 3932160,
+ "native_diag_encode_s": 0.04042190000473056,
+ "native": {
+  "P": 80,
+  "Q": 141,
+  "w_I": 4,
+  "w_D": 1,
+  "w_C": 2,
+  "w_L": 4,
+  "w_N": 1,
+  "w_G": 4,
+  "regime_h": 60,
+  "regime_w_D": 1,
+  "cc_count": 751,
+  "run_count": 671599,
+  "label_count": 64,
+  "payload_ub_bytes": 682,
+  "payload_lb_bytes_fixed_background": 680,
+  "total_bytes": 26389,
+  "label_bytes": 1313,
+  "candidate_count_before": 671599,
+  "candidates_after_singleton": 456762,
+  "candidates_after_adjacency": 13263,
+  "candidates_after_equal": 2002,
+  "candidate_count_after": 213,
+  "incidence_count_before": 3932160,
+  "incidence_count": 1612,
+  "component_count": 120,
+  "max_component_cc": 61,
+  "cc_written": 702,
+  "label_format": "PINS_VARIABLE_WIDTH",
+  "bgcolor": 568025
+ },
+ "native_stream_equal_timed": true,
+ "instance_build_s": 0.10520200000610203,
+ "instance": {
+  "h": 60,
+  "c": 5,
+  "s": 2,
+  "n_runs": 671599,
+  "n_cc": 751,
+  "n_nonbg_cc": 702,
+  "n_lp": 643,
+  "n_fixed_single": 59,
+  "useful_runs": 431889,
+  "useful_positions": 3491770,
+  "components_lp": 57
+ },
+ "T4": {
+  "cc_count_equal": true,
+  "run_count_equal": true,
+  "pins_valid": true,
+  "selection_covers_all": true,
+  "pq_equal": true,
+  "payload_ub_equal": true,
+  "pass": true,
+  "stream_equal_timed": true
+ },
+ "cg": {
+  "converged": true,
+  "stop": "converged",
+  "iterations": 1,
+  "pricing_passes": 1,
+  "columns": 1861,
+  "nnz": 15410,
+  "lp_time_s": 0.12462170000071637,
+  "pricing_time_s": 0.05737720000615809,
+  "int_time_s": 0.003864500002237037,
+  "lp_rss_bytes": 17858560,
+  "history": [
+   {
+    "iter": 0,
+    "lp_obj": 564.0,
+    "dual_sum": 682.0,
+    "violating_runs": 0,
+    "columns": 1861,
+    "nnz": 15410,
+    "lp_s": 0.125
+   }
+  ],
+  "wall_s": 4.235782299991115
+ },
+ "integer": {
+  "P": 80,
+  "Q": 143,
+  "U": 686
+ },
+ "certificate": {
+  "feasible": true,
+  "violations": 0,
+  "repair_passes": 1,
+  "repaired_windows": 0,
+  "L": 682,
+  "n_components": 57,
+  "q": 1048576,
+  "time_s": 0.1820278000086546
+ },
+ "compare": {
+  "U_Etheta": 682,
+  "L_ascent": 680,
+  "U_CG": 686,
+  "L_CG": 682,
+  "U_CG_le_U_Etheta": false,
+  "L_CG_ge_L_ascent": true,
+  "gap_ascent": 2,
+  "gap_CG": 0
+ },
+ "process_peak": {
+  "rss_bytes": 168517632,
+  "peak_rss_bytes": 326639616,
+  "mode": "win_peak_wset"
+ },
+ "wall_s": 4.866333199999644
+}

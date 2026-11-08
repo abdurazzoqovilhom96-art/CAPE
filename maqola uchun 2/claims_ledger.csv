@@ -1,0 +1,9 @@
+id,claim,status,evidence
+B1,CompleteWindows is dominance-complete in each regime,SUPPORTED,mathematics/dominance_completeness_theorem.md; tables/T03_prechecks.csv
+B2,Prefix-sum pricing finds the exact minimum reduced cost per run,SUPPORTED,mathematics/pricing_exactness.md; tables/T03_prechecks.csv
+B3,The integer certificate brackets the optimum (L <= OPT <= U),SUPPORTED,mathematics/integer_certificate.md; tables/T03_prechecks.csv
+B4,CG-implicit lowers the projected encode-inclusive peak by >= 5% at preserved quality,UNSUPPORTED,tables/T05_projection_and_gate.csv
+B5,CG-implicit lowers the projected encode time by >= 5% at preserved quality,UNSUPPORTED,tables/T05_projection_and_gate.csv
+B6,CG-cert halves the certificate gap at no extra time,UNSUPPORTED,tables/T06_certificate.csv
+B7,A wider pin interval family can improve compression,CONTRADICTED,mathematics/dominance_completeness_theorem.md
+B8,Native CG implementation / final benchmark,NOT_RUN,protocol section 11

@@ -1,0 +1,14 @@
+{
+  "mask": 6719,
+  "source": "f3fa7321f96a",
+  "configs": {
+    "j0126": "configs/q1_final_j0126.yaml",
+    "snemi": "configs/q1_final_snemi.yaml",
+    "hemibrain": "configs/q1_final_hemibrain.yaml",
+    "scale": "configs/q1_final_scale.yaml",
+    "scale_stock": "configs/q1_final_scale_stock.yaml",
+    "profile_j0126": "configs/q1_final_profile_j0126.yaml",
+    "profile_hemibrain": "configs/q1_final_profile_hemibrain.yaml",
+    "profile_scale": "configs/q1_final_profile_scale.yaml"
+  }
+}

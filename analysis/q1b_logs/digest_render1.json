@@ -1,0 +1,19 @@
+{
+ "plot_data/F01_object_examples.csv": "98498a714211169b5f0d9374c47326171b6745fdd1f891f0a13b1405def53119",
+ "plot_data/F02_encoder_pipeline.csv": "592ee15517ca7b5b0b5a74ab0f9865d1edaa1ec2f4124ce34a3c0ef331cb7bdd",
+ "plot_data/F03_size_time_pareto_j0126.csv": "4677c6d88526535abe1f461f7cc1563edd274fd399fe6666ba3c3dbd5a75aed0",
+ "plot_data/F04_speedup_ci.csv": "090b53fba8ebd644a3331dd05b565147b99ba23f3725a6e07a559c8efd72b896",
+ "plot_data/F05_memory_scale.csv": "e239cbf4711ae6781d578d6a006cdd8b0ce346d406952f079099751713bc9a35",
+ "plot_data/F06_ablation.csv": "349aacef95f04ea13d43fcb99d13629b7f175b6a29af8a0dc7bb86b3d5284025",
+ "plot_data/F07_size_safe.csv": "d05ac60238907faccee45b2a70ced4810f7140cbb18e9afa6f90cc7d42c9689e",
+ "plot_data/F08_certificates.csv": "98705d6ffd2896ab3d1f3260b1a2fa96ccd89e404411e0114548b3b43c0b4247",
+ "tables/T01_datasets.csv": "91e4d33f5c4fa601b05bb6d77d4439b56bab2973459e85ea9912891c1ecfbe3e",
+ "tables/T02_methods.csv": "479c58ad4d8d3c9e0822ffef8a5bc0fc5806b63e9dc793e27b6824f57b6d62bd",
+ "tables/T03_primary_matched.csv": "bb331ff2c2b2f97fe56e013cfeca7844db3836dfe79bc1682b91301d77ab18ad",
+ "tables/T04_scale.csv": "f31cb0fcd0070881d5ca3d15a1a639f231178c45a2d9a15a1ef09eb08fead4f4",
+ "tables/T05_ablation_gates.csv": "a9291bca4328dfbf3c6da70d5a870b4485c8af44e9188a396b12af88e0a20c5b",
+ "tables/T06_archive_safe.csv": "ac6f5e93ac5b621a0ee345eeed74c74f177adabe87eb0c415b1ff9a01ec1deaa",
+ "tables/T07_certificate_audit.csv": "2c271d4eec34727e023427c6763be22dab65e13ccff62de97573b39f3e5f2d23",
+ "tables/T08_negative_results.csv": "362783f4c3a5b4bfe69078ae8115fe0f43928d0dbd0debfdc01b82c6b6c4e265",
+ "tables/T09_amendments.csv": "41dcc358c3a482805f0105faeff3884627c41aa7a7fcd8760b2cb29cbdd7e094"
+}

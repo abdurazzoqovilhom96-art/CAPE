@@ -1,0 +1,12 @@
+id,claim,status,scope,evidence,limitation
+Q1,Eθ writes byte-identical streams to frozen v3 E0 on 100.0% of j0126 samples,SUPPORTED,"j0126 (33 volumes); also SNEMI3D, hemibrain","tables/T03, raw_results","implementation equivalence, not compression"
+Q2,"Eθ encodes faster than E0 (j0126 S_T 1.074 [1.065, 1.083]; time reduction 6.9%)",SUPPORTED,"one new acquisition (j0126), 1 thread, Windows/MinGW, i7-13700F","F04, T03",target 1.05 reached: True
+Q3,"Eθ needs less encode-inclusive peak memory than E0 (j0126 R_M 0.915 [0.911, 0.919])",SUPPORTED,process peak incl. Python and input; one new acquisition,"F05, T03",target 0.95 reached: True
+Q4_snemi,"C1 on snemi: S_T 1.079 [1.067, 1.091], R_M 0.893 [0.885, 0.900]",CONDITIONAL,previously seen (SNEMI3D),T03,not independent
+Q4_hemibrain,"C1 on hemibrain: S_T 1.066 [1.009, 1.124], R_M 0.859 [0.858, 0.860]",CONDITIONAL,"descriptive (4 cutouts, one acquisition)",T03,CI = timing variation only
+Q5,"CAPE selection vs matched weighted greedy (same infrastructure): 0.0368% smaller [0.0317, 0.0416], S_T 0.988",CONDITIONAL,j0126,T03 C3,small size gain; not a Q1 change
+Q6,"vs corrected stock pins: 0.1216% smaller, S_T 7.054",CONDITIONAL,j0126; stock = pinned upstream + count-width fix,T03,whole CAPE vs stock; mostly v2.1/v3 work
+Q7,the Q1 mechanisms are new algorithms,UNSUPPORTED,-,methods/CONTRIBUTION_AND_PRIOR_ART_EN.md,buffer/allocation engineering with proofs of output equivalence
+Q8,results generalize to all connectomics label data,UNSUPPORTED,-,T01,three acquisitions in total; one new primary
+Q9,certificates are valid lower bounds of the restricted model,SUPPORTED,restricted model,"F08, T07","not global, no zstd bound"
+Q10,Q1 acceptance / 10-out-of-10,UNSUPPORTED,-,-,never derived automatically

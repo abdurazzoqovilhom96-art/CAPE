@@ -1,0 +1,4 @@
+dataset,sample_id,shape_zyx,dtype,slice_rule,unique_ids,spacing_xyz_nm,mismatch_count,stream_bytes,stream_sha256
+j0126,j0126_z2559_y4991_x4863_256x256x128,"[128, 256, 256]",uint64,"geometric centre (z = Z//2 for XY, y = Y//2 for XZ)",69,"[9, 9, 20]",0,195617,eb62f6f51f8f03e41564b6c504a6bac118a4f6643c2215678d8ec40793bffdd5
+snemi,snemi3d_x0_y0_z0_128x128x64,"[64, 128, 128]",uint16,"geometric centre (z = Z//2 for XY, y = Y//2 for XZ)",39,,0,20246,92ae149680101e56c7205c3b2b6a19706f8e6167ae72f0b2e48fec652d25a76f
+hemibrain,hemibrain_x11008_y25664_z10688_512x512x256,"[256, 512, 512]",uint64,"geometric centre (z = Z//2 for XY, y = Y//2 for XZ)",908,"[8, 8, 8]",0,1115613,5553abc080b8436c729fda55cc0f86c2ff301f5927a80335c4aef78e01a9dbcd

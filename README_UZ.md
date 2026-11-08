@@ -50,5 +50,10 @@ konsolga chiqariladi). `results\LATEST_RUN.txt` faqat eng oxirgi run manzili.
 - Sertifikatlar faqat `certificate_scope` da yozilgan cheklangan model uchun amal qiladi.
 - Q1 yoki yangilik kafolati yo'q; da'volar faqat `claim_gate.json` ruxsat bergan doirada.
 
-Litsenziyalar: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). CAPE kodining o'z litsenziyasini
-loyiha muallifi tanlaydi.
+Litsenziya: CAPE kodi [BSD 3-Clause](LICENSE) (muallif: Ilkhom Abdurazzokov). Kompilyatsiya qilinadigan
+uchinchi tomon header'lari o'z litsenziyalarida: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+## Boshqalar qanday foydalanadi
+
+Python API (`cape.api.compress`), buyruq qatori (`python -m cape.api`), o'rnatish (Windows va Linux), natijalar
+jadvali va qayta ishlab chiqarish: inglizcha [`README.md`](README.md).
