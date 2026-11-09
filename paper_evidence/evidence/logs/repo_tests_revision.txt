@@ -1,0 +1,3 @@
+Repository test suite during the 2026-11-09 revision (code unchanged; commit c721b35, branch q1b)
+command: .venv\Scripts\python -m pytest tests -m "not acceptance" -q
+result: 2762 passed, 7 skipped (tests/test_cg_prechecks.py: no LP rows), 12 deselected in 72.73 s

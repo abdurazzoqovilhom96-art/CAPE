@@ -1,0 +1,20 @@
+[2026-11-08T10:55:27+00:00] native: BUILT 984a79a928372909
+[2026-11-08T10:55:27+00:00] $ /work/.venv/bin/python /work/scripts/doctor.py --require-native
+[2026-11-08T10:55:27+00:00] doctor: OK
+     34 ERROR tests/test_v3_invariants.py::test_every_v3_bit_combination_matches_frozen_v21
+     34 ERROR tests/test_q1_invariants.py::test_every_q1_combination_matches_frozen_v3
+     20 ERROR tests/test_v3_invariants.py::test_v3_roundtrip_edge_cases
+     17 ERROR tests/test_v3_invariants.py::test_v3_fast_preset_matches_frozen_v21_same_as_stock
+     17 ERROR tests/test_q1_invariants.py::test_q1_fast_preset_matches_frozen_v3_same_as_stock
+     16 FAILED tests/test_safe_archive.py::test_safe_is_the_smaller_of_its_two_wrapped_streams
+     12 FAILED tests/test_refine.py::test_refine_is_lossless_and_never_worse_than_safe
+     10 ERROR tests/test_q1_invariants.py::test_q1_edge_cases_match_frozen_v3
+      6 FAILED tests/test_reduction_fast.py::test_forced_hash_collisions_never_merge_distinct_chains
+      1 FAILED tests/test_v3_invariants.py::test_frozen_v21_adapter_roundtrip_in_its_own_process
+      1 FAILED tests/test_q1_invariants.py::test_frozen_v3_adapter_contract_in_own_process
+36 failed, 2269 passed, 28 skipped, 12 deselected, 132 errors in 29.80s
+synthetic sha256 c8f5ad7aa732bcdb3c27438a69c5320947f469901b0b2624140a9ad890d3a619
+hemibrain hemibrain_x12032_y27328_z20800_512x512x256: IDENTICAL sha256 dbde58a08d9db0e8  lossless True
+hemibrain hemibrain_x20096_y17792_z13312_512x512x256: IDENTICAL sha256 6839d580da85d3c8  lossless True
+summary: identical+lossless 69, different 0, missing 0
+exit 0

@@ -1,0 +1,47 @@
+Revision math tests (synthetic; not biological evidence)
+crackle-codec decoder (PyPI)
+{
+ "T1": {
+  "cases": 120,
+  "U_equals_OPT": 120,
+  "max_U_minus_OPT": 0,
+  "mean_U_minus_OPT": 0.0
+ },
+ "T2": {
+  "cases": 120,
+  "count_width_coupling_active": 27,
+  "two_byte_depth_active": 118
+ },
+ "T3": {
+  "cases": 18,
+  "volumes": 9,
+  "fixed_depth_width": {
+   "U_equals_OPT": 6,
+   "max_U_minus_OPT": 2,
+   "L_equals_OPT": 9
+  },
+  "full_width_first": {
+   "U_equals_OPT": 9,
+   "max_U_minus_OPT": 0,
+   "L_equals_OPT": 9
+  }
+ },
+ "T4": {
+  "U": 542,
+  "L": 538,
+  "OPT_ser": 539,
+  "excess_bytes": 3,
+  "w_N": 2,
+  "OPT_w_N": 1,
+  "Q": 259,
+  "OPT_P": 1,
+  "OPT_Q": 257
+ },
+ "T5": {
+  "255": 1,
+  "256": 2
+ },
+ "T6": "ok",
+ "seconds": 8.7,
+ "all_passed": true
+}

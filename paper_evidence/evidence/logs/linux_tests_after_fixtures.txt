@@ -1,0 +1,12 @@
+[2026-11-08T11:02:15+00:00] doctor: OK
+22 samples -> /tmp/smoke.jsonl (19 synthetic)
+     68 ERROR tests/test_v3_invariants.py::test_every_v3_bit_combination_matches_frozen_v21
+     68 ERROR tests/test_q1_invariants.py::test_every_q1_combination_matches_frozen_v3
+     34 ERROR tests/test_v3_invariants.py::test_v3_fast_preset_matches_frozen_v21_same_as_stock
+     34 ERROR tests/test_q1_invariants.py::test_q1_fast_preset_matches_frozen_v3_same_as_stock
+     20 ERROR tests/test_v3_invariants.py::test_v3_roundtrip_edge_cases
+     10 ERROR tests/test_q1_invariants.py::test_q1_edge_cases_match_frozen_v3
+      1 FAILED tests/test_v3_invariants.py::test_frozen_v21_adapter_roundtrip_in_its_own_process
+      1 FAILED tests/test_q1_invariants.py::test_frozen_v3_adapter_contract_in_own_process
+2 failed, 2457 passed, 14 skipped, 12 deselected, 234 errors in 31.18s
+exit 0
