@@ -7,7 +7,7 @@ CAPE changes only *which* pin and singleton records are written to the label sec
 made; the boundary (crack-code) section is byte-identical to upstream Crackle (checked on all 69 test volumes).
 
 *Status: research code (version 0.3.0.dev0). A manuscript — "CAPE: Efficient Pin Selection with Optimality Bounds for
-Crackle Compression of 3D Neuron Segmentations" — is in preparation and has not been peer reviewed.*
+Lossless Compression of 3D Neuron Segmentation Labels in Crackle" — is in preparation and has not been peer reviewed.*
 O'zbekcha: [README_UZ.md](README_UZ.md).
 
 ## Use it
@@ -65,7 +65,7 @@ upstream sources (`sources.lock.json`: Crackle at commit 14b39b1) and builds the
 ## Results at a glance
 
 Final run `q1_20261107T072741Z`: one machine (Windows 11, Intel i7-13700F, MinGW g++ 16.2), **one thread**, 7 timed
-repeats per volume, fresh process per memory row. Per volume the median over repeats, then the geometric mean over
+repeats per volume (3 for hemibrain), fresh process per memory row. Per volume the median over repeats, then the geometric mean over
 volumes. Memory is the encode-inclusive peak of the whole process (including the Python interpreter and the input
 array), not an algorithm-only figure. All streams were decoded with the upstream decoder and compared voxel by voxel.
 

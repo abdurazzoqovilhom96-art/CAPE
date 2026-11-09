@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below. A manuscript is in preparation and not yet peer reviewed."
-title: "CAPE: Efficient Pin Selection with Optimality Bounds for Crackle Compression of 3D Neuron Segmentations"
+title: "CAPE: Efficient Pin Selection with Optimality Bounds for Lossless Compression of 3D Neuron Segmentation Labels in Crackle"
 type: software
 authors:
   - family-names: Abdurazzokov
